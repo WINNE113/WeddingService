@@ -8,3 +8,6 @@
 - ✅ JavaScript and React for front-end development
 - ✅ Spring Security 6 for secure, authenticated applications
 - ✅ Login/Registration systems for user management
+- HƯỚNG DẪN CHẠY PROJECT
+- ✅ Build project: mvn clean install
+- ✅ Open Api Document: http://localhost:8080/swagger-ui/index.html
