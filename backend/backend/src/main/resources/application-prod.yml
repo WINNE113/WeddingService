@@ -1,0 +1,56 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: backend
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 123456789Aaa!
+    url: jdbc:mysql://srv1098.hstgr.io/u898129453_testdb
+    username: u898129453_root25
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  main:
+    allow-circular-references: true
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+      enabled: true
+      file-size-threshold: 0
+      location: /tmp
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: trouytin@gmail.com
+    password: auux cbjy mang mjcm
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+twilio:
+  account_sid: ACc2a522ebd3172b9f66ac39c838814f51
+  auth_token: b32ec809812a18c11b411bb2b9702a5e
+  trial_number: +12314004777
+
+vnpay:
+  returnUrl: https://nhatro-spring-app-20231220005522.azuremicroservices.io/api/v1/payment/vnpay-return
+  paymentUrl: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+  tmnCode": QYBSTFGY
+  hashSecret: ZZFKYHJMITRTSDOUEIJUFQYRLLRMMSVN
+  version: 2.1.0
