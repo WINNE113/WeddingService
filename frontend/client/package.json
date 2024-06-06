@@ -37,6 +37,7 @@
     "redux-persist": "^6.0.0",
     "sweetalert2": "^11.7.10",
     "tailwind-merge": "^1.14.0",
+    "mdb-react-ui-kit": "8.0.0",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {

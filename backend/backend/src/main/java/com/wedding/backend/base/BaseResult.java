@@ -12,5 +12,4 @@ import java.util.List;
 public class BaseResult {
     private boolean success;
     private String message = "";
-    private List<BaseError> errors = new ArrayList<>();
 }

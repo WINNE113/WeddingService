@@ -1,5 +1,6 @@
 package com.wedding.backend.service.impl.auth;
 
+import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.common.ModelCommon;
 import com.wedding.backend.dto.auth.LoginDTO;
 import com.wedding.backend.dto.auth.LoginResponse;
@@ -18,6 +19,7 @@ import com.wedding.backend.util.message.MessageUtil;
 import com.wedding.backend.util.validator.PhoneNumberValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,27 +50,31 @@ public class AuthenticationService implements IAuthenticationService {
         ResponseEntity<?> response = null;
         try {
             if (!PhoneNumberValidator.isValidPhoneNumber(request.getPhoneNumber())) {
-                response = new ResponseEntity<>(MessageUtil.MSG_PHONE_NUMBER_FORMAT_INVALID, HttpStatus.BAD_REQUEST);
+                BaseResult baseResult = new BaseResult(false, MessageUtil.MSG_PHONE_NUMBER_FORMAT_INVALID);
+                response = new ResponseEntity<>(baseResult, HttpStatus.BAD_REQUEST);
                 return response;
             }
 
             Optional<UserEntity> existingUser = userRepository.findByPhoneNumber(PhoneNumberValidator.normalizePhoneNumber(request.getPhoneNumber()));
 
             if (existingUser.isPresent()) {
-                response = new ResponseEntity<>(MessageUtil.MSG_PHONE_NUMBER_IS_EXITED, HttpStatus.BAD_REQUEST);
+                BaseResult baseResult = new BaseResult(false, MessageUtil.MSG_PHONE_NUMBER_IS_EXITED);
+                response = new ResponseEntity<>(baseResult, HttpStatus.BAD_REQUEST);
                 return response;
             }
 
             if (request.getRole().equals(ModelCommon.CUSTOMER)) {
                 boolean checkRegister = this.baseRegister(request);
                 if (checkRegister) {
-                    response = new ResponseEntity<>(MessageUtil.MSG_REGISTER_SUCCESS, HttpStatus.OK);
+                    BaseResult baseResult = new BaseResult(true, MessageUtil.MSG_REGISTER_SUCCESS);
+                    response = new ResponseEntity<>(baseResult, HttpStatus.OK);
                 }
             }
             //TODO: Check if other role like manager..
 
         } catch (Exception ex) {
-            response = new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            BaseResult baseResult = new BaseResult(false, ex.getMessage());
+            response = new ResponseEntity<>(baseResult, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
     }
