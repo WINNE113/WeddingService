@@ -30,5 +30,9 @@ spring:
       enabled: true
       file-size-threshold: 0
       location: /tmp
+twilio:
+  account_sid: ACc2a522ebd3172b9f66ac39c838814f51
+  auth_token: b32ec809812a18c11b411bb2b9702a5e
+  trial_number: +12314004777
 
 

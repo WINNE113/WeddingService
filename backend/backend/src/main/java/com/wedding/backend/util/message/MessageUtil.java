@@ -20,5 +20,6 @@ public class MessageUtil {
     public static final String MSG_PHONE_NUMBER_NOT_FOUND = "Số điện thoại không đúng. Vui lòng nhập số điện thoại mới";
     public static final String MSG_PHONE_NUMBER_CONFIRM_NOT_VALID = "Số điện thoại xác thực không đúng. Vui lòng nhập số điện thoại mới";
     public static final String MSG_UPDATE_PROFILE_IMAGE_SUCCESS = "Cập nhật hình ảnh thành công.";
-
+    public static final String MSG_SEND_OTP_DELIVERED = "Gửi mã OTP thành công.";
+    public static final String MSG_SEND_OTP_FAILED = "Rất tiếc! Không thể gửi mã OTP.";
 }

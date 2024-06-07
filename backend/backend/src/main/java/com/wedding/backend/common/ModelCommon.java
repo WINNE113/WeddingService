@@ -12,7 +12,7 @@ public class ModelCommon {
     /**
      * Represents the role for management personnel.
      */
-    public static final String MANAGER = "ROLE_";
+    public static final String MANAGE = "ROLE_MANAGE";
     /**
      * Represents the role for regular users.
      */

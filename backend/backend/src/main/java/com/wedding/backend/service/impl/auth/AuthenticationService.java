@@ -2,10 +2,8 @@ package com.wedding.backend.service.impl.auth;
 
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.common.ModelCommon;
-import com.wedding.backend.dto.auth.LoginDTO;
-import com.wedding.backend.dto.auth.LoginResponse;
-import com.wedding.backend.dto.auth.RegisterDTO;
-import com.wedding.backend.dto.auth.TokenTypeDTO;
+import com.wedding.backend.common.StatusCommon;
+import com.wedding.backend.dto.auth.*;
 import com.wedding.backend.entity.RoleEntity;
 import com.wedding.backend.entity.TokenEntity;
 import com.wedding.backend.entity.UserEntity;
@@ -14,12 +12,12 @@ import com.wedding.backend.repository.TokenRepository;
 import com.wedding.backend.repository.UserRepository;
 import com.wedding.backend.service.IService.auth.IAuthenticationService;
 import com.wedding.backend.service.IService.auth.IJWTService;
+import com.wedding.backend.service.impl.twilio.TwilioOTPService;
 import com.wedding.backend.util.helper.HashHelper;
 import com.wedding.backend.util.message.MessageUtil;
 import com.wedding.backend.util.validator.PhoneNumberValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,9 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -43,7 +39,8 @@ public class AuthenticationService implements IAuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final IJWTService jwtService;
     private final TokenRepository tokenRepository;
-
+    private final TwilioOTPService twilioOTPService;
+    private final Map<String, RegisterDTO> registerAccounts = new HashMap<>();
 
     @Override
     public ResponseEntity<?> register(RegisterDTO request) {
@@ -69,14 +66,31 @@ public class AuthenticationService implements IAuthenticationService {
                     BaseResult baseResult = new BaseResult(true, MessageUtil.MSG_REGISTER_SUCCESS);
                     response = new ResponseEntity<>(baseResult, HttpStatus.OK);
                 }
+            } else if (request.getRole().equals(ModelCommon.MANAGE)) {
+                //TODO: Check if other role like manager..
+                OTPRequestDto otpRequestDto = createOTPRequest(request);
+                ResponseSendOTP responseSendOTP = twilioOTPService.sendSMS(otpRequestDto);
+                //TODO: Process when send OTP delivered
+                if (responseSendOTP.getStatus().equals(StatusCommon.DELIVERED)) {
+                    registerAccounts.put(request.getPhoneNumber(), request);
+                    return new ResponseEntity<>(responseSendOTP.getMessage(), HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(responseSendOTP.getMessage(), HttpStatus.BAD_REQUEST);
+                }
             }
-            //TODO: Check if other role like manager..
 
         } catch (Exception ex) {
             BaseResult baseResult = new BaseResult(false, ex.getMessage());
             response = new ResponseEntity<>(baseResult, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
+    }
+
+    private OTPRequestDto createOTPRequest(RegisterDTO request) {
+        OTPRequestDto otpRequestDto = new OTPRequestDto();
+        otpRequestDto.setPhoneNumber(request.getPhoneNumber());
+        otpRequestDto.setUserName(request.getUserName());
+        return otpRequestDto;
     }
 
     @Override
@@ -107,6 +121,38 @@ public class AuthenticationService implements IAuthenticationService {
         } else {
             return LoginResponse.error(MessageUtil.MSG_USER_BY_TOKEN_NOT_FOUND);
         }
+    }
+
+    @Override
+    public ResponseEntity<?> registerTwoFactor(OTPValidationRequestDto requestDto) {
+        ResponseEntity<?> response = null;
+        try {
+            boolean checkValidOTP = twilioOTPService.validateOtp(requestDto);
+            if (checkValidOTP) {
+                for (Map.Entry<String, RegisterDTO> entry : registerAccounts.entrySet()
+                ) {
+                    RegisterDTO item = entry.getValue();
+                    if (item.getUserName().equals(requestDto.getUserName())) {
+                        RegisterDTO request = new RegisterDTO();
+                        request.setUserName(item.getUserName());
+                        request.setPhoneNumber(item.getPhoneNumber());
+                        request.setPassword(item.getPassword());
+                        request.setRole(item.getRole());
+                        boolean checkRegister = this.baseRegister(request);
+                        if (!checkRegister) {
+                            BaseResult baseResult = new BaseResult(false, MessageUtil.MSG_REGISTER_FAIL);
+                            return new ResponseEntity<>(baseResult, HttpStatus.OK);
+                        }
+                    }
+                }
+                BaseResult baseResult = new BaseResult(true, MessageUtil.MSG_OTP_CODE_CORRECT);
+                return new ResponseEntity<>(baseResult, HttpStatus.OK);
+            }
+        } catch (Exception ex) {
+            BaseResult baseResult = new BaseResult(false, ex.getMessage());
+            response = new ResponseEntity<>(baseResult, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return response;
     }
 
     private void saveUserToken(Optional<UserEntity> user, String jwtToken) {
@@ -148,8 +194,11 @@ public class AuthenticationService implements IAuthenticationService {
                 user.setRoles(Set.of(role));
                 user.setPhoneNumberConfirmed(false);
                 user.setTwoFactorEnable(false);
-            } else if (request.getRole().equals(ModelCommon.MANAGER)) {
-                //TODO
+            } else if (request.getRole().equals(ModelCommon.MANAGE)) {
+                RoleEntity responseFromDB = roleRepository.findByName(ModelCommon.CUSTOMER);
+                user.setRoles(Set.of(role, responseFromDB));
+                user.setPhoneNumberConfirmed(true);
+                user.setTwoFactorEnable(true);
             }
             user.setActive(true);
             user.setDeleted(false);
