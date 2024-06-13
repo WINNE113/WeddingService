@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 
 const Home = () => {
     return(
-        <h1>This is a home page</h1>
+        <h1>This is a home page hihi.</h1>
     )
 }
 
