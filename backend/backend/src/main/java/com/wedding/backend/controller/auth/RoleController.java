@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +22,7 @@ public class RoleController {
             summary = "Endpoint For add role"
     )
     @PostMapping("/add")
-    public ResponseEntity<?> addRole(RoleDTO request) {
+    public ResponseEntity<?> addRole(@RequestBody RoleDTO request) {
         return roleService.addRole(request);
     }
 }
