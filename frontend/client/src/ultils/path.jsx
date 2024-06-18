@@ -2,6 +2,8 @@ const path = {
     LAYOUT: "/",
     HOME: "",
     LOGIN: "login",
-    INVALID: "*"
+    INVALID: "*",
+
+    TOP_PROVINCE: "tinh-thanh"
 }
 export default path

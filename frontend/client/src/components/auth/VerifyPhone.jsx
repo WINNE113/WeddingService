@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { Button, InputForm, OtpVerify } from ".."
+import Button from "../common/Button"
+import InputForm from "../inputs/InputForm"
 import { useForm } from "react-hook-form"
 import { useSelector } from "react-redux"
 import { apiVerifyRole } from "@/apis/user"

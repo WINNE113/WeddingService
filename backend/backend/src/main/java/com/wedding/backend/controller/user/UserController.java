@@ -22,7 +22,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
-    @GetMapping("/get")
+    @GetMapping("/get/{userId}")
     public ResponseEntity<?> getUser(@RequestParam String userId) {
         return ResponseEntity.ok(userService.getUser(userId));
     }
