@@ -7,6 +7,7 @@ import com.wedding.backend.dto.user.UserDTO;
 import com.wedding.backend.entity.UserEntity;
 import org.springframework.data.domain.Pageable;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +19,6 @@ public interface IUserService {
     BaseResultWithData<UserDTO> getUser(String userId);
 
     BaseResult updateUser(String userId, UserDTO userDTO);
+
+    UserDTO viewProfile(Principal connectedUser);
 }

@@ -46,10 +46,8 @@ const Login = ({ navigate, dispatch, location }) => {
       setIsLoading(false)
       if (response.token) {
         dispatch(login({ token: response.token }))
-        // if (searchParams.get("redirect"))
-        //   console.log("den day 2");
+       //  if (searchParams.get("redirect"))
         return navigate("/")
-        // console.log("den day 3");
       } else {
         Swal.fire('Oops...', response.message, 'error')
       }

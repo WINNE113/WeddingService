@@ -3,10 +3,10 @@ import userSlice from "./userSlice"
 import appSlice from "./appSlice"
 import storage from "redux-persist/lib/storage"
 import { persistReducer, persistStore } from "redux-persist"
-import commentSlice from "./commentSlide"
+import commentSlice from "./commentSlice"
 
 const commonConfig = {
-  key: "trouytin",
+  key: "sweetdreams",
   storage,
 }
 const userConfig = {

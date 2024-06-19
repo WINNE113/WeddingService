@@ -12,7 +12,7 @@ import { AiOutlineHeart } from "react-icons/ai"
 import Button from "../common/Button"
 //import VerifyPhone from "../auth/VerifyPhone"
 import Swal from "sweetalert2"
-// import { formatMoney } from "@/ultils/fn"
+import { formatMoney } from "@/ultils/fn"
 // import { apiValidManager } from "@/apis/user"
 import { toast } from "react-toastify"
 
@@ -25,6 +25,10 @@ const Navigation = ({ dispatch, location, navigate }) => {
   const [params] = useSearchParams()
   const [isShowOptions, setIsShowOptions] = useState(false)
   const { current, wishlist } = useSelector((state) => state.user)
+
+
+  console.log("Curron ở daaday: " + JSON.stringify(current));
+
   const handleShowOptions = (e) => {
     e.stopPropagation()
     if (!isShowOptions) setIsShowOptions(true)
@@ -43,7 +47,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
     }
   }, [])
   const handleClickCreatePost = (pathname) => {
-    if (current?.roleList?.some((el) => el.name === "ROLE_MANAGE")) {
+    if (current?.roles?.some((el) => el.name === "ROLE_MANAGE")) {
       navigate(pathname)
     } else {
       Swal.fire({
@@ -102,7 +106,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
             </div>
             {current && (
               <>
-                {current?.roleList?.some((el) => el.name === "ROLE_USER") && (
+                {current?.roles?.some((el) => el.name === "ROLE_CUSTOMER") && (
                   <Link
                     to={`/${path.MEMBER}/${path.WISHLIST}`}
                     className="rounded-md flex items-center gap-2 text-white text-sm font-medium px-6 py-2"
@@ -145,7 +149,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
                 </Button>
 
 
-                {current?.roleList?.some((el) => el.name === "ROLE_MANAGE") && (
+                {current?.roles?.some((el) => el.name === "ROLE_MANAGE") && (
                   <Link
                     to={`/${path.MANAGER}/${path.DEPOSIT}`}
                     className="text-emerald-800-300 rounded-md flex items-center gap-2 border  bg-gradient-to-r to-main-yellow from-main-orange text-sm font-medium px-6 py-2"
@@ -163,8 +167,8 @@ const Navigation = ({ dispatch, location, navigate }) => {
                       id="options"
                       className="absolute flex flex-col min-w-[150px] w-fit z-50 top-full right-0 bg-white rounded-md border text-gray-800"
                     >
-                      {current?.roleList?.some(
-                        (el) => el.name === "ROLE_USER"
+                      {current?.roles?.some(
+                        (el) => el.name === "ROLE_CUSTOMER"
                       ) && (
                           <Link
                             to={`/${path.MEMBER}/${path.PERSONAL}`}
@@ -173,7 +177,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
                             Thông tin cá nhân
                           </Link>
                         )}
-                      {current?.roleList?.some(
+                      {current?.roles?.some(
                         (el) => el.name === "ROLE_ADMIN"
                       ) && (
                           <Link
@@ -183,7 +187,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
                             Admin
                           </Link>
                         )}
-                      {current?.roleList?.some(
+                      {current?.roles?.some(
                         (el) => el.name === "ROLE_ULTI_MANAGER"
                       ) && (
                           <span
@@ -196,7 +200,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
                             Quản lý trọ
                           </span>
                         )}
-                      {current?.roleList?.some(
+                      {current?.roles?.some(
                         (el) => el.name === "ROLE_MANAGE"
                       ) && (
                           <Link
@@ -214,7 +218,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
                       </span>
                     </div>
                   )}
-                  <span className="text-sm flex flex-col text-white">
+                  <span className="text-sm flex flex-col text-pink-400">
                     <span className="font-bold">{current?.userName}</span>
                     <span>{`TK chính: ${formatMoney(
                       +current?.balance

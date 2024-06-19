@@ -8,9 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/user")
+@CrossOrigin("*")
 public class UserController {
 
     private final IUserService userService;
@@ -32,4 +35,10 @@ public class UserController {
                                         @RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.updateUser(userId, userDTO));
     }
+    @GetMapping("/view-profile")
+    public UserDTO viewProfile(Principal connectedUser) {
+        return userService.viewProfile(connectedUser);
+    }
+
+
 }

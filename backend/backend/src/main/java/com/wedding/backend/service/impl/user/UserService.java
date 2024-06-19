@@ -13,8 +13,10 @@ import com.wedding.backend.util.message.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +32,7 @@ public class UserService implements IUserService {
     public Optional<UserEntity> findByPhoneNumber(String phoneNumber) {
         return userRepository.findByPhoneNumber(phoneNumber);
     }
+
     @Override
     public BaseResultWithDataAndCount<List<UserDTO>> getAllUsers(Pageable pageable) {
         BaseResultWithDataAndCount<List<UserDTO>> baseResultWithDataAndCount = new BaseResultWithDataAndCount<>();
@@ -90,5 +93,11 @@ public class UserService implements IUserService {
                     "User with id [%s] not found".formatted(userId)
             );
         }
+    }
+
+    @Override
+    public UserDTO viewProfile(Principal connectedUser) {
+        var userEntity = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        return userMapper.entityToDto(userEntity);
     }
 }

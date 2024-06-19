@@ -4,7 +4,7 @@ const instance = axios.create({
 })
 instance.interceptors.request.use(
   function (config) {
-    const data = window.localStorage.getItem("persist:trouytin")
+    const data = window.localStorage.getItem("persist:sweetdreams")
     const tokenObj = data && JSON.parse(data)
     if (tokenObj?.token?.length > 6)
       config.headers = {
