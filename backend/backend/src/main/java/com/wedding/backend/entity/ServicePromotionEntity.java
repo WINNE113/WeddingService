@@ -1,5 +1,6 @@
 package com.wedding.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -30,8 +31,8 @@ public class ServicePromotionEntity {
     @Column(name = "end_date")
     private Date endData;
 
-    @JsonManagedReference
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @OneToOne(mappedBy = "servicePromotion")
-    private ServiceEntity service;
+    @JsonBackReference
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "service_id", referencedColumnName = "id")
+    private ServiceEntity serviceServicePromotion;
 }

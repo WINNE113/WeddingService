@@ -1,7 +1,6 @@
 package com.wedding.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,8 +33,8 @@ public class ServiceAlbumEntity {
     @Column(name = "video_url")
     private String videoURL;
 
-    @JsonManagedReference
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @OneToOne(mappedBy = "serviceAlbum")
-    private ServiceEntity service;
+    @JsonBackReference
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "service_id", referencedColumnName = "id")
+    private ServiceEntity serviceServiceAlbum;
 }

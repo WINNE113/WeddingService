@@ -2,6 +2,8 @@ package com.wedding.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wedding.backend.common.StatusCommon;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -61,17 +63,17 @@ public class ServiceEntity extends BaseEntityWithIDIncrement {
     @JsonBackReference
     private ServiceTypeEntity serviceType;
 
-    @JsonBackReference
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "service_album_id", referencedColumnName = "id")
+    @JsonManagedReference
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @OneToOne(mappedBy = "serviceServiceAlbum")
     private ServiceAlbumEntity serviceAlbum;
 
-    @JsonBackReference
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "service_promotion_id", referencedColumnName = "id")
+    @JsonManagedReference
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @OneToOne(mappedBy = "serviceServicePromotion")
     private ServicePromotionEntity servicePromotion;
 
-    @OneToMany(mappedBy = "services")
+    @OneToMany(mappedBy = "servicesReport")
     @JsonBackReference
     private List<ReportEntity> reports;
 

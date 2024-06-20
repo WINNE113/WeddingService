@@ -31,5 +31,5 @@ public class ReportEntity {
     @JsonManagedReference
     @ManyToOne()
     @JoinColumn(name = "service_id", referencedColumnName = "id")
-    private ServiceEntity services;
+    private ServiceEntity servicesReport;
 }

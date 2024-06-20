@@ -51,6 +51,19 @@ const Home = () => {
                         ))}
                     </CustomSlider>
                 </Section>
+                <Section
+                className="w-main mx-auto"
+                title="Nhà hàng tiệc cưới"
+                contentClassName="grid grid-cols-4 gap-4"
+              >
+                {ratings?.map((el) => (
+                  <Card
+                    isLike={wishlist?.some((n) => n.id === el.id)}
+                    {...el}
+                    key={el.id}
+                  />
+                ))}
+              </Section>
             </div>
         </section>
     )
