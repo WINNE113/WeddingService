@@ -5,7 +5,7 @@ import { useSelector } from "react-redux"
 import { logout } from "@/redux/userSlice"
 import withBaseTopping from "@/hocs/WithBaseTopping"
 import path from "@/ultils/path"
-import { menu, menuColors } from "@/ultils/constant"
+import { menuColors } from "@/ultils/constant"
 import clsx from "clsx"
 import { modal, resetFilter } from "@/redux/appSlice"
 import { AiOutlineHeart } from "react-icons/ai"
@@ -15,6 +15,8 @@ import Swal from "sweetalert2"
 import { formatMoney } from "@/ultils/fn"
 // import { apiValidManager } from "@/apis/user"
 import { toast } from "react-toastify"
+import Dropdown from "../dropdown/Dropdown"
+import { apiGetServiceType } from "@/apis/service"
 
 const activedStyle =
   "text-sm flex gap-2 items-center px-4 py-3 rounded-l-full rounded-r-full border border-white"
@@ -25,9 +27,78 @@ const Navigation = ({ dispatch, location, navigate }) => {
   const [params] = useSearchParams()
   const [isShowOptions, setIsShowOptions] = useState(false)
   const { current, wishlist } = useSelector((state) => state.user)
+  const [hoveredMenu, setHoveredMenu] = useState(null);
+  const timeoutRef = useRef(null);
+  const [menu, setMenu] = useState([
+    {
+      path: "/danh-sach/?type=" + path.PHONGTRO,
+      name: "DỊCH VỤ CƯỚI",
+      subname: "Dịch vụ cưới",
+      id: "dichvucuoi",
+      type: path.PHONGTRO,
+      dropdownItems: [] // Khởi tạo dropdownItems là một mảng rỗng
+    },
+    {
+      path: "/danh-sach/?type=" + path.CANHO,
+      name: "KHUYỂN MÃI",
+      id: "nhacanhochothue",
+      type: path.CANHO,
+      subname: "Nhà, Căn hộ cho thuê",
+    },
+    {
+      path: "/danh-sach/?type=" + path.TIMOGHEP,
+      name: "KINH NGHIỆM & Ý TƯỞNG",
+      id: "timoghep",
+      type: path.TIMOGHEP,
+      subname: "Tìm ở ghép",
+    },
+    {
+      path: "/" + path.PRICING,
+      name: "BẢNG GIÁ GÓI",
+      id: "banggiadichvu",
+      type: path.PRICING,
+      subname: "Bảng giá dịch vụ",
+    },
+  ]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await apiGetServiceType();
+        // Tìm mục menu có id là "dichvucuoi" và cập nhật dropdownItems từ dữ liệu API
+        const updatedMenu = menu.map((item) => {
+          if (item.id === "dichvucuoi") {
+            return {
+              ...item,
+              dropdownItems: response.data.map((apiItem) => ({
+                name: apiItem.name,
+                path: `/dich-vu-cuoi/${apiItem.path}`,
+                iconURL: apiItem.iconURL
+              })),
+            };
+          }
+          return item;
+        });
+        // Cập nhật menu với dropdownItems từ API
+        setMenu(updatedMenu);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
-  console.log("Curron ở daaday: " + JSON.stringify(current));
+    fetchData();
+  }, []); // Gọi API chỉ khi component được tạo
+
+  const handleMouseEnter = (id) => {
+    clearTimeout(timeoutRef.current);
+    setHoveredMenu(id);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setHoveredMenu(null);
+    }, 200);
+  };
 
   const handleShowOptions = (e) => {
     e.stopPropagation()
@@ -47,7 +118,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
     }
   }, [])
   const handleClickCreatePost = (pathname) => {
-    if (current?.roles?.some((el) => el.name === "ROLE_MANAGE")) {
+    if (current?.roles?.some((el) => el.name === "ROLE_SUPPLIER")) {
       navigate(pathname)
     } else {
       Swal.fire({
@@ -77,7 +148,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
       <div className="w-main flex flex-col gap-4">
         <div className="flex justify-between items-center">
           <Link className="text-3xl text-pink-300 font-bold" to={"/"}>
-            Wedding.com
+            SweetDream
           </Link>
           <div className="flex items-center gap-4">
             <div className="flex gap-2 justify-center items-center h-full">
@@ -109,11 +180,11 @@ const Navigation = ({ dispatch, location, navigate }) => {
                 {current?.roles?.some((el) => el.name === "ROLE_CUSTOMER") && (
                   <Link
                     to={`/${path.MEMBER}/${path.WISHLIST}`}
-                    className="rounded-md flex items-center gap-2 text-white text-sm font-medium px-6 py-2"
+                    className="rounded-md flex items-center gap-2 text-pink-400 text-sm font-medium px-6 py-2"
                   >
                     <span className="relative">
                       {wishlist && wishlist.length > 0 && (
-                        <span className="text-[8px] text-white w-3 h-3 flex items-center justify-center bg-red-500 border border-white absolute -top-2 -right-2 p-2 rounded-full">
+                        <span className="text-[8px] text-pink-400 w-3 h-3 flex items-center justify-center bg-red-500 border border-white absolute -top-2 -right-2 p-2 rounded-full">
                           {wishlist?.length || 0}
                         </span>
                       )}
@@ -132,24 +203,14 @@ const Navigation = ({ dispatch, location, navigate }) => {
                         `/${path.MANAGER}/${path.CREATE_POST}`
                       )
                     }
-                    className="text-emerald-800-300 rounded-md flex items-center gap-2 border  bg-gradient-to-r to-main-yellow from-main-orange text-sm font-medium px-6 py-2"
+                    className="text-white rounded-md flex items-center gap-2 border  bg-gradient-to-r to-main-pink from-main-rose text-sm font-medium px-6 py-2"
                   >
-                    Đăng tin mới
+                    Trở Thành Nhà Cung Cấp
                   </Button>
                 </div>
-                <Button
-                  onClick={() =>
-                    handleCheckUltilManager(
-                      `/${path.SUPER_ADMIN}/${path.DASHBOARD}`
-                    )
-                  }
-                  className="text-emerald-800-300 rounded-md flex items-center gap-2 border  bg-gradient-to-r to-main-yellow from-main-orange text-sm font-medium px-6 py-2"
-                >
-                  Quản lý trọ
-                </Button>
 
 
-                {current?.roles?.some((el) => el.name === "ROLE_MANAGE") && (
+                {current?.roles?.some((el) => el.name === "ROLE_SUPPLIER") && (
                   <Link
                     to={`/${path.MANAGER}/${path.DEPOSIT}`}
                     className="text-emerald-800-300 rounded-md flex items-center gap-2 border  bg-gradient-to-r to-main-yellow from-main-orange text-sm font-medium px-6 py-2"
@@ -187,28 +248,6 @@ const Navigation = ({ dispatch, location, navigate }) => {
                             Admin
                           </Link>
                         )}
-                      {current?.roles?.some(
-                        (el) => el.name === "ROLE_ULTI_MANAGER"
-                      ) && (
-                          <span
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleCheckUltilManager()
-                            }}
-                            className="p-3 hover:bg-gray-100 cursor-pointer hover:text-emerald-600 font-medium whitespace-nowrap"
-                          >
-                            Quản lý trọ
-                          </span>
-                        )}
-                      {current?.roles?.some(
-                        (el) => el.name === "ROLE_MANAGE"
-                      ) && (
-                          <Link
-                            to={`/${path.MANAGER}/${path.CREATE_POST}`}
-                            className="p-3 hover:bg-gray-100 hover:text-emerald-600 font-medium whitespace-nowrap">
-                            Quản lý tin
-                          </Link>
-                        )}
                       <span
                         onClick={() => dispatch(logout())}
                         className="p-3 hover:bg-gray-100 hover:text-emerald-600 font-medium"
@@ -234,23 +273,34 @@ const Navigation = ({ dispatch, location, navigate }) => {
             )}
           </div>
         </div>
-        <div className="flex items-center gap-4 -ml-4 text-pink-300">
+        <div className="flex items-center gap-4 -ml-4 text-pink-300 relative">
           {menu.map((el) => (
-            <NavLink
-              to={el.path}
+            <div
               key={el.id}
-              onClick={() => dispatch(resetFilter(true))}
-              className={({ isActive }) =>
-                clsx(
-                  params.get("type") === el.type
-                    ? activedStyle
-                    : notActivedStyle,
-                  !params.get("type") && isActive && activedStyle
-                )
-              }
+              onMouseEnter={() => handleMouseEnter(el.id)}
+              onMouseLeave={handleMouseLeave}
+              className="relative"
             >
-              <span>{el.name}</span>
-            </NavLink>
+              <NavLink
+                to={el.path}
+                onClick={() => dispatch(resetFilter(true))}
+                className={({ isActive }) =>
+                  clsx(
+                    params.get("type") === el.type ? activedStyle : notActivedStyle,
+                    !params.get("type") && isActive && activedStyle
+                  )
+                }
+              >
+                <span>{el.name}</span>
+              </NavLink>
+              {el.dropdownItems && hoveredMenu === el.id && (
+                <Dropdown
+                  items={el.dropdownItems}
+                  onMouseEnter={() => handleMouseEnter(el.id)}
+                  onMouseLeave={handleMouseLeave}
+                />
+              )}
+            </div>
           ))}
         </div>
       </div>

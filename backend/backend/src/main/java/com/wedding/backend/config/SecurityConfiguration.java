@@ -47,6 +47,7 @@ public class SecurityConfiguration {
                                 "/swagger-ui.html",
                                 "/api/v1/guest/**",
                                 "/api/v1/comment/list/**",
+                                "/api/v1/service-type/getAll",
                                 "/api/v1/rating/list/**",
                                 "/api/v1/role/**"
                         )

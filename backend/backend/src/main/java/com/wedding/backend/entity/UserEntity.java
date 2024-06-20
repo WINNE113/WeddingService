@@ -84,6 +84,13 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @JsonManagedReference
     private List<TokenEntity> tokens = new ArrayList<>();
 
+    @OneToMany(mappedBy = "authorId")
+    private List<ServiceEntity> services;
+
+    @OneToMany(mappedBy = "userWishList")
+    @JsonManagedReference
+    private List<WishlistEntity> wishlists;
+
     /**
      * Retrieves the authorities (roles) assigned to the user.
      * This method is used by Spring Security to determine the user's

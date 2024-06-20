@@ -35,50 +35,8 @@ export const menuColors = [
   }
 ];
 
-export const menu = [
-  {
-    path: "/danh-sach/?type=" + path.PHONGTRO,
-    name: "Nav_1",
-    subname: "Phòng trọ",
-    id: "phongtro",
-    type: path.PHONGTRO,
-  },
-  {
-    path: "/danh-sach/?type=" + path.CANHO,
-    name: "Nav_2",
-    id: "nhacanhochothue",
-    type: path.CANHO,
-    subname: "Nhà, Căn hộ cho thuê",
-  },
-  {
-    path: "/danh-sach/?type=" + path.TIMOGHEP,
-    name: "Nav_3",
-    id: "timoghep",
-    type: path.TIMOGHEP,
-    subname: "Tìm ở ghép",
-  },
-  // {
-  //   path: "/" + path.BLOG,
-  //   name: "BLOG",
-  //   id: "blog",
-  //   type: path.BLOG,
-  //   subname: "Blogs",
-  // },
-  // {
-  //   path: "/" + path.GUIDE,
-  //   name: "HƯỚNG DẪN",
-  //   id: "huongdan",
-  //   type: path.GUIDE,
-  //   subname: "Hướng dẫn",
-  // },
-  {
-    path: "/" + path.PRICING,
-    name: "Nav_4",
-    id: "banggiadichvu",
-    type: path.PRICING,
-    subname: "Bảng giá dịch vụ",
-  },
-]
+export const menu = [];
+
 export const distances = [
   {
     label: "Dưới 500m",

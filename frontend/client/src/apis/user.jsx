@@ -22,4 +22,4 @@ export const apiGetWishlist = (params) =>
         url: "/wishlist/get",
         method: "get",
         params,
-    }) 
+    })

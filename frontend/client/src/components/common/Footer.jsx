@@ -49,7 +49,7 @@ const Footer = () => {
             Hotline: <a href="tel:0332101032">0332101032</a>
           </span>
           <span className="hover:underline">
-            Email: <a href="mailto:trouytin@gmail.com">trouytin@gmail.com</a>
+            Email: <a href="mailto:sweetdreams@gmail.com">sweetdreams@gmail.com</a>
           </span>
           <span className="flex items-center gap-2 my-2">
             <a href="https://www.facebook.com/profile.php?id=61553932246952">
