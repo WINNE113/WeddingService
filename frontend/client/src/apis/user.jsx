@@ -17,9 +17,20 @@ export const apiGetCurrent = () =>
         url: "/user/view-profile",
         method: "get",
     })
+export const apiAddWishlist = (params) =>
+    axios({
+        url: "/wishlist/add",
+        method: "post",
+        params,
+    })
 export const apiGetWishlist = (params) =>
     axios({
         url: "/wishlist/get",
         method: "get",
         params,
+    })
+export const apiRemoveWishlist = (id) =>
+    axios({
+        url: "/wishlist/delete/wishListItem/" + id,
+        method: "delete",
     })

@@ -1,5 +1,5 @@
 import { apiAddWishlist, apiRemoveWishlist } from "@/apis/user"
-import { getWishlist } from "@/redux/actions"
+import { getWishlist } from "@/redux/action"
 import { formatMoney, formatVietnameseToString } from "@/ultils/fn"
 import path from "@/ultils/path"
 import moment from "moment"
@@ -23,7 +23,7 @@ const Card = ({
   const { current, wishlist } = useSelector((s) => s.user)
   const handleAddWishlist = async () => {
     if (!current) return toast.warn("Bạn phải đăng nhập trước.")
-    const response = await apiAddWishlist({ postId: id, wishlistName: "POST" })
+    const response = await apiAddWishlist({ postId: id, wishlistName: "service" })
     if (response.wishlistId) {
       toast.success("Thêm bài đăng yêu thích thành công")
       dispatch(getWishlist())
@@ -63,13 +63,9 @@ const Card = ({
         />
       </div>
       <div className="p-3 flex flex-col gap-1">
-        <span className="text-sm text-gray-500">
-
-          {address?.split(",")[address?.split(",")?.length - 1]}
-        </span>
         <Link
           to={`/${path.DETAIL_POST}/${id}/${formatVietnameseToString(title)}`}
-          className="text-emerald-800 text-lg cursor-pointer hover:underline font-semibold line-clamp-2"
+          className="text-fuchsia-950 text-lg cursor-pointer hover:underline font-semibold line-clamp-2"
         >
           {title}
         </Link>

@@ -14,7 +14,7 @@ const ProvinceItem = ({ image, provinceName, totalPosts }) => {
         className="w-full h-[180px] object-cover rounded-t-md"
       />
       <div className="p-4 bg-gray-100">
-        <h2 className="font-semibold text-emerald-700">{provinceName}</h2>
+        <h2 className="font-semibold text-pink-700">{provinceName}</h2>
         <small>{`${totalPosts} tin đăng`}</small>
       </div>
     </Link>

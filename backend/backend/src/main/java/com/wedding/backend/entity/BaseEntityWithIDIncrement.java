@@ -24,13 +24,13 @@ public abstract class BaseEntityWithIDIncrement {
             nullable = false,
             updatable = false
     )
-    private Long createdBy;
+    private String createdBy;
 
     @LastModifiedBy
     @Column(
             name = "modified_by",
             insertable = false)
-    private Long modifiedBy;
+    private String modifiedBy;
 
     @CreatedDate
     @Column(name = "created_date",

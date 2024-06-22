@@ -60,7 +60,7 @@ public class ServiceEntity extends BaseEntityWithIDIncrement {
 
     @ManyToOne()
     @JoinColumn(name = "service_type_id", referencedColumnName = "id")
-    @JsonBackReference
+    @JsonManagedReference
     private ServiceTypeEntity serviceType;
 
     @JsonManagedReference

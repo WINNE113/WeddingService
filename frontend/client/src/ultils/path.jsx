@@ -3,7 +3,8 @@ const path = {
     HOME: "",
     LOGIN: "login",
     INVALID: "*",
-
-    TOP_PROVINCE: "tinh-thanh"
+    MEMBER: "member",
+    TOP_PROVINCE: "tinh-thanh",
+    WISHLIST: "danh-sach-yeu-thich"
 }
 export default path

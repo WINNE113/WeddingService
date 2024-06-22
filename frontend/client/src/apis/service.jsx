@@ -5,3 +5,10 @@ export const apiGetServiceType = () =>
         url: "/service-type/getAll",
         method: "GET"
     })
+
+export const apiGetServiceByDeleted = (params) =>
+    axios({
+        url: "/service/getAllByDeleted",
+        method: "GET",
+        params,
+    })

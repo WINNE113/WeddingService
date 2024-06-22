@@ -17,7 +17,7 @@ export const getWishlist = createAsyncThunk(
     const response = await apiGetWishlist({
       page: 0,
       size: 100,
-      wishListName: "POST",
+      wishListName: "service",
     })
     if (!response) return rejectWithValue(null)
     return response || []

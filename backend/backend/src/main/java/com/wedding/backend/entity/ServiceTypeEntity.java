@@ -1,5 +1,6 @@
 package com.wedding.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,6 @@ public class ServiceTypeEntity {
     private String description;
 
     @OneToMany(mappedBy = "serviceType")
-    @JsonManagedReference
+    @JsonBackReference
     private List<ServiceEntity> services;
 }

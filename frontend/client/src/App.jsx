@@ -9,6 +9,8 @@ import Modal from "./components/common/Modal"
 import path from "./ultils/path"
 import { getCurrent, getWishlist } from "./redux/action"
 import Layout from "./pages/public/layout"
+import LayoutMember from "./pages/member/LayoutMember"
+import Wishlist from "./pages/member/Wishlist"
 
 
 function App() {
@@ -40,7 +42,26 @@ function App() {
         </Route>
         <Route path={path.LOGIN} element={<Login />} />
         <Route path={path.INVALID} element={<Home />} />
+        {/* Member routes */}
+        <Route path={path.MEMBER} element={<LayoutMember />}>
+          <Route path={path.WISHLIST} element={<Wishlist />} />
+        </Route>
       </Routes>
+
+
+
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   )
 }
