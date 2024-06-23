@@ -5,6 +5,7 @@ const path = {
     INVALID: "*",
     MEMBER: "member",
     TOP_PROVINCE: "tinh-thanh",
-    WISHLIST: "danh-sach-yeu-thich"
+    WISHLIST: "danh-sach-yeu-thich",
+    PERSONAL: "thong-tin-ca-nhan"
 }
 export default path

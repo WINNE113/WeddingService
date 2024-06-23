@@ -26,7 +26,7 @@ const MemberSidebar = ({ dispatch }) => {
       <div className="py-12 pb-6 flex flex-col gap-1 justify-center items-center w-full">
         <div className="mt-4 flex flex-col items-center justify-center gap-1">
           <img
-            src={current?.images || "/user.svg"}
+            src={current?.profileImage || "/user.svg"}
             alt="avatar"
             className="w-24 h-24 rounded-full object-cover"
           />

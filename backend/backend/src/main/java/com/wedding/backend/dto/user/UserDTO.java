@@ -15,7 +15,7 @@ public class UserDTO {
     private String customerId;
     private String userName;
     private String email;
-    private String profileImageId;
+    private String profileImage;
     private String phoneNumber;
     private boolean phoneNumberConfirmed;
     private boolean twoFactorEnable;

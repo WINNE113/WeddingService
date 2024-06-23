@@ -17,6 +17,12 @@ export const apiGetCurrent = () =>
         url: "/user/view-profile",
         method: "get",
     })
+export const apiUpdateProfile = (data) =>
+    axios({
+        url: "/user/update-profile",
+        method: "post",
+        data,
+    })
 export const apiAddWishlist = (params) =>
     axios({
         url: "/wishlist/add",

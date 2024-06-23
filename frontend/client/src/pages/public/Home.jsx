@@ -5,10 +5,9 @@ import Search from "@/components/search/Search";
 import CustomSlider from "@/components/common/CustomSlider";
 import Section from "@/components/common/Section";
 import ProvinceItem from "@/components/topProvince/ProvinceItem";
-import { apiGetServiceByDeleted } from "@/apis/service";
+import { apiGetServiceByDeleted, apiGetServiceByServiceType } from "@/apis/service";
 import Card from "@/components/posts/Card";
 import { useDispatch, useSelector } from "react-redux"
-import { apiGetWishlist } from "@/apis/user";
 
 const topProvinces = [
     {
@@ -42,17 +41,23 @@ const topProvinces = [
 const Home = () => {
     const dispatch = useDispatch()
     const [service, setSerivces] = useState()
+    const [serviceByType, setServiceByType] = useState()
     const { wishlist } = useSelector((s) => s.user)
-
 
     const fetchHomeData = async () => {
         const response = await apiGetServiceByDeleted({ size: 5 })
         if (response?.data) setSerivces(response.data)
     }
 
+    const fetchServiceByTypeDate = async () => {
+        const response = await apiGetServiceByServiceType({ size: 5 })
+        if (response?.data) setServiceByType(response.data)
+    }
+
 
     useEffect(() => {
         fetchHomeData()
+        fetchServiceByTypeDate()
     }, [])
 
     return (
@@ -73,10 +78,23 @@ const Home = () => {
             </div>
             <Section
                 className="w-main mx-auto text-neutral-400"
-                title="Nhà hàng tiệc cưới"
+                title="Nhà Cung Cấp"
                 contentClassName="grid grid-cols-4 gap-4"
             >
                 {service?.map((el) => (
+                    <Card
+                        isLike={wishlist?.some((n) => n.id === el.id)}
+                        {...el}
+                        key={el.id}
+                    />
+                ))}
+            </Section>
+            <Section
+                className="w-main mx-auto text-neutral-400"
+                title="Nhà hàng tiệc cưới"
+                contentClassName="grid grid-cols-4 gap-4"
+            >
+                {serviceByType?.map((el) => (
                     <Card
                         isLike={wishlist?.some((n) => n.id === el.id)}
                         {...el}

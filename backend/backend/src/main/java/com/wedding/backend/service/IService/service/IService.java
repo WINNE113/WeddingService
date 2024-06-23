@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface IService {
     BaseResultWithDataAndCount<List<ServiceDTO>> getAllByFalseDeletedAndAcceptStatus(Pageable pageable);
+
+    BaseResultWithDataAndCount<List<ServiceDTO>> getAllByServiceTypeAndAcceptStatus(Long serviceTypeId,Pageable pageable);
 }

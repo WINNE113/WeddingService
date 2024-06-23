@@ -20,8 +20,8 @@ import java.util.*;
                         columnNames = "phone_number"
                 ),
                 @UniqueConstraint(
-                        name = "profile_image_id_unique",
-                        columnNames = "profile_image_id"
+                        name = "profile_image_unique",
+                        columnNames = "profile_image"
                 )
         })
 @Getter
@@ -43,10 +43,10 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private String email;
 
     @Column(
-            name = "profile_image_id",
+            name = "profile_image",
             unique = true
     )
-    private String profileImageId;
+    private String profileImage;
 
     @Column(
             name = "phone_number",

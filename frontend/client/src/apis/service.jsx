@@ -12,3 +12,9 @@ export const apiGetServiceByDeleted = (params) =>
         method: "GET",
         params,
     })
+export const apiGetServiceByServiceType = (params) =>
+    axios({
+        url: "/service/getAllByServiceType",
+        method: "GET",
+        params,
+    })

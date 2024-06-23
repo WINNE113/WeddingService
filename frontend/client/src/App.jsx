@@ -11,6 +11,7 @@ import { getCurrent, getWishlist } from "./redux/action"
 import Layout from "./pages/public/layout"
 import LayoutMember from "./pages/member/LayoutMember"
 import Wishlist from "./pages/member/Wishlist"
+import Personal from "./pages/member/Personal"
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
         {/* Member routes */}
         <Route path={path.MEMBER} element={<LayoutMember />}>
           <Route path={path.WISHLIST} element={<Wishlist />} />
+          <Route path={path.PERSONAL} element={<Personal />} />
         </Route>
       </Routes>
 

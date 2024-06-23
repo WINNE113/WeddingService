@@ -264,7 +264,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
                     )} VND`}</span>
                   </span>
                   <img
-                    src={current?.images || "/user.svg"}
+                    src={current?.profileImage || "/user.svg"}
                     alt="avatar"
                     className="w-12 h-12 object-cover rounded-full border"
                   />

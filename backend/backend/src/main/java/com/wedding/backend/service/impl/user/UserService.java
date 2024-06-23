@@ -1,8 +1,10 @@
 package com.wedding.backend.service.impl.user;
 
+import com.cloudinary.Cloudinary;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
+import com.wedding.backend.dto.user.UpdateProfileRequest;
 import com.wedding.backend.dto.user.UserDTO;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.exception.ResourceNotFoundException;
@@ -15,10 +17,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +33,8 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final Cloudinary cloudinary;
+
 
     @Override
     public Optional<UserEntity> findByPhoneNumber(String phoneNumber) {
@@ -66,26 +74,6 @@ public class UserService implements IUserService {
         return baseResultWithData;
     }
 
-    @Override
-    public BaseResult updateUser(String userId, UserDTO userDTO) {
-        BaseResult baseResult = null;
-        try {
-            //TODO
-            UserEntity userEntity = userMapper.DtoToEntity(userDTO);
-            userRepository.save(userEntity);
-            baseResult = BaseResult.builder()
-                    .success(true)
-                    .message(MessageUtil.MSG_ADD_SUCCESS)
-                    .build();
-        } catch (Exception ex) {
-            baseResult = BaseResult.builder()
-                    .success(false)
-                    .message(ex.getMessage())
-                    .build();
-        }
-        return baseResult;
-    }
-
     private void checkIfCustomerExitsOrThrow(String userId) {
         Optional<UserEntity> userEntity = userRepository.findById(userId);
         if (userEntity.isEmpty()) {
@@ -99,5 +87,39 @@ public class UserService implements IUserService {
     public UserDTO viewProfile(Principal connectedUser) {
         var userEntity = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
         return userMapper.entityToDto(userEntity);
+    }
+
+    @Override
+    public BaseResult updateProfile(UpdateProfileRequest profileRequest, MultipartFile images, Principal connectedUser) throws IOException {
+        try {
+            var userEntity = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+            // Chua te if-else
+            if (profileRequest.getUserName() != null) {
+                userEntity.setUserName(profileRequest.getUserName());
+            }
+            if (profileRequest.getEmail() != null) {
+                userEntity.setEmail(profileRequest.getEmail());
+            }
+            if (profileRequest.getDateOfBirth() != null) {
+                userEntity.setDateOfBirth(profileRequest.getDateOfBirth());
+            }
+            if (profileRequest.getAddress() != null) {
+                userEntity.setAddress(profileRequest.getAddress());
+            }
+            if (images != null) {
+                userEntity.setProfileImage(getFileUrls(images));
+            }
+            userRepository.save(userEntity);
+            return new BaseResult(true, "Cập nhật thông tin thành công!");
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+    }
+
+    private String getFileUrls(MultipartFile multipartFile) throws IOException {
+        return cloudinary.uploader()
+                .upload(multipartFile.getBytes(), Map.of("public_id", UUID.randomUUID().toString()))
+                .get("url")
+                .toString();
     }
 }
