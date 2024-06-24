@@ -1,9 +1,7 @@
 package com.wedding.backend.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,9 +14,13 @@ public class RatingEntity extends BaseEntityWithIDIncrement {
     @Column(name = "star_point")
     private double starPoint;
 
-    @Column(name = "service_id")
-    private Long serviceId;
+    @JsonManagedReference
+    @ManyToOne()
+    @JoinColumn(name = "service_id", referencedColumnName = "id")
+    private ServiceEntity serviceRating;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @JsonManagedReference
+    @ManyToOne()
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity userRating;
 }

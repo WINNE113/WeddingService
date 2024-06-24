@@ -55,8 +55,8 @@ public class ServiceEntity extends BaseEntityWithIDIncrement {
 
     @JsonIgnore
     @ManyToOne()
-    @JoinColumn(name = "author_id", referencedColumnName = "id")
-    private UserEntity authorId;
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
+    private SupplierEntity supplier;
 
     @ManyToOne()
     @JoinColumn(name = "service_type_id", referencedColumnName = "id")
@@ -76,5 +76,13 @@ public class ServiceEntity extends BaseEntityWithIDIncrement {
     @OneToMany(mappedBy = "servicesReport")
     @JsonBackReference
     private List<ReportEntity> reports;
+
+    @OneToMany(mappedBy = "serviceRating")
+    @JsonBackReference
+    private List<RatingEntity> ratings;
+
+    @OneToMany(mappedBy = "serviceComment")
+    @JsonBackReference
+    private List<CommentEntity> comments;
 
 }

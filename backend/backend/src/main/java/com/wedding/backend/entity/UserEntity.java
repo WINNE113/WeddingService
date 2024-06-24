@@ -1,5 +1,6 @@
 package com.wedding.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -84,12 +85,21 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @JsonManagedReference
     private List<TokenEntity> tokens = new ArrayList<>();
 
-    @OneToMany(mappedBy = "authorId")
-    private List<ServiceEntity> services;
-
     @OneToMany(mappedBy = "userWishList")
     @JsonManagedReference
     private List<WishlistEntity> wishlists;
+
+    @OneToMany(mappedBy = "user")
+    @JsonBackReference
+    private List<SupplierEntity> suppliers;
+
+    @OneToMany(mappedBy = "userRating")
+    @JsonBackReference
+    private List<RatingEntity> ratings;
+
+    @OneToMany(mappedBy = "userComment")
+    @JsonBackReference
+    private List<CommentEntity> comments;
 
     /**
      * Retrieves the authorities (roles) assigned to the user.

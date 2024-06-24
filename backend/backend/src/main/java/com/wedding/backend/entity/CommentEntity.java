@@ -1,9 +1,8 @@
 package com.wedding.backend.entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,10 +20,13 @@ public class CommentEntity extends BaseEntityWithIDIncrement {
     @Column(name = "status")
     private boolean status;
 
-    @Column(name = "service_id")
-    private Long serviceId;
+    @JsonManagedReference
+    @ManyToOne()
+    @JoinColumn(name = "service_id", referencedColumnName = "id")
+    private ServiceEntity serviceComment;
 
-    @Column(name = "user_id")
-    private Long userId;
-
+    @JsonManagedReference
+    @ManyToOne()
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity userComment;
 }
