@@ -46,7 +46,7 @@ export const apiVerifyOtp = (data) =>
         method: "post",
         data,
     })
-export const apiVerifyRole = (data) =>
+export const apiSendOTP = (data) =>
     axios({
         url: "/user/sendOTP",
         method: "post",

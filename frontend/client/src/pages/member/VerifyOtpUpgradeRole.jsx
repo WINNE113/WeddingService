@@ -1,4 +1,4 @@
-import { apiUpgradeRole, apiVerifyRole } from "@/apis/user"
+import { apiUpgradeRole, apiSendOTP } from "@/apis/user"
 import { Button, InputForm } from "@/components"
 import WithBaseTopping from "@/hocs/WithBaseTopping"
 import { login, logout } from "@/redux/userSlice"
@@ -61,7 +61,7 @@ const VerifyOtpUpgradeRole = ({ navigate, dispatch }) => {
   const handleResendOtp = async () => {
     if (expiredTime) {
       setIsLoading(true)
-      const response = await apiVerifyRole({
+      const response = await apiSendOTP({
         phoneNumber: current?.phoneNumber,
         userName: current?.userName,
       })

@@ -3,7 +3,7 @@ import Button from "../common/Button"
 import InputForm from "../inputs/InputForm"
 import { useForm } from "react-hook-form"
 import { useSelector } from "react-redux"
-import { apiVerifyRole } from "@/apis/user"
+import { apiSendOTP } from "@/apis/user"
 import WithBaseTopping from "@/hocs/WithBaseTopping"
 import path from "@/ultils/path"
 import { toast } from "react-toastify"
@@ -25,7 +25,7 @@ const VerifyPhone = ({ navigate, dispatch }) => {
   }, [current])
   const handleSendOtp = async () => {
     setIsLoading(true)
-    const response = await apiVerifyRole({
+    const response = await apiSendOTP({
       phoneNumber: watch("phoneNumber"),
       userName: current?.userName,
     })
