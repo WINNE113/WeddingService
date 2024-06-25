@@ -17,6 +17,7 @@ import { formatMoney } from "@/ultils/fn"
 import { toast } from "react-toastify"
 import Dropdown from "../dropdown/Dropdown"
 import { apiGetServiceType } from "@/apis/service"
+import { VerifyPhone } from ".."
 
 const activedStyle =
   "text-sm flex gap-2 items-center px-4 py-3 rounded-l-full rounded-r-full border border-white"
@@ -131,7 +132,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
         cancelButtonText: "Bỏ qua",
       }).then((rs) => {
         if (rs.isConfirmed) {
-          //dispatch(modal({ isShowModal: true, modalContent: <VerifyPhone /> }))
+          dispatch(modal({ isShowModal: true, modalContent: <VerifyPhone /> }))
         }
       })
     }
@@ -236,6 +237,16 @@ const Navigation = ({ dispatch, location, navigate }) => {
                             className="p-3 hover:bg-gray-100 hover:text-emerald-600 font-medium"
                           >
                             Thông tin cá nhân
+                          </Link>
+                        )}
+                      {current?.roles?.some(
+                        (el) => el.name === "ROLE_SUPPLIER"
+                      ) && (
+                          <Link
+                            to={`/${path.SUPPLIER}`}
+                            className="p-3 hover:bg-gray-100 hover:text-emerald-600 font-medium"
+                          >
+                            Quản lý dịch vụ
                           </Link>
                         )}
                       {current?.roles?.some(

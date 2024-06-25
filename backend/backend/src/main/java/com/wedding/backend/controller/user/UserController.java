@@ -1,6 +1,8 @@
 package com.wedding.backend.controller.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wedding.backend.dto.auth.OTPRequestDto;
+import com.wedding.backend.dto.auth.OTPValidationRequestDto;
 import com.wedding.backend.dto.user.UpdateProfileRequest;
 import com.wedding.backend.dto.user.UserDTO;
 import com.wedding.backend.service.IService.user.IUserService;
@@ -50,5 +52,13 @@ public class UserController {
         return userService.viewProfile(connectedUser);
     }
 
+    @PostMapping("/sendOTP")
+    public ResponseEntity<?> sendOTP(@RequestBody OTPRequestDto requestDto) {
+        return userService.sendOTP(requestDto);
+    }
+    @PostMapping("/up-to-role-manage")
+    public ResponseEntity<?> upRoleUserToManage(@RequestBody OTPValidationRequestDto otpValidationRequestDto, Principal connectedUser) {
+        return userService.upRoleToManage(otpValidationRequestDto, connectedUser);
+    }
 
 }

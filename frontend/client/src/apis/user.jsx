@@ -40,3 +40,21 @@ export const apiRemoveWishlist = (id) =>
         url: "/wishlist/delete/wishListItem/" + id,
         method: "delete",
     })
+export const apiVerifyOtp = (data) =>
+    axios({
+        url: "/auth/verification-otp",
+        method: "post",
+        data,
+    })
+export const apiVerifyRole = (data) =>
+    axios({
+        url: "/user/sendOTP",
+        method: "post",
+        data,
+    })
+export const apiUpgradeRole = (data) =>
+    axios({
+        url: "/user/up-to-role-manage",
+        method: "post",
+        data,
+    })

@@ -169,10 +169,10 @@ export const targets = [
     label: "Tất cả",
   },
 ]
-export const managerSidebar = [
+export const supplierSidebar = [
   {
     id: 1234,
-    name: "Quản lý tin đăng",
+    name: "Quản lý dịch vụ",
     path: `/${path.MANAGER}/${path.MANAGE_POST}`,
     icon: <BsPostcard size={20} />,
     type: "SINGLE",
@@ -272,7 +272,7 @@ export const memberSidebar = [
     icon: <AiOutlineHeart size={20} />,
     type: "SINGLE",
   },
-  
+
   {
     id: 2,
     name: "Tới Homepage",

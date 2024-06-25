@@ -13,6 +13,7 @@ import com.wedding.backend.repository.UserRepository;
 import com.wedding.backend.service.IService.auth.IAuthenticationService;
 import com.wedding.backend.service.IService.auth.IJWTService;
 import com.wedding.backend.service.impl.twilio.TwilioOTPService;
+import com.wedding.backend.util.handler.TokenHandler;
 import com.wedding.backend.util.helper.HashHelper;
 import com.wedding.backend.util.message.MessageUtil;
 import com.wedding.backend.util.validator.PhoneNumberValidator;
@@ -40,6 +41,7 @@ public class AuthenticationService implements IAuthenticationService {
     private final IJWTService jwtService;
     private final TokenRepository tokenRepository;
     private final TwilioOTPService twilioOTPService;
+    private final TokenHandler tokenHandler;
     private final Map<String, RegisterDTO> registerAccounts = new HashMap<>();
 
     @Override
@@ -112,8 +114,8 @@ public class AuthenticationService implements IAuthenticationService {
         if (user.isPresent()) {
             var jwtToken = jwtService.generateToken(user.get());
 
-            revokeAllUserTokens(user.get());
-            saveUserToken(user, jwtToken);
+            tokenHandler.revokeAllUserTokens(user.get());
+            tokenHandler.saveUserToken(user, jwtToken);
 
             return LoginResponse.builder()
                     .token(jwtToken)
@@ -154,31 +156,6 @@ public class AuthenticationService implements IAuthenticationService {
         }
         return response;
     }
-
-    private void saveUserToken(Optional<UserEntity> user, String jwtToken) {
-        if (user.isPresent()) {
-            var token = TokenEntity.builder()
-                    .userEntity(user.get())
-                    .token(jwtToken)
-                    .tokeType(TokenTypeDTO.BEARER)
-                    .revoked(false)
-                    .expired(false)
-                    .build();
-            tokenRepository.save(token);
-        }
-    }
-
-    private void revokeAllUserTokens(UserEntity user) {
-        var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
-        if (validUserTokens.isEmpty())
-            return;
-        validUserTokens.forEach(t -> {
-            t.setRevoked(true);
-            t.setExpired(true);
-        });
-        tokenRepository.saveAll(validUserTokens);
-    }
-
     private boolean baseRegister(RegisterDTO request) {
         RoleEntity role = roleRepository.findByName(request.getRole());
         if (role != null) {
