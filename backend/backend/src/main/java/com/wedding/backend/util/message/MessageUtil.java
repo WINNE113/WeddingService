@@ -16,6 +16,7 @@ public class MessageUtil {
     public static final String MSG_USER_BY_TOKEN_NOT_FOUND = "Không thể tìm thấy người dùng với token !";
     public static final String MSG_USER_BY_ID_NOT_FOUND = "Không thể tìm thấy người dùng với id !";
     public static final String MSG_PHONE_NUMBER_IS_EXITED = "Số điện thoại đã tồn tại. Vui lòng nhập số điện thoại mới";
+    public static final String MSG_EMAIL_IS_EXITED = "Email đã tồn tại. Vui lòng nhập email mới";
     public static final String MSG_PHONE_NUMBER_FORMAT_INVALID = "Số điện thoại không đúng định dạng.";
     public static final String MSG_PHONE_NUMBER_NOT_FOUND = "Số điện thoại không đúng. Vui lòng nhập số điện thoại mới";
     public static final String MSG_PHONE_NUMBER_CONFIRM_NOT_VALID = "Số điện thoại xác thực không đúng. Vui lòng nhập số điện thoại mới";

@@ -7,13 +7,14 @@ import Home from "./pages/public/Home"
 import Loading from './components/common/Loading.jsx';
 import Modal from "./components/common/Modal"
 import path from "./ultils/path"
-import { getCurrent, getWishlist } from "./redux/action"
+import { getCurrent, getWishlist, getProvinces } from "./redux/action"
 import Layout from "./pages/public/layout"
 import LayoutMember from "./pages/member/LayoutMember"
 import Wishlist from "./pages/member/Wishlist"
 import Personal from "./pages/member/Personal"
 import LayoutSupplier from "./pages/supplier/LayoutSupplier"
 import VerifyOtpUpgradeRole from "./pages/member/VerifyOtpUpgradeRole"
+import InforSupplier from "./pages/supplier/InforSupplier"
 
 
 function App() {
@@ -23,7 +24,9 @@ function App() {
 
   const { token } = useSelector((state) => state.user)
   const dispatch = useDispatch()
-
+  useEffect(() => {
+    dispatch(getProvinces())
+  }, [])
   useEffect(() => {
     setTimeout(() => {
       dispatch(getCurrent())
@@ -53,6 +56,7 @@ function App() {
         </Route>
         {/* Supplier routes */}
         <Route path={path.SUPPLIER} element={<LayoutSupplier />}>
+          <Route path={path.INFORMATION_SUPPLIER} element={<InforSupplier />} />
         </Route>
 
       </Routes>

@@ -1,4 +1,5 @@
 import { apiGetCurrent, apiGetWishlist } from "@/apis/user"
+import { apiGetProvinces } from "@/apis/app"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 
 
@@ -8,6 +9,15 @@ export const getCurrent = createAsyncThunk(
     const response = await apiGetCurrent()
     // if (!response) return rejectWithValue(response)
     return response
+  }
+)
+
+export const getProvinces = createAsyncThunk(
+  "app/provinces",
+  async (data, { rejectWithValue }) => {
+    const response = await apiGetProvinces()
+    if (!response.status === 200) return rejectWithValue(response)
+    return response.data || []
   }
 )
 

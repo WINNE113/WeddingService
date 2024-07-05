@@ -2,6 +2,7 @@ import React, { memo } from "react"
 import clsx from "clsx"
 import { twMerge } from "tailwind-merge"
 const InputForm = ({
+  textColor,
   label,
   fullWidth,
   type = "text",
@@ -21,8 +22,8 @@ const InputForm = ({
         clsx("flex flex-col gap-2 flex-1", fullWidth && "w-full", wrapClassanme)
       )}
     >
-      <label className="font-medium" style={{color: '#93536a'}} htmlFor={id}>
-        {label}
+    <label className="font-medium" style={{ color: textColor || '#93536a' }} htmlFor={id}>
+    {label}
       </label>
       <input
         type={type}

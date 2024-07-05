@@ -171,30 +171,37 @@ export const targets = [
 ]
 export const supplierSidebar = [
   {
+    id: 1834,
+    name: "Thông tin nhà cung cấp ",
+    path: `/${path.SUPPLIER}/${path.INFORMATION_SUPPLIER}`,
+    icon: <BsPostcard size={20} />,
+    type: "SINGLE",
+  },
+  {
     id: 1234,
     name: "Quản lý dịch vụ",
-    path: `/${path.MANAGER}/${path.MANAGE_POST}`,
+    path: `/${path.SUPPLIER}/${path.MANAGE_POST}`,
     icon: <BsPostcard size={20} />,
     type: "SINGLE",
   },
   {
     id: 578,
     name: "Nạp tiền",
-    path: `/${path.MANAGER}/${path.DEPOSIT}`,
+    path: `/${path.SUPPLIER}/${path.DEPOSIT}`,
     icon: <AiFillDollarCircle size={20} />,
     type: "SINGLE",
   },
   {
     id: 5738,
     name: "Lịch sử nạp tiền",
-    path: `/${path.MANAGER}/${path.MANAGE_DEPOSIT}`,
+    path: `/${path.SUPPLIER}/${path.MANAGE_DEPOSIT}`,
     icon: <MdOutlineAttachMoney size={20} />,
     type: "SINGLE",
   },
   {
     id: 57438,
     name: "Lịch sử thanh toán",
-    path: `/${path.MANAGER}/${path.HISTORIES_PAYMENT}`,
+    path: `/${path.SUPPLIER}/${path.HISTORIES_PAYMENT}`,
     icon: <MdHistory size={20} />,
     type: "SINGLE",
   },

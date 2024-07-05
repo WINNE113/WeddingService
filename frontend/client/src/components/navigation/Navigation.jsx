@@ -243,7 +243,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
                         (el) => el.name === "ROLE_SUPPLIER"
                       ) && (
                           <Link
-                            to={`/${path.SUPPLIER}`}
+                            to={`/${path.SUPPLIER}/${path.INFORMATION_SUPPLIER}`}
                             className="p-3 hover:bg-gray-100 hover:text-emerald-600 font-medium"
                           >
                             Quản lý dịch vụ

@@ -10,7 +10,7 @@ const SelectLib = ({
   className,
   label,
   gap,
-  register = () => {},
+  register = () => { },
   id,
   validate,
   errors,
@@ -28,7 +28,7 @@ const SelectLib = ({
         onChange={(val) => onChange(val)}
         formatOptionLabel={(option) => (
           <div className="flex text-black items-center gap-2">
-            <div>{option.name}</div>
+            <div>{option.province_name || option.district_name || option.ward_name}</div>
           </div>
         )}
         classNames={{

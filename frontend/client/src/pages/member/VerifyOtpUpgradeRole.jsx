@@ -31,14 +31,14 @@ const VerifyOtpUpgradeRole = ({ navigate, dispatch }) => {
       setTimeout(() => {
         Swal.fire({
           title: "Congrads!",
-          text: "Xác thực thành công. Bây giờ bạn có thể đăng tin rồi, đi tới đăng tin?",
+          text: "Xác thực thành công. Bây giờ bạn có thể trở thành nhà cung cấp, cập nhật thông tin nhà cung cấp?",
           icon: "success",
           showConfirmButton: true,
           showCancelButton: true,
           confirmButtonText: "Đăng tin",
         }).then((rs) => {
           if (rs.isConfirmed) {
-            navigate(`/${path.SUPPLIER}`)
+            navigate(`/${path.SUPPLIER}/${path.INFORMATION_SUPPLIER}`)
           }
         })
       }, 500)
