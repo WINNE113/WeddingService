@@ -15,6 +15,8 @@ import Personal from "./pages/member/Personal"
 import LayoutSupplier from "./pages/supplier/LayoutSupplier"
 import VerifyOtpUpgradeRole from "./pages/member/VerifyOtpUpgradeRole"
 import InforSupplier from "./pages/supplier/InforSupplier"
+import Filter from "./pages/public/Filter"
+import DetailService from "./pages/public/DetailService"
 
 
 function App() {
@@ -46,9 +48,11 @@ function App() {
         <Route path={path.LAYOUT} element={<Layout />}>
           <Route path={path.HOME} element={<Home />} />
           <Route path={path.VERIFY_PHONE} element={<VerifyOtpUpgradeRole />} />
+          <Route path={path.LIST} element={<Filter />} />
+          <Route path={path.DETAIL_POST__PID__TITLE} element={<DetailService/>} />
+          <Route path={path.INVALID} element={<Home />} />
         </Route>
         <Route path={path.LOGIN} element={<Login />} />
-        <Route path={path.INVALID} element={<Home />} />
         {/* Member routes */}
         <Route path={path.MEMBER} element={<LayoutMember />}>
           <Route path={path.WISHLIST} element={<Wishlist />} />

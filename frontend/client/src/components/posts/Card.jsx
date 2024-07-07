@@ -8,6 +8,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useParams } from "react-router-dom"
 import { toast } from "react-toastify"
+import { Button } from ".."
 
 const Card = ({
   image,
@@ -71,9 +72,10 @@ const Card = ({
         </Link>
         <span className="text-sm text-gray-500">{address}</span>
         <div className="mt-3 flex justify-between items-center">
-          <span className="font-medium text-main-orange">{`${formatMoney(
-            price
-          )} VNĐ`}</span>
+          <Button
+          >
+            Nhận Báo Giá
+          </Button>
           <span className="text-gray-500 text-sm">
             {moment(createdDate).format("DD/MM/YYYY")}
           </span>

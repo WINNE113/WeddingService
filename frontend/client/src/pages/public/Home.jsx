@@ -62,7 +62,6 @@ const Home = () => {
 
     return (
         <section className="pb-16">
-            <Navigation />
             <Search />
             <div className="bg-pink-100">
                 <Section

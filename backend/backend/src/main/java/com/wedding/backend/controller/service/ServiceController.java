@@ -32,4 +32,8 @@ public class ServiceController {
         return ResponseEntity.ok(service.getAllByServiceTypeAndAcceptStatus(serviceTypeId,pageable));
     }
 
+    @GetMapping("/detail-service")
+    public ResponseEntity<?> getDetailServiceById(@RequestParam Long serviceId){
+        return ResponseEntity.ok(service.getDetailServiceById(serviceId));
+    }
 }

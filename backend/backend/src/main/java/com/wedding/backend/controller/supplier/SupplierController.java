@@ -37,7 +37,7 @@ public class SupplierController {
         return ResponseEntity.ok(service.getSupplier(supplierId));
     }
 
-    @GetMapping("/getByUser")   
+    @GetMapping("/getByUser")
     public ResponseEntity<?> getSupplierByUser(Principal connectedUser){
         return ResponseEntity.ok(service.getSupplierByUser(connectedUser));
     }

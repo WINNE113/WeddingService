@@ -1,8 +1,10 @@
 package com.wedding.backend.service.impl.service;
 
+import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.common.StatusCommon;
 import com.wedding.backend.dto.service.ServiceDTO;
+import com.wedding.backend.dto.service.ServiceDetail;
 import com.wedding.backend.entity.ServiceTypeEntity;
 import com.wedding.backend.exception.ResourceNotFoundException;
 import com.wedding.backend.mapper.ServiceMapper;
@@ -61,6 +63,18 @@ public class service implements IService {
             }
         } catch (Exception ex) {
             throw new ResourceNotFoundException(ex.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public BaseResultWithData<ServiceDetail> getDetailServiceById(Long serviceId) {
+        BaseResultWithData<ServiceDetail> result = new BaseResultWithData<>();
+        try {
+            ServiceDetail resultFromDb = repository.serviceDetailById(serviceId);
+            result.Set(true, "", resultFromDb);
+        } catch (Exception ex) {
+            result.Set(false, ex.getMessage(), null);
         }
         return result;
     }

@@ -32,7 +32,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
   const timeoutRef = useRef(null);
   const [menu, setMenu] = useState([
     {
-      path: "/danh-sach/?type=" + path.PHONGTRO,
+      path: "/danh-sach",
       name: "DỊCH VỤ CƯỚI",
       subname: "Dịch vụ cưới",
       id: "dichvucuoi",
@@ -201,7 +201,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
                   <Button
                     onClick={() =>
                       handleClickCreatePost(
-                        `/${path.MANAGER}/${path.CREATE_POST}`
+                        `/${path.SUPPLIER}/${path.INFORMATION_SUPPLIER}`
                       )
                     }
                     className="text-white rounded-md flex items-center gap-2 border  bg-gradient-to-r to-main-pink from-main-rose text-sm font-medium px-6 py-2"

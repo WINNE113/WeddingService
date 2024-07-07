@@ -50,6 +50,7 @@ public class SecurityConfiguration {
                                 "/api/v1/service-type/getAll",
                                 "/api/v1/service/getAllByDeleted",
                                 "/api/v1/service/getAllByServiceType",
+                                "/api/v1/service/detail-service",
                                 "/api/v1/rating/list/**",
                                 "/api/v1/role/**"
                         )

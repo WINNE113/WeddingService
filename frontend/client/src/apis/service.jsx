@@ -18,3 +18,10 @@ export const apiGetServiceByServiceType = (params) =>
         method: "GET",
         params,
     })
+export const apiGetDetailService = (params) => {
+    axios({
+        url: "/service/detail-service",
+        method: "GET",
+        params
+    })
+}
