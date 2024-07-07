@@ -26,6 +26,16 @@ public class MessageUtil {
     public static final String MSG_SERVICE_NOT_FOUND = "Dịch vụ không tồn tại !";
     public static final String MSG_SERVICE_TYPE_NOT_FOUND = "Loại dịch vụ không tồn tại !";
     public static final String MSG_WISHLIST_ITEM_EXITED = "Danh sách yêu thích đã tồn tại dịch vụ";
+    public static final String MSG_OK = "Thành công";
+    public static final String MSG_PROCESS_TRANSACTION_PAYMENT_FAIL = "Xin lỗi, giao dịch thanh toán của bạn không thành công.";
+    public static final String MSG_PROCESS_TRANSACTION_PAYMENT_SUCCESS = "Cảm ơn bạn, giao dịch thanh toán thành công !";
+    public static final String MSG_PAYMENT_NOT_FOUND = "Giao dịch thanh toán không tìm thấy.";
+    public static final String MSG_TRANSACTION_SERVICE_SUCCESS_WITH_SMS = "Giao dich thanh toán dịch vụ thành công, Vui lòng kiểm tra SMS để xem chi tiết ";
+    public static final String MSG_TRANSACTION_EXTENSION_SERVICE_SUCCESS_WITH_SMS = "Giao dich thanh toán gia hạn dịch vụ thành công, Vui lòng kiểm tra SMS để xem chi tiết ";
+    public static final String MSG_TRANSACTION_SERVICE_SUCCESS_WITHOUT_SMS = "Giao dich thanh toán dịch vụ thành công. Lỗi gửi SMS! ";
+    public static final String MSG_TRANSACTION_EXTENSION_SERVICE_SUCCESS_WITHOUT_SMS = "Giao dich thanh toán gia hạn dịch vụ thành công. Lỗi gửi SMS! ";
+    public static final String MSG_BALANCE_NOT_ENOUGH = "Hiện tại, Số dư của bạn không đủ để thực hiện giao dịch.";
+
 
 
 }

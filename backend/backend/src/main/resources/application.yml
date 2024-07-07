@@ -35,4 +35,11 @@ twilio:
   auth_token: b32ec809812a18c11b411bb2b9702a5e
   trial_number: +12314004777
 
+vnpay:
+  returnUrl: http://localhost:8080/api/v1/payment/vnpay-return
+  paymentUrl: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+  tmnCode": QYBSTFGY
+  hashSecret: ZZFKYHJMITRTSDOUEIJUFQYRLLRMMSVN
+  version: 2.1.0
+
 
