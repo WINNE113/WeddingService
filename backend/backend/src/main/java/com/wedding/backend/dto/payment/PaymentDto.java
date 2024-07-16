@@ -14,7 +14,7 @@ public class PaymentDto {
     private Date paymentDate = new Date();
     private Date expireDate = new Date(System.currentTimeMillis() + 15 * 60 * 1000); // 15 minutes in the future
     private String paymentLanguage = "vn";
-    private String merchantId = "fc324545c40144e5be6552aded90c2af";
+    private String merchantId = "92ddc03d7cfc4a58bf5768e545fa8249";
     private String paymentDestinationId = "";
     private String signature = "";
 }

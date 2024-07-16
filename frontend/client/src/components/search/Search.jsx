@@ -83,7 +83,7 @@ const Search = ({ dispatch, navigate, location }) => {
             }
           >
             <span className="line-clamp-1">
-              {priceRange?.text || "💲 Giá thuê"}
+              {priceRange?.text || "💲 Tên Nhà Cung Cấp"}
             </span>
           </div>
           <div
@@ -108,7 +108,7 @@ const Search = ({ dispatch, navigate, location }) => {
             }
           >
             <span className="line-clamp-1">
-              {areaRange?.text || "🔳 Diện tích"}
+              {areaRange?.text || "🔳 Loại Dịch Vụ"}
             </span>
           </div>
           <div className="col-span-1 h-full flex items-center justify-center gap-2">

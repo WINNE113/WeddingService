@@ -1,6 +1,7 @@
 package com.wedding.backend.controller.payment;
 
 import com.wedding.backend.base.BaseResponse;
+import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.dto.payment.PaymentDto;
 import com.wedding.backend.dto.payment.PaymentResultData;
@@ -30,7 +31,7 @@ public class PaymentController {
 
     public final IPaymentService paymentService;
 
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGE','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPLIER','ROLE_ADMIN')")
     @PostMapping()
     public ResponseEntity<?> create(@RequestBody PaymentDto request, Principal connectedUser) {
         return paymentService.createPayment(request, connectedUser);
@@ -67,10 +68,10 @@ public class PaymentController {
     @GetMapping(value = "/vnpay-return-view")
     public void vnpayReturnView(@ModelAttribute ViewPaymentReturnDto response, HttpServletResponse httpServletResponse) throws IOException {
         ResponseEntity<?> responseEntity = paymentService.vnpayReturnView(response);
-        BaseResponse baseResponse = (BaseResponse) responseEntity.getBody();
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("https://trouytin.online/payment/status")
-                .queryParam("message", baseResponse.getMessage())
-                .queryParam("success", baseResponse.isSuccess());
+        BaseResult baseResult = (BaseResult) responseEntity.getBody();
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:5173/payment/status")
+                .queryParam("message", baseResult.getMessage())
+                .queryParam("success", baseResult.isSuccess());
         httpServletResponse.sendRedirect(builder.toUriString());
     }
 

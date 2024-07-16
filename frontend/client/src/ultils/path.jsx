@@ -12,6 +12,10 @@ const path = {
     INFORMATION_SUPPLIER: "thong-tin-nha-cung-cap",
     LIST: "danh-sach",
     DETAIL_POST: "chi-tiet-dich-vu",
-    DETAIL_POST__PID__TITLE: "chi-tiet-dich-vu/:pid/:title/*"
+    DETAIL_POST__PID__TITLE: "chi-tiet-dich-vu/:pid/:title/*",
+    DEPOSIT: "nap-tien",
+    PAYMENT_RESULT: "payment/status",
+    HISTORIES_PAYMENT: "lich-su-thanh-toan",
+    MANAGE_DEPOSIT: "quan-ly-nap-tien",
 }
 export default path

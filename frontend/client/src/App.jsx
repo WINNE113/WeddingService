@@ -17,7 +17,10 @@ import VerifyOtpUpgradeRole from "./pages/member/VerifyOtpUpgradeRole"
 import InforSupplier from "./pages/supplier/InforSupplier"
 import Filter from "./pages/public/Filter"
 import DetailService from "./pages/public/DetailService"
-
+import Deposit from "./pages/supplier/Deposit"
+import PaymentResult from "./pages/public/PaymentResult"
+import HistoriesPayment from "./pages/supplier/HistoriesPayment"
+import ManageDeposit from "./pages/supplier/ManageDeposit"
 
 function App() {
   const { isLoading, isShowModal, modalContent } = useSelector(
@@ -61,7 +64,11 @@ function App() {
         {/* Supplier routes */}
         <Route path={path.SUPPLIER} element={<LayoutSupplier />}>
           <Route path={path.INFORMATION_SUPPLIER} element={<InforSupplier />} />
+          <Route path={path.DEPOSIT} element={<Deposit />} />
+          <Route path={path.HISTORIES_PAYMENT} element={<HistoriesPayment />} />
+          <Route path={path.MANAGE_DEPOSIT} element={<ManageDeposit />} />
         </Route>
+        <Route path={path.PAYMENT_RESULT} element={<PaymentResult />} />
 
       </Routes>
 
