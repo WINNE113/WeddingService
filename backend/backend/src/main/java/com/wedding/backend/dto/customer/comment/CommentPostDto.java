@@ -1,4 +1,4 @@
-package com.wedding.backend.dto.comment;
+package com.wedding.backend.dto.customer.comment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

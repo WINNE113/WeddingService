@@ -1,7 +1,7 @@
 package com.wedding.backend.controller.customer;
 
 
-import com.wedding.backend.dto.comment.CommentPostDto;
+import com.wedding.backend.dto.customer.comment.CommentPostDto;
 import com.wedding.backend.service.IService.customer.ICommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/comment")

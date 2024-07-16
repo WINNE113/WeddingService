@@ -3,7 +3,7 @@ package com.wedding.backend.service.IService.customer;
 
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
-import com.wedding.backend.dto.comment.CommentPostDto;
+import com.wedding.backend.dto.customer.comment.CommentPostDto;
 
 import java.security.Principal;
 import java.util.List;
