@@ -17,23 +17,25 @@ public class ServiceController {
     private final IService service;
 
     /*
-    * Find all service with condition is deleted is false and status is APPROVED
-    * */
+     * Find all service with condition is deleted is false and status is APPROVED
+     * */
     @GetMapping("/getAllByDeleted")
     public ResponseEntity<?> getAllByFalseDeletedAndAcceptStatus(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
-                                    @RequestParam(name = "size", required = false, defaultValue = "5") Integer size){
+                                                                 @RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(service.getAllByFalseDeletedAndAcceptStatus(pageable));
     }
+
     @GetMapping("/getAllByServiceType")
     public ResponseEntity<?> getAllByServiceTypeAndAcceptStatus(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
-                                                                @RequestParam(name = "size", required = false, defaultValue = "5") Integer size, @RequestParam (name = "serviceType", defaultValue = "1") Long serviceTypeId ){
+                                                                @RequestParam(name = "size", required = false, defaultValue = "5") Integer size, @RequestParam(name = "serviceType", defaultValue = "1") Long serviceTypeId) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(service.getAllByServiceTypeAndAcceptStatus(serviceTypeId,pageable));
+        return ResponseEntity.ok(service.getAllByServiceTypeAndAcceptStatus(serviceTypeId, pageable));
     }
 
     @GetMapping("/detail-service")
-    public ResponseEntity<?> getDetailServiceById(@RequestParam Long serviceId){
+    public ResponseEntity<?> getDetailServiceById(@RequestParam Long serviceId) {
         return ResponseEntity.ok(service.getDetailServiceById(serviceId));
     }
+
 }

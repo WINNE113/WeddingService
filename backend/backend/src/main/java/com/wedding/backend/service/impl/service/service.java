@@ -3,6 +3,8 @@ package com.wedding.backend.service.impl.service;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.common.StatusCommon;
+import com.wedding.backend.dto.service.ImageAlbDTO;
+import com.wedding.backend.dto.service.ImageAlbDTOConvert;
 import com.wedding.backend.dto.service.ServiceDTO;
 import com.wedding.backend.dto.service.ServiceDetail;
 import com.wedding.backend.entity.ServiceTypeEntity;
@@ -77,5 +79,27 @@ public class service implements IService {
             result.Set(false, ex.getMessage(), null);
         }
         return result;
+    }
+
+    @Override
+    public BaseResultWithDataAndCount<List<ImageAlbDTOConvert>> getAlbumOfServiceByNameAlb(Long serviceId, String albName) {
+        BaseResultWithDataAndCount<List<ImageAlbDTOConvert>> result = new BaseResultWithDataAndCount<>();
+        try {
+            List<ImageAlbDTOConvert> dataAfterConvert = repository.imagesOfAlbum(serviceId, albName)
+                    .stream()
+                    .map(this::convertData)
+                    .toList();
+            result.set(dataAfterConvert, (long) dataAfterConvert.size());
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+        return result;
+    }
+
+    public ImageAlbDTOConvert convertData(ImageAlbDTO dataConvert) {
+        return ImageAlbDTOConvert.builder()
+                .imageURL(dataConvert.getImagesURL())
+                .albName(dataConvert.getNameAlb())
+                .build();
     }
 }

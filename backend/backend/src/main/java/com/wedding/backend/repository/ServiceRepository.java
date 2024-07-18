@@ -1,5 +1,6 @@
 package com.wedding.backend.repository;
 
+import com.wedding.backend.dto.service.ImageAlbDTO;
 import com.wedding.backend.dto.service.ServiceDetail;
 import com.wedding.backend.entity.ServiceEntity;
 import com.wedding.backend.entity.ServiceTypeEntity;
@@ -26,4 +27,12 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
                     "where sv.id=:serviceId", nativeQuery = true
     )
     ServiceDetail serviceDetailById(@Param("serviceId") Long serviceId);
+
+
+    @Query(
+            value = "Select s.id, li.image_url_list as imagesURL, sa.name as nameAlb from services as s\n" +
+                    "inner join service_albums as sa on s.id = sa.service_id\n" +
+                    "inner join service_album_entity_image_url_list as li on sa.id = li.service_album_entity_id\n" +
+                    "where s.id=:serviceId and sa.name like :albName", nativeQuery = true)
+    List<ImageAlbDTO> imagesOfAlbum(@Param("serviceId") Long serviceId, @Param("albName") String albName);
 }
