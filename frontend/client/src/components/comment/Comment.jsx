@@ -25,14 +25,17 @@ const Comment = ({
   const [finalParents, setFinalParents] = useState([])
   const [isShowOption, setIsShowOption] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
+
+
   useEffect(() => {
     if (!isShowMore) setFinalParents(() => parents.filter((_, idx) => idx < 1))
     else setFinalParents(parents)
   }, [isShowMore, update])
+
   return (
     <div className="flex gap-3">
       <img
-         src={partUser?.images || "/user.svg"}
+        src={partUser?.images || "/user.svg"}
         alt="user"
         className="w-12 h-12 flex-none object-cover border rounded-full"
       />
@@ -56,7 +59,7 @@ const Comment = ({
                 ({moment(createdDate).fromNow()})
               </span>
             </span>
-            {+current?.userId === +userId && (
+            {current?.customerId === userId && (
               <span className="text-xl select-none cursor-pointer p-2 pr-0 relative">
                 <span
                   onClick={() => setIsShowOption(!isShowOption)}

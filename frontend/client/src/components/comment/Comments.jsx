@@ -16,7 +16,7 @@ const Comments = ({ dispatch }) => {
   const fetchComments = async () => {
     const response = await apiGetComments(pid)
     if (response) {
-      setComments(response)
+      setComments(response.data)
       setUpdate(!update)
     }
   }

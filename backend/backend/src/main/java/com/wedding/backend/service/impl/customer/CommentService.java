@@ -158,7 +158,10 @@ public class CommentService implements ICommentService {
                     }
                 }
                 item.setPartUser(partUser);
+                //TODO: MAKE AGAIN
+                item.setUserId(user.getId());
             }
+
             result.set(commentPostDtos, (long) commentPostDtos.size());
         } catch (Exception ex) {
             throw new ResourceNotFoundException(ex.getMessage());

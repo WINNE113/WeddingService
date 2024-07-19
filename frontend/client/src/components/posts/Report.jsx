@@ -44,7 +44,7 @@ const Report = ({ dispatch, id }) => {
         </div>
         <div className="flex flex-col gap-1">
           <h3 className="font-semibold">
-            Điền thông tin để Trọ Uy Tín liên lạc với bạn khi cần thiết
+            Điền thông tin để chúng tôi liên lạc với bạn khi cần thiết
           </h3>
           <InputForm
             register={register}

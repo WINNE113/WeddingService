@@ -20,6 +20,7 @@ public class CommentPostDto {
     private String parentComment;
     @JsonIgnore
     private UserEntity userComment;
+    private String userId;
     private PartUser partUser;
     @JsonIgnore
     private ServiceEntity serviceComment;
