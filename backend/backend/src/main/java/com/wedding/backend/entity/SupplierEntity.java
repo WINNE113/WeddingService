@@ -30,6 +30,9 @@ public class SupplierEntity extends BaseEntityWithIDIncrement {
     @Column(name = "address_supplier")
     private String addressSupplier;
 
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
+
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "id")
     @JsonManagedReference

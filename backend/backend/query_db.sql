@@ -12,7 +12,7 @@ inner join wishlist_items as wi on s.id = wi.service_id
 inner join wishlists as w on w.wishlist_id = wi.wishlist_id
 where w.user_id = '08ce75edefd446159f4f590cb78977ca'  and w.wishlist_name LIKE 'service'
 group by s.id, s.title, s.address, s.created_date, s.price, s.image, wi.wishlist_item_id 
-order by wi.wishlist_item_id desc
+order by wi.wishlist_item_id desc;
 
 
 ALTER TABLE `wedding_db`.`services`
@@ -24,3 +24,7 @@ ALTER TABLE `wedding_db`.`services`
     CHANGE COLUMN `information` `information` TEXT CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL AFTER `price`,
     CHANGE COLUMN `supplier_id` `supplier_id` BIGINT NULL DEFAULT NULL AFTER `information`,
     CHANGE COLUMN `service_type_id` `service_type_id` BIGINT NULL DEFAULT NULL AFTER `supplier_id`;
+
+
+-- Query select all supplier (conditional)
+

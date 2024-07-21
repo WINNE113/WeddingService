@@ -29,8 +29,9 @@ public class SupplierController {
     public ResponseEntity<?> getAllSuppliers(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                              @RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(service.getAllSuppliers(pageable));
+        return ResponseEntity.ok(service.getSuppliersByFalseDeleted(pageable));
     }
+
 
     @GetMapping("/get/{supplierId}")
     public ResponseEntity<?> getSupplier(@PathVariable Long supplierId) {
@@ -38,7 +39,7 @@ public class SupplierController {
     }
 
     @GetMapping("/getByUser")
-    public ResponseEntity<?> getSupplierByUser(Principal connectedUser){
+    public ResponseEntity<?> getSupplierByUser(Principal connectedUser) {
         return ResponseEntity.ok(service.getSupplierByUser(connectedUser));
     }
 
@@ -54,8 +55,8 @@ public class SupplierController {
 
     @PostMapping(value = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> addSupplier(@RequestPart String request, @RequestPart(required = false, name = "supplierImage") @Valid MultipartFile supplierImage, Principal connectedUser) throws JsonProcessingException {
-       ObjectMapper objectMapper = new ObjectMapper();
-       SupplierDTO supplierDTO = objectMapper.readValue(request, SupplierDTO.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        SupplierDTO supplierDTO = objectMapper.readValue(request, SupplierDTO.class);
         return ResponseEntity.ok(service.addSupplier(supplierDTO, supplierImage, connectedUser));
     }
 }

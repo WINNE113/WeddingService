@@ -30,10 +30,6 @@ public class SupplierService implements ISupplierService {
     private final FileHandler fileHandler;
     private final SupplierMapper supplierMapper;
 
-    @Override
-    public BaseResultWithDataAndCount<List<SupplierDTO>> getAllSuppliers(Pageable pageable) {
-        return null;
-    }
 
     @Override
     public BaseResultWithData<SupplierDTO> getSupplier(Long supplierId) {
@@ -104,6 +100,21 @@ public class SupplierService implements ISupplierService {
                     .toList();
             result.setData(resultFromDB);
             result.setCount((long) resultFromDB.size());
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public BaseResultWithDataAndCount<List<SupplierDTO>> getSuppliersByFalseDeleted(Pageable pageable) {
+        BaseResultWithDataAndCount<List<SupplierDTO>> result = new BaseResultWithDataAndCount<>();
+        try {
+            List<SupplierDTO> resultFromDB = repository.findAllByIsDeletedFalse(pageable)
+                    .stream()
+                    .map(supplierMapper::entityToDto)
+                    .toList();
+            result.set(resultFromDB, (long) resultFromDB.size());
         } catch (Exception ex) {
             throw new ResourceNotFoundException(ex.getMessage());
         }

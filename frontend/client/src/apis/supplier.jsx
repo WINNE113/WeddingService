@@ -13,3 +13,8 @@ export const apiSupplierGetByUser = () =>
         url: "/supplier/getByUser",
         method: "GET"
     })
+export const apiSuppliers = () =>
+    axios({
+        url: "/supplier/getAll",
+        method: "GET"
+    })

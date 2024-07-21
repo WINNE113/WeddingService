@@ -12,7 +12,6 @@ import java.security.Principal;
 import java.util.List;
 
 public interface ISupplierService {
-    BaseResultWithDataAndCount<List<SupplierDTO>> getAllSuppliers(Pageable pageable);
 
     BaseResultWithData<SupplierDTO> getSupplier(Long supplierId);
 
@@ -21,4 +20,6 @@ public interface ISupplierService {
     BaseResult addSupplier(SupplierDTO request, MultipartFile supplierImage, Principal connectedUser);
 
     BaseResultWithDataAndCount<List<SupplierDTO>> getSupplierByUser(Principal connectedUser);
+
+    BaseResultWithDataAndCount<List<SupplierDTO>> getSuppliersByFalseDeleted(Pageable pageable);
 }
