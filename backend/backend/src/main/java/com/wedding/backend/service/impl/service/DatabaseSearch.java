@@ -28,6 +28,7 @@ public class DatabaseSearch implements IDatabaseSearch {
         String username = "root";
         String password = "huuthang";
         String tableName = "services";
+        String tableJoin = "supplier";
 
         //TODO: If Filter By Service Type Name => Get Id Of Service Type
         if (!map.isEmpty() && map.containsKey("service_type")) {
@@ -39,9 +40,12 @@ public class DatabaseSearch implements IDatabaseSearch {
         final Connection connection = DriverManager.getConnection(url, username, password);
         StringBuilder filterQuery = new StringBuilder();
         StringBuilder totalResultQuery = new StringBuilder();
-        totalResultQuery.append("SELECT count(*) as total FROM ").append(tableName).append(" where services.is_deleted = false ");
-        filterQuery.append("Select s.id, s.title, s.image, s.address, s.is_deleted, s.status, s.service_type_id, s.created_date")
+        totalResultQuery.append("SELECT count(*) as total FROM ").append(tableName)
+                .append(" inner join supplier as sup on services.supplier_id = sup.id")
+                .append(" where services.is_deleted = false ");
+        filterQuery.append("Select s.id, s.title, s.image, s.address, s.is_deleted, s.status, s.service_type_id, s.created_date, sup.name, sup.id")
                 .append(" from services s")
+                .append(" inner join supplier as sup on s.supplier_id = sup.id")
                 .append(" where s.is_deleted = false");
         int count = 0;
         if (!map.isEmpty()) {
@@ -53,9 +57,9 @@ public class DatabaseSearch implements IDatabaseSearch {
                     totalResultQuery.append(" AND ");
                 }
                 switch (key) {
-                    case "price" -> {
-                        filterQuery.append("price BETWEEN ? AND ?");
-                        totalResultQuery.append("price BETWEEN ? AND ?");
+                    case "supplierName" -> {
+                        filterQuery.append("sup.name like ?");
+                        totalResultQuery.append("sup.name like ?");
                     }
                     case "acreage" -> {
                         filterQuery.append("acreage BETWEEN ? AND ?");
@@ -77,7 +81,7 @@ public class DatabaseSearch implements IDatabaseSearch {
 //        filterQuery.append(" and p.status = 'APPROVED'");
 //        totalResultQuery.append(" and posts.status = 'APPROVED'");
         // Use Group By on filter query
-        filterQuery.append(" group by s.id, s.title, s.image, s.address, s.is_deleted, s.status, s.service_type_id, s.created_date");
+        filterQuery.append(" group by s.id, s.title, s.image, s.address, s.is_deleted, s.status, s.service_type_id, s.created_date, sup.name, sup.id");
 
         //Order by Created data DESC
 

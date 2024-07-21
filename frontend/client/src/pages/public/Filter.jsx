@@ -1,4 +1,4 @@
-import { apiGetServiceByDeleted , apiGetServices} from "@/apis/service"
+import { apiGetServiceByDeleted, apiGetServices } from "@/apis/service"
 import {
     apiGetDistricts,
     apiGetWards,
@@ -71,6 +71,21 @@ const Filter = ({ location, navigate, dispatch }) => {
     };
 
     useEffect(() => {
+        const text = clsx(
+          ward?.ward_name,
+          ward?.ward_name && ",",
+          district?.district_name,
+          district?.ndistrict_nameame && ",",
+          province?.province_name
+        )
+        const textModified = text
+          ?.split(",")
+          ?.map((el) => el.trim())
+          ?.join(", ")
+        setCustomValue("address", textModified)
+      }, [province, district, ward])
+
+    useEffect(() => {
         if (!province) {
             setValue("district", "");
             setValue("ward", "");
@@ -94,6 +109,20 @@ const Filter = ({ location, navigate, dispatch }) => {
     }, [district, setValue]);
 
 
+    const handleFilterRange = (type, value) => {
+        const params = Object.fromEntries([...searchParams])
+        if (type === "ADDRESS") {
+            if (params.supplierName) {
+                params.supplierName = searchParams.getAll("supplierName")
+            } else delete params.supplierName
+            params.address = value
+        }
+        navigate({
+            pathname: location.pathname,
+            search: createSearchParams(params).toString(),
+        })
+    }
+
     useEffect(() => {
         const formdata = new FormData()
         const { type, page, ...searchParamsObject } = Object.fromEntries([
@@ -104,6 +133,7 @@ const Filter = ({ location, navigate, dispatch }) => {
             "json",
             JSON.stringify({ ...searchParamsObject, status: "APPROVED" })
         )
+        if (page && Number(page)) formdata.append("page", Number(page) - 1)
         formdata.append("size", 5)
         getPosts(formdata)
         dispatch(resetFilter(false))
@@ -144,7 +174,7 @@ const Filter = ({ location, navigate, dispatch }) => {
                             className="col-span-2 text-sm"
                             onChange={(val) => setCustomValue("district", val)}
                             value={district}
-                             options={districts?.map((el) => ({
+                            options={districts?.map((el) => ({
                                 ...el,
                                 value: el.district_id,
                                 label: el.district_name,
@@ -156,7 +186,7 @@ const Filter = ({ location, navigate, dispatch }) => {
                             className="col-span-2 text-sm"
                             onChange={(val) => setCustomValue("ward", val)}
                             value={ward}
-                             options={wards?.map((el) => ({
+                            options={wards?.map((el) => ({
                                 ...el,
                                 value: el.ward_id,
                                 label: el.ward_name,
@@ -171,40 +201,9 @@ const Filter = ({ location, navigate, dispatch }) => {
                             >
                                 Thêm
                             </Button>
-                            {/* <Button
-                onClick={resetValue}
-                className="py-1 bg-transparent border border-orange-600 text-orange-600"
-              >
-                Reset
-              </Button> */}
                         </div>
                     </div>
-                </BoxFilter>
-                <BoxFilter title="DIỆN TÍCH">
-                    <div className="grid grid-cols-2 gap-2 p-2">
-                        {areaOptions.map((el, idx) => (
-                            <div className="flex items-center gap-2" key={idx}>
-                                <input
-                                    onChange={(e) => handleFilterRange(el.type, [el.min, el.max])}
-                                    type="radio"
-                                    name={el.type}
-                                    id={el.value}
-                                    value={el.value}
-                                    className="AREA_OPTION"
-                                />
-                                <label htmlFor={el.value}>{el.value}</label>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="flex justify-center items-center text-sm">
-                        <Button
-                            onClick={() => handleResetRadio("AREA_OPTION")}
-                            className="py-1 bg-transparent border border-red-600 text-red-600"
-                        >
-                            Reset
-                        </Button>
-                    </div>
-                </BoxFilter>
+                </  BoxFilter>
                 <BoxFilter title="KHÁC">
                     <div className="flex flex-col gap-2 p-2">
                         <SelectLib
