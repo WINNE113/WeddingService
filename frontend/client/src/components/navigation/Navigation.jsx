@@ -73,7 +73,7 @@ const Navigation = ({ dispatch, location, navigate }) => {
               ...item,
               dropdownItems: response.data.map((apiItem) => ({
                 name: apiItem.name,
-                path: `/dich-vu-cuoi/${apiItem.path}`,
+                path: `/${path.LIST}?service_type_id=${apiItem.id}`,
                 iconURL: apiItem.iconURL
               })),
             };

@@ -7,33 +7,32 @@ import withBaseTopping from "@/hocs/WithBaseTopping"
 import { modal } from "@/redux/appSlice"
 import path from "@/ultils/path"
 import { createSearchParams } from "react-router-dom"
-import { BiReset } from "react-icons/bi"
+import { BiReset, BiDollar } from "react-icons/bi"
 import SearchRange from "./SearchRange"
 import SearchAddress from "./SearchAddress"
+import SearchNameSupplier from "./SearchNameSupplier"
+import { InputForm } from ".."
+
 
 const Search = ({ dispatch, navigate, location }) => {
-  const { prices, areas } = useSelector((s) => s.app)
-  const { setValue, watch } = useForm()
-  const categoryCode = watch("categoryCode")
-  const priceRange = watch("priceRange")
-  const areaRange = watch("areaRange")
+
+
+  const { setValue, watch, register, formState: { errors } } = useForm()
+  const nameSupplier = watch("nameSupplier")
   const address = watch("address")
   useEffect(() => {
     if (location.pathname === "/") reset()
   }, [location.pathname])
   const reset = () => {
-    setValue("categoryCode", "")
-    setValue("priceRange", "")
-    setValue("areaRange", "")
+    setValue("nameSupplier", "")
     setValue("address", "")
   }
 
   const handleSearchPost = () => {
     const queries = {}
-    if (categoryCode) queries.category = categoryCode.id
-    if (priceRange) queries.price = priceRange.value
-    if (areaRange) queries.acreage = areaRange.value
+    if (nameSupplier) queries.nameSupplier = nameSupplier
     if (address) queries.address = address
+
     navigate({
       pathname: `/${path.LIST}`,
       search: createSearchParams(queries).toString(),
@@ -68,14 +67,10 @@ const Search = ({ dispatch, navigate, location }) => {
                 modal({
                   isShowModal: true,
                   modalContent: (
-                    <SearchRange
-                      unit="triệu/tháng"
-                      type="PRICE"
-                      targetNumber={15}
-                      options={prices}
-                      getValue={(val) => setValue("priceRange", val)}
-                      valRange={priceRange?.value}
-                      exp={6}
+                    <SearchNameSupplier
+                      getValue={(val) => setValue("nameSupplier", val)}
+                      valRange={nameSupplier?.value}
+                      typeCode="NAME"
                     />
                   ),
                 })
@@ -83,34 +78,10 @@ const Search = ({ dispatch, navigate, location }) => {
             }
           >
             <span className="line-clamp-1">
-              {priceRange?.text || "💲 Tên Nhà Cung Cấp"}
+              {nameSupplier || "📛 Tên nhà cung cấp"}
             </span>
           </div>
-          <div
-            className="col-span-1 p-2 rounded-[0.25rem] flex items-center cursor-pointer text-gray-500 bg-white"
-            onClick={() =>
-              dispatch(
-                modal({
-                  isShowModal: true,
-                  modalContent: (
-                    <SearchRange
-                      unit="m2"
-                      type="AREA"
-                      targetNumber={90}
-                      options={areas}
-                      getValue={(val) => setValue("areaRange", val)}
-                      valRange={areaRange?.value}
-                      typeCode="AREA"
-                    />
-                  ),
-                })
-              )
-            }
-          >
-            <span className="line-clamp-1">
-              {areaRange?.text || "🔳 Loại Dịch Vụ"}
-            </span>
-          </div>
+
           <div className="col-span-1 h-full flex items-center justify-center gap-2">
             <Button className="flex-auto h-full" onClick={handleSearchPost}>
               <CiSearch size={18} />

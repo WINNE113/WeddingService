@@ -1,4 +1,4 @@
-import { apiGetServiceByDeleted } from "@/apis/service"
+import { apiGetServiceByDeleted , apiGetServices} from "@/apis/service"
 import {
     apiGetDistricts,
     apiGetWards,
@@ -42,10 +42,12 @@ const Filter = ({ location, navigate, dispatch }) => {
 
     // Filter POST API
     const getPosts = async (formdata) => {
-        const response = await apiGetServiceByDeleted(formdata)
+        const response = await apiGetServices(formdata)
         if (response) setPosts(response)
         else setPosts([])
     }
+
+
     const province = watch("province")
     const target = watch("target")
     const district = watch("district")
@@ -97,16 +99,7 @@ const Filter = ({ location, navigate, dispatch }) => {
         const { type, page, ...searchParamsObject } = Object.fromEntries([
             ...searchParams,
         ])
-        if (searchParamsObject.price) {
-            searchParamsObject.price = searchParams.getAll("price")?.join(",")
-        } else delete searchParamsObject.price
-        if (searchParamsObject.acreage) {
-            searchParamsObject.acreage = searchParams.getAll("acreage")?.join(",")
-        } else delete searchParamsObject.acreage
-        if (page && Number(page)) formdata.append("page", Number(page) - 1)
-        if (type === path.PHONGTRO) searchParamsObject.post_type_id = 1
-        if (type === path.CANHO) searchParamsObject.post_type_id = 2
-        if (type === path.TIMOGHEP) searchParamsObject.post_type_id = 3
+
         formdata.append(
             "json",
             JSON.stringify({ ...searchParamsObject, status: "APPROVED" })

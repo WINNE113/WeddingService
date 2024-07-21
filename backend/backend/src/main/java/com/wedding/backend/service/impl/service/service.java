@@ -35,7 +35,7 @@ public class service implements IService {
             List<ServiceDTO> resultFromDb = repository.findAllByIsDeletedFalse(pageable)
                     .stream()
                     .map(serviceEntity -> mapper.entityToDto(serviceEntity))
-                    .filter(serviceDTO -> serviceDTO.getStatus().equals(StatusCommon.APPROVED))
+                    .filter(serviceDTO -> serviceDTO.getStatus().equals("APPROVED"))
                     .toList();
             Long countResultFromDb = (long) resultFromDb.size();
 
@@ -55,7 +55,7 @@ public class service implements IService {
                 List<ServiceDTO> resultFromDb = repository.findAllByServiceTypeAndIsDeletedFalse(serviceTypeFromDb.get(), pageable)
                         .stream()
                         .map(serviceEntity -> mapper.entityToDto(serviceEntity))
-                        .filter(serviceDTO -> serviceDTO.getStatus().equals(StatusCommon.APPROVED))
+                        .filter(serviceDTO -> serviceDTO.getStatus().equals("APPROVED"))
                         .toList();
                 Long countResultFromDb = (long) resultFromDb.size();
 

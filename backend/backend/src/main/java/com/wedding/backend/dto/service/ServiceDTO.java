@@ -17,8 +17,8 @@ public class ServiceDTO {
     private String image;
     private String price;
     private String address;
-    private String isDeleted;
-    private StatusCommon status;
+    private boolean isDeleted;
+    private String status;
     private ServiceTypeEntity serviceType;
     private Date createdDate;
 }

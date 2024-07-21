@@ -7,7 +7,12 @@ import { useForm } from "react-hook-form"
 import clsx from "clsx"
 import withBaseTopping from "@/hocs/WithBaseTopping"
 import { modal } from "@/redux/appSlice"
-//import { apiGetProvince } from "@/apis/app"
+import {
+  apiGetProvinces,
+  apiGetDistricts,
+  apiGetWards,
+} from "@/apis/app"
+
 
 const SearchAddress = ({ getAddress, dispatch }) => {
   const { provinces } = useSelector((state) => state.app)
@@ -31,32 +36,51 @@ const SearchAddress = ({ getAddress, dispatch }) => {
       shouldTouch: true,
       shouldValidate: true,
     })
-  // const getDataProvince = async (provinceCode) => {
-  //   const response = await apiGetProvince(provinceCode)
-  //   if (response.status === 200) {
-  //     setDistricts(response.data?.districts)
-  //   }
-  // }
-  useEffect(() => {
-    if (province) {
-      setCustomValue("district", "")
-      setCustomValue("ward", "")
-      setCustomValue("street", "")
-      //getDataProvince(province.code)
+  const getDataDistricts = async (provinceCode) => {
+    const response = await apiGetDistricts(provinceCode);
+    if (response.status === 200) {
+      setDistricts(response.data.results);
     }
-  }, [province])
+  };
+
+  // Lấy dữ liệu các Phường/Xã dựa trên mã Quận/Huyện
+  const getDataWards = async (districtCode) => {
+    const response = await apiGetWards(districtCode);
+    if (response.status === 200) {
+      setWards(response.data.results);
+    }
+  };
   useEffect(() => {
-    if (district) setWards(district.wards)
-  }, [district])
+    if (!province) {
+      setValue("district", "");
+      setValue("ward", "");
+      setDistricts([]);
+      setWards([]);
+    } else {
+      getDataDistricts(province.province_id);
+      setValue("district", "");
+      setValue("ward", "");
+    }
+  }, [province, setValue]);
+
+  useEffect(() => {
+    if (!district) {
+      setValue("ward", "");
+      setWards([]);
+    } else {
+      getDataWards(district.district_id);
+      setValue("ward", "");
+    }
+  }, [district, setValue]);
   useEffect(() => {
     const text = clsx(
       street,
       street && ",",
-      ward?.name,
-      ward?.name && ",",
-      district?.name,
-      district?.name && ",",
-      province?.name
+      ward?.ward_name,
+      ward?.ward_name && ",",
+      district?.district_name,
+      district?.district_name && ",",
+      province?.province_name
     )
     const textModified = text
       ?.split(",")
@@ -75,10 +99,10 @@ const SearchAddress = ({ getAddress, dispatch }) => {
       <div className="mt-6">
         <div className="grid grid-cols-3 gap-4">
           <SelectLib
-            options={provinces?.map((el) => ({
+            options={provinces.results?.map((el) => ({
               ...el,
-              value: el.code,
-              label: el.name,
+              value: el.province_id,
+              label: el.province_name,
             }))}
             onChange={(val) => setCustomValue("province", val)}
             value={province}
@@ -88,8 +112,8 @@ const SearchAddress = ({ getAddress, dispatch }) => {
           <SelectLib
             options={districts?.map((el) => ({
               ...el,
-              value: el.code,
-              label: el.name,
+              value: el.district_id,
+              label: el.district_name,
             }))}
             onChange={(val) => setCustomValue("district", val)}
             value={district}
@@ -99,8 +123,8 @@ const SearchAddress = ({ getAddress, dispatch }) => {
           <SelectLib
             options={wards?.map((el) => ({
               ...el,
-              value: el.code,
-              label: el.name,
+              value: el.ward_id,
+              label: el.ward_name,
             }))}
             onChange={(val) => setCustomValue("ward", val)}
             value={ward}

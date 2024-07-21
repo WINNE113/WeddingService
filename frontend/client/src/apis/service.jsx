@@ -26,6 +26,13 @@ export const apiGetDetailService = (params) => {
     })
 }
 
+export const apiGetServices = (data) =>
+    axios({
+      url: "/guest/service/filters",
+      method: "post",
+      data,
+    })
+
 export const apiGetAlbumOfService = (params) => {
     return axios({
         url: "/guest/albByName",

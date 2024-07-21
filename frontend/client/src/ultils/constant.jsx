@@ -494,3 +494,13 @@ export const superAdminSidebar = [
     type: "SINGLE",
   },
 ]
+
+// supplierData.js
+export const suppliers = [
+  { id: 1, value: 'Supplier A' },
+  { id: 2, value: 'Supplier B' },
+  { id: 3, value: 'Supplier C' },
+  { id: 4, value: 'Supplier D' },
+  { id: 5, value: 'Supplier E' },
+];
+

@@ -11,11 +11,7 @@ export const apiGetLngLatFromAddress = (params) =>
         url: `https://api.geoapify.com/v1/geocode/search`,
         params,
     })
-export const apiGetProvince = (provinceCode) =>
-    axios({
-        url: `https://provinces.open-api.vn/api/p/${provinceCode}?depth=3`,
-        method: "get",
-    })
+
 export const apiGetDistricts = (provinceCode) =>
     axios({
         url: `https://vapi.vnappmob.com/api/province/district/${provinceCode}`,
