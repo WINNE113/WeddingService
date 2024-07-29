@@ -2,22 +2,26 @@ package com.wedding.backend.service.impl.service;
 
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
-import com.wedding.backend.common.StatusCommon;
 import com.wedding.backend.dto.service.ImageAlbDTO;
 import com.wedding.backend.dto.service.ImageAlbDTOConvert;
 import com.wedding.backend.dto.service.ServiceDTO;
 import com.wedding.backend.dto.service.ServiceDetail;
 import com.wedding.backend.entity.ServiceTypeEntity;
+import com.wedding.backend.entity.SupplierEntity;
+import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.exception.ResourceNotFoundException;
 import com.wedding.backend.mapper.ServiceMapper;
 import com.wedding.backend.repository.ServiceRepository;
 import com.wedding.backend.repository.ServiceTypeRepository;
+import com.wedding.backend.repository.SupplierRepository;
 import com.wedding.backend.service.IService.service.IService;
 import com.wedding.backend.util.message.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +31,7 @@ public class service implements IService {
     private final ServiceRepository repository;
     private final ServiceMapper mapper;
     private final ServiceTypeRepository serviceTypeRepository;
+    private final SupplierRepository supplierRepository;
 
     @Override
     public BaseResultWithDataAndCount<List<ServiceDTO>> getAllByFalseDeletedAndAcceptStatus(Pageable pageable) {
@@ -90,6 +95,26 @@ public class service implements IService {
                     .map(this::convertData)
                     .toList();
             result.set(dataAfterConvert, (long) dataAfterConvert.size());
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public BaseResultWithDataAndCount<List<ServiceDTO>> getServiceBySupplier(Pageable pageable, Principal connectedUser) {
+        BaseResultWithDataAndCount<List<ServiceDTO>> result = new BaseResultWithDataAndCount<>();
+        try {
+            var user = (UserEntity)((UsernamePasswordAuthenticationToken)connectedUser).getPrincipal();
+            Optional<SupplierEntity> supplier = supplierRepository.findByUser_Id(user.getId());
+            if(supplier.isPresent()){
+                List<ServiceDTO> resultFromDB = repository.findAllBySupplier_Id(pageable,supplier.get().getId())
+                        .stream()
+                        .map(mapper::entityToDto)
+                        .toList();
+
+                result.set(resultFromDB,(long) resultFromDB.size());
+            }
         } catch (Exception ex) {
             throw new ResourceNotFoundException(ex.getMessage());
         }

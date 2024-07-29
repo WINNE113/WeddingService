@@ -30,7 +30,7 @@ const Search = ({ dispatch, navigate, location }) => {
 
   const handleSearchPost = () => {
     const queries = {}
-    if (nameSupplier) queries.supplierName = nameSupplier
+    if (nameSupplier) queries.name = nameSupplier
     if (address) queries.address = address
 
     navigate({

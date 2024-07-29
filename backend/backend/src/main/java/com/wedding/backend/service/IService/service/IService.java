@@ -9,6 +9,7 @@ import com.wedding.backend.dto.service.ServiceDetail;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ProblemDetail;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface IService {
@@ -19,4 +20,6 @@ public interface IService {
     BaseResultWithData<ServiceDetail> getDetailServiceById(Long serviceId);
 
     BaseResultWithDataAndCount<List<ImageAlbDTOConvert>> getAlbumOfServiceByNameAlb(Long serviceId, String albName);
+
+    BaseResultWithDataAndCount<List<ServiceDTO>> getServiceBySupplier(Pageable pageable, Principal connectedUser);
 }

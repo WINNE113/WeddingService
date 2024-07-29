@@ -40,3 +40,19 @@ export const apiGetAlbumOfService = (params) => {
         params
     })
 }
+
+export const apiGetServiceBySupplier = (params) => {
+    return axios({
+        url: "/service/getBySupplier",
+        method: "GET",
+        params
+    })
+}
+
+export const apiDeleteService = (params) => {
+    axios({
+        url: "/service/deleteById",
+        method: "GET",
+        params
+    })
+}

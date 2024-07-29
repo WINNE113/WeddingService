@@ -33,9 +33,9 @@ public class SupplierEntity extends BaseEntityWithIDIncrement {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @ManyToOne
-    @JoinColumn(name = "userId", referencedColumnName = "id")
     @JsonManagedReference
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
     @OneToMany(mappedBy = "supplier")

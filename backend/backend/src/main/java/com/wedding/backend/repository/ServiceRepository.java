@@ -29,6 +29,8 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
     ServiceDetail serviceDetailById(@Param("serviceId") Long serviceId);
 
 
+    List<ServiceEntity> findAllBySupplier_Id(Pageable pageable, Long supplierId );
+
     @Query(
             value = "Select s.id, li.image_url_list as imagesURL, sa.name as nameAlb from services as s\n" +
                     "inner join service_albums as sa on s.id = sa.service_id\n" +

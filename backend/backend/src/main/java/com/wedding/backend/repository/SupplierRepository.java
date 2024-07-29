@@ -19,4 +19,6 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> 
     List<SupplierEntity> findAllByUser(UserEntity email);
 
     List<SupplierEntity> findAllByIsDeletedFalse(Pageable pageable);
+
+    Optional<SupplierEntity> findByUser_Id(String userId);
 }

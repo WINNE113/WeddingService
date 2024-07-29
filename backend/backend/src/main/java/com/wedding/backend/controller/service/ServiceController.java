@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("api/v1/service")
 @RequiredArgsConstructor
@@ -38,4 +40,10 @@ public class ServiceController {
         return ResponseEntity.ok(service.getDetailServiceById(serviceId));
     }
 
+    @GetMapping("/getBySupplier")
+    public ResponseEntity<?> getServicesBySupplier(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                   @RequestParam(name = "size", required = false, defaultValue = "5") Integer size, Principal connectedUser) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(service.getServiceBySupplier(pageable, connectedUser));
+    }
 }

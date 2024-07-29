@@ -17,5 +17,6 @@ const path = {
     PAYMENT_RESULT: "payment/status",
     HISTORIES_PAYMENT: "lich-su-thanh-toan",
     MANAGE_DEPOSIT: "quan-ly-nap-tien",
+    MANAGE_SERVICE: "quan-ly-dich-vu"
 }
 export default path

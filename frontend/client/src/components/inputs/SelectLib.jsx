@@ -15,6 +15,7 @@ const SelectLib = ({
   validate,
   errors,
 }) => {
+
   return (
     <div className={twMerge(clsx("flex flex-col gap-2 flex-1", gap))}>
       <h3 className="font-medium">{label}</h3>
@@ -28,7 +29,7 @@ const SelectLib = ({
         onChange={(val) => onChange(val)}
         formatOptionLabel={(option) => (
           <div className="flex text-black items-center gap-2">
-            <div>{option.province_name || option.district_name || option.ward_name}</div>
+            <div>{option.province_name || option.district_name || option.ward_name || option.name}</div>
           </div>
         )}
         classNames={{

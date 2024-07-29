@@ -14,7 +14,7 @@ where w.user_id = '08ce75edefd446159f4f590cb78977ca'  and w.wishlist_name LIKE '
 group by s.id, s.title, s.address, s.created_date, s.price, s.image, wi.wishlist_item_id 
 order by wi.wishlist_item_id desc;
 
-
+  
 ALTER TABLE `wedding_db`.`services`
     CHANGE COLUMN `id` `id` BIGINT NOT NULL AUTO_INCREMENT FIRST,
     CHANGE COLUMN `title` `title` VARCHAR(255) NOT NULL AFTER `id`,
@@ -27,4 +27,11 @@ ALTER TABLE `wedding_db`.`services`
 
 
 -- Query select all supplier (conditional)
+Select * from supplier;
+UPDATE `wedding_db`.`supplier` SET `is_deleted` = 'false' WHERE (`id` = '1');
+
+-- Get services by supplier
+select * from services as s 
+inner join supplier as sup on s.supplier_id = sup.id
+inner join users as u on u.id = sup.user_id
 

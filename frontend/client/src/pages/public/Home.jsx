@@ -45,12 +45,12 @@ const Home = () => {
     const { wishlist } = useSelector((s) => s.user)
 
     const fetchHomeData = async () => {
-        const response = await apiGetServiceByDeleted({ size: 5 })
+        const response = await apiGetServiceByDeleted({ size: 8 })
         if (response?.data) setSerivces(response.data)
     }
 
     const fetchServiceByTypeDate = async () => {
-        const response = await apiGetServiceByServiceType({ size: 5 })
+        const response = await apiGetServiceByServiceType({ size: 8 })
         if (response?.data) setServiceByType(response.data)
     }
 

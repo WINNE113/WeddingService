@@ -180,7 +180,7 @@ export const supplierSidebar = [
   {
     id: 1234,
     name: "Quản lý dịch vụ",
-    path: `/${path.SUPPLIER}/${path.MANAGE_POST}`,
+    path: `/${path.SUPPLIER}/${path.MANAGE_SERVICE}`,
     icon: <BsPostcard size={20} />,
     type: "SINGLE",
   },

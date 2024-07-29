@@ -57,9 +57,9 @@ public class DatabaseSearch implements IDatabaseSearch {
                     totalResultQuery.append(" AND ");
                 }
                 switch (key) {
-                    case "supplierName" -> {
-                        filterQuery.append("sup.name like ?");
-                        totalResultQuery.append("sup.name like ?");
+                    case "supplier_id" -> {
+                        filterQuery.append("s.supplier_id = ?");
+                        totalResultQuery.append("supplier_id = ?");
                     }
                     case "acreage" -> {
                         filterQuery.append("acreage BETWEEN ? AND ?");
