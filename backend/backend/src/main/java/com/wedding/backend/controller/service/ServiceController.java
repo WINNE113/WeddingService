@@ -1,14 +1,22 @@
 package com.wedding.backend.controller.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wedding.backend.dto.service.AlbumRequestDTO;
+import com.wedding.backend.dto.service.UpSertServiceDTO;
 import com.wedding.backend.service.IService.service.IService;
+import com.wedding.backend.util.message.MessageUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/service")
@@ -45,5 +53,25 @@ public class ServiceController {
                                                    @RequestParam(name = "size", required = false, defaultValue = "5") Integer size, Principal connectedUser) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(service.getServiceBySupplier(pageable, connectedUser));
+    }
+
+    @PostMapping(value = "/update-insert",
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+                    MediaType.APPLICATION_OCTET_STREAM_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    public ResponseEntity<?> upSertService(
+            @RequestPart String serviceDto,
+            @RequestPart(required = false, name = "images") @Valid MultipartFile avatar,
+            @RequestPart(required = false, name = "albums") @Valid List<MultipartFile> albums,
+            Principal connectedUser
+    ) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            UpSertServiceDTO upSertServiceDTO = objectMapper.readValue(serviceDto, UpSertServiceDTO.class);
+            return ResponseEntity.ok(service.upSertService(upSertServiceDTO, avatar, albums, connectedUser));
+        } catch (Exception ex) {
+            return ResponseEntity.ok(ex.getMessage());
+        }
     }
 }

@@ -72,7 +72,7 @@ const ManageService = ({ dispatch, navigate }) => {
     <section className="mb-[200px]">
       <Title title="Quản lý Dịch Vụ">
         <Button
-          onClick={() => navigate(`/${path.MANAGER}/${path.CREATE_POST}`)}
+          onClick={() => navigate(`/${path.SUPPLIER}/${path.CREATE_SERVICE}`)}
         >
           Đăng tin mới
         </Button>
@@ -125,7 +125,7 @@ const ManageService = ({ dispatch, navigate }) => {
                 <th className="p-2 border font-medium text-center">
                   Trạng thái
                 </th>
-                <th className="p-2 border bg-emerald-800 text-white font-medium text-center">
+                <th className="p-2 border bg-pink-500 text-white font-medium text-center">
                   Hành động
                 </th>
               </tr>
@@ -176,13 +176,13 @@ const ManageService = ({ dispatch, navigate }) => {
                           )
                         }
                         title="Chỉnh sửa"
-                        className="text-lg text-main-blue cursor-pointer px-1"
+                        className="text-lg text-pink-400 cursor-pointer px-1"
                       >
                         <AiOutlineEdit size={22} />
                       </span>
                       <span
                         onClick={() => handleDeletePost(el.id)}
-                        className="text-lg text-main-blue cursor-pointer px-1"
+                        className="text-lg text-rose-600 cursor-pointer px-1"
                         title="Xóa"
                       >
                         <AiFillDelete size={22} />

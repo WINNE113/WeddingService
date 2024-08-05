@@ -78,8 +78,7 @@ public class DatabaseSearch implements IDatabaseSearch {
                 count++;
             }
         }
-//        filterQuery.append(" and p.status = 'APPROVED'");
-//        totalResultQuery.append(" and posts.status = 'APPROVED'");
+
         // Use Group By on filter query
         filterQuery.append(" group by s.id, s.title, s.image, s.address, s.is_deleted, s.status, s.service_type_id, s.created_date, sup.name, sup.id");
 

@@ -151,7 +151,7 @@ const DetailPost = ({ navigate, location, dispatch }) => {
         <div className="p-6">
           <div className="flex items-center justify-center">
             <img
-              src={post?.image} // Thay đổi đường dẫn đến logo của bạn
+              src={post?.logo} // Thay đổi đường dẫn đến logo của bạn
               alt="Logo"
               className="h-16 w-auto"
             />

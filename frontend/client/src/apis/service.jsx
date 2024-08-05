@@ -56,3 +56,10 @@ export const apiDeleteService = (params) => {
         params
     })
 }
+
+export const apiCreateNewService = (data) =>
+    axios({
+      url: "/service/update-insert",
+      method: "post",
+      data,
+    })
