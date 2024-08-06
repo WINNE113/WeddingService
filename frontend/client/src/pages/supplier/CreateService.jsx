@@ -22,6 +22,7 @@ import { toast } from "react-toastify"
 import { getBase64 } from "@/ultils/fn"
 import path from "@/ultils/path"
 import { ImBin } from "react-icons/im"
+import { stringify } from "postcss"
 
 const CreateService = ({ navigate }) => {
     const {
@@ -50,7 +51,6 @@ const CreateService = ({ navigate }) => {
     const ward = watch("ward")
     const serviceTypeId = watch("serviceTypeId")
     const images = watch("images")
-    const avtImg = watch("avtImg")
     const address = watch("address")
     const street = watch("street")
     const information = watch("information")
@@ -71,9 +71,12 @@ const CreateService = ({ navigate }) => {
         if (base64) setImagesBase64((prev) => [...prev, base64])
     }
     const convertImage = async (file) => {
-        const image64 = await getBase64(file)
-        if(image64) setAvtImgBase64(image64)
-    }
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setAvtImgBase64(reader.result);
+        };
+        reader.readAsDataURL(file);
+    };
     useEffect(() => {
         setImagesBase64([])
         if (images && images instanceof FileList)
@@ -81,12 +84,12 @@ const CreateService = ({ navigate }) => {
     }, [images])
 
     useEffect(() => {
-        const files = getValues("avtImg")
+        const files = getValues("avtImgBase64");
         if (files instanceof FileList && files.length > 0) {
-            const file = files[0]
-            convertImage(file)
+            const file = files[0];
+            convertImage(file);
         }
-    }, [watch("avtImg")])
+    }, [watch("avtImgBase64")]);
 
     const fetchPostTypes = async () => {
         const response = await apiGetServiceType()
@@ -196,6 +199,7 @@ const CreateService = ({ navigate }) => {
             phoneNumber,
             linkFacebook,
             linkWebsite,
+            avtImgBase64,
             ...dto
         } = getValues()
         const payload = {
@@ -212,9 +216,11 @@ const CreateService = ({ navigate }) => {
         // setIsLoading(true)
         const formData = new FormData()
         formData.append("serviceDto", JSON.stringify(payload))
-        console.log("Rotation payload: ", payload.rotation);
         if (images && images instanceof FileList) {
-            for (let image of images) formData.append("images", image)
+            for (let image of images) formData.append("albums", image)
+        }
+        if (avtImgBase64 && avtImgBase64 instanceof FileList && avtImgBase64.length > 0) {
+            formData.append("images", avtImgBase64[0])
         }
         setIsLoading(true)
         const response = await apiCreateNewService(formData)
@@ -382,21 +388,20 @@ const CreateService = ({ navigate }) => {
                         />
                     </div>
                     <div className="mt-6 flex flex-col gap-2">
-                        <label className="font-medium" htmlFor="avtImg">
+                        <label className="font-medium" htmlFor="avtImgBase64">
                             Chọn ảnh đại diện
                         </label>
                         <label
                             className="rounded-md px-4 py-2 flex items-center justify-center text-white bg-main-pink w-fit gap-2"
-                            htmlFor="avtImg"
+                            htmlFor="avtImgBase64"
                         >
                             <img
-                                src={getValues("avtImgBase64") || "/user.svg"}
+                                src={avtImgBase64 || "/user.svg"}
                                 alt="avtImg"
                                 className="w-24 h-24 object-cover border rounded-full"
                             />
                         </label>
-                        <input {...register("avtImg")} hidden type="file" id="avtImg" />
-
+                        <input {...register("avtImgBase64")} hidden type="file" id="avtImgBase64" />
                     </div>
                     <div className="mt-6 flex flex-col gap-2">
                         <label className="font-medium" htmlFor="images">
