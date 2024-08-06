@@ -25,4 +25,8 @@ public interface IService {
     BaseResultWithDataAndCount<List<ServiceDTO>> getServiceBySupplier(Pageable pageable, Principal connectedUser);
 
     BaseResult upSertService(UpSertServiceDTO serviceDTO, MultipartFile avatar, List<MultipartFile> albums, Principal connectedUser);
+
+    BaseResult deleteByIds(Long[] serviceIds);
+
+    BaseResult deleteById(Long serviceId);
 }

@@ -18,6 +18,7 @@ const path = {
     HISTORIES_PAYMENT: "lich-su-thanh-toan",
     MANAGE_DEPOSIT: "quan-ly-nap-tien",
     MANAGE_SERVICE: "quan-ly-dich-vu",
-    CREATE_SERVICE: "tao-moi-dich-vu"
+    CREATE_SERVICE: "tao-moi-dich-vu",
+    PRICING: "bang-gia-goi"
 }
 export default path

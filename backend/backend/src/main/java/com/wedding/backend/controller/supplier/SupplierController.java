@@ -45,7 +45,9 @@ public class SupplierController {
 
 
     @PostMapping(value = "/update-supplier", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> updateSupplier(@RequestPart String supplierRequest, @RequestPart(required = false, name = "supplierImage") @Valid MultipartFile supplierImage, Principal connectedUser) throws IOException {
+    public ResponseEntity<?> updateSupplier(@RequestPart(name = "supplierRequest") String supplierRequest,
+                                            @RequestPart(required = false, name = "supplierImage") @Valid MultipartFile supplierImage,
+                                            Principal connectedUser) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         UpdateSupplierRequest supplier = objectMapper.readValue(supplierRequest, UpdateSupplierRequest.class);
@@ -54,9 +56,16 @@ public class SupplierController {
     }
 
     @PostMapping(value = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> addSupplier(@RequestPart String request, @RequestPart(required = false, name = "supplierImage") @Valid MultipartFile supplierImage, Principal connectedUser) throws JsonProcessingException {
+    public ResponseEntity<?> addSupplier(@RequestPart(name = "request") String request,
+                                         @RequestPart(required = false, name = "supplierImage") @Valid MultipartFile supplierImage,
+                                         Principal connectedUser) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         SupplierDTO supplierDTO = objectMapper.readValue(request, SupplierDTO.class);
         return ResponseEntity.ok(service.addSupplier(supplierDTO, supplierImage, connectedUser));
+    }
+
+    @GetMapping(value = "supplier-is-exit-by-userId")
+    public ResponseEntity<?> supplierIsExitedByUserId(Principal connectedUser) {
+        return ResponseEntity.ok(service.checkSupplierExitByUserId(connectedUser));
     }
 }

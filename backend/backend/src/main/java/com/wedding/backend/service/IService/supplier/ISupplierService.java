@@ -22,4 +22,6 @@ public interface ISupplierService {
     BaseResultWithDataAndCount<List<SupplierDTO>> getSupplierByUser(Principal connectedUser);
 
     BaseResultWithDataAndCount<List<SupplierDTO>> getSuppliersByFalseDeleted(Pageable pageable);
+
+    BaseResult checkSupplierExitByUserId(Principal connectedUser);
 }

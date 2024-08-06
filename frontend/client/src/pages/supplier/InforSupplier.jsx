@@ -160,7 +160,7 @@ const InforSupplier = ({ navigate }) => {
         setIsLoading(true);
         const response = await apiAddInforSupplier(formData);
         setIsLoading(false);
-        if (response.success != false) {
+        if (response.success == true) {
             toast.success("Cập nhật thông tin nhà cung cấp thành công");
            // navigate("/" + path.SUPPLIER + "/" + path.INFORMATION_SUPPLIER);
         } else {

@@ -28,9 +28,9 @@ export const apiGetDetailService = (params) => {
 
 export const apiGetServices = (data) =>
     axios({
-      url: "/guest/service/filters",
-      method: "post",
-      data,
+        url: "/guest/service/filters",
+        method: "post",
+        data,
     })
 
 export const apiGetAlbumOfService = (params) => {
@@ -49,17 +49,23 @@ export const apiGetServiceBySupplier = (params) => {
     })
 }
 
-export const apiDeleteService = (params) => {
+export const apiDeleteServices = (params) =>
     axios({
-        url: "/service/deleteById",
-        method: "GET",
+        url: "/service/delete-by-ids",
+        method: "DELETE",
         params
     })
-}
+
+export const apiDeleteService = (params) =>
+    axios({
+        url: "/service/delete-by-id",
+        method: "delete",
+        params
+    })
 
 export const apiCreateNewService = (data) =>
     axios({
-      url: "/service/update-insert",
-      method: "post",
-      data,
+        url: "/service/update-insert",
+        method: "post",
+        data,
     })

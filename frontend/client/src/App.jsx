@@ -23,6 +23,7 @@ import HistoriesPayment from "./pages/supplier/HistoriesPayment"
 import ManageDeposit from "./pages/supplier/ManageDeposit"
 import ManageService from "./pages/supplier/ManageService"
 import CreateService from "./pages/supplier/CreateService"
+import Pricing from "./pages/public/Pricing"
 
 function App() {
   const { isLoading, isShowModal, modalContent } = useSelector(
@@ -56,6 +57,7 @@ function App() {
           <Route path={path.LIST} element={<Filter />} />
           <Route path={path.DETAIL_POST__PID__TITLE} element={<DetailService />} />
           <Route path={path.INVALID} element={<Home />} />
+          <Route path={path.PRICING} element={<Pricing />} />
         </Route>
         <Route path={path.LOGIN} element={<Login />} />
         {/* Member routes */}
@@ -70,7 +72,7 @@ function App() {
           <Route path={path.HISTORIES_PAYMENT} element={<HistoriesPayment />} />
           <Route path={path.MANAGE_DEPOSIT} element={<ManageDeposit />} />
           <Route path={path.MANAGE_SERVICE} element={<ManageService />} />
-          <Route path={path.CREATE_SERVICE} element= {<CreateService />}/>
+          <Route path={path.CREATE_SERVICE} element={<CreateService />} />
         </Route>
         <Route path={path.PAYMENT_RESULT} element={<PaymentResult />} />
 

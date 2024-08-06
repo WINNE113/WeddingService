@@ -16,6 +16,7 @@ import clsx from "clsx"
 import { apiDeleteService, apiGetServiceBySupplier, apiGetServices } from "@/apis/service"
 import path from "@/ultils/path"
 import { stars, statuses } from "@/ultils/constant"
+import { apiCheckSupplierExited } from "@/apis/supplier"
 
 const ManageService = ({ dispatch, navigate }) => {
   const { setValue, watch } = useForm()
@@ -33,18 +34,29 @@ const ManageService = ({ dispatch, navigate }) => {
   }
   const debounceValue = useDebounce(keyword, 500)
   useEffect(() => {
-    const formdata = new FormData()
-    const { page, ...searchParamsObject } = Object.fromEntries([
-      ...searchParams,
-    ])
-    if (page && Number(page)) formdata.append("page", Number(page) - 1)
-    if (status) searchParamsObject.status = status.value
-    else delete searchParamsObject.status
-    formdata.append("json", JSON.stringify(searchParamsObject))
-    formdata.append("supplier_id", "")
-    formdata.append("size", 5)
-    !isShowModal && fetchPosts(formdata)
-  }, [searchParams, update, debounceValue, status, isShowModal])
+    const formdata = new FormData();
+    const { page, ...searchParamsObject } = Object.fromEntries([...searchParams]);
+
+    // Adjust the page parameter
+    if (page && Number(page)) formdata.append("page", Number(page) - 1);
+
+    // Set status in searchParamsObject
+    if (status) searchParamsObject.status = status.value;
+    else delete searchParamsObject.status;
+
+    // Add supplier_id with a value of null to the searchParamsObject
+    searchParamsObject.supplier_id = null;
+
+    // Append the json parameter with the updated searchParamsObject
+    formdata.append("json", JSON.stringify(searchParamsObject));
+
+    // Append size parameter
+    formdata.append("size", 5);
+
+    // Fetch posts if the modal is not shown
+    !isShowModal && fetchPosts(formdata);
+  }, [searchParams, update, debounceValue, status, isShowModal]);
+
   const render = () => {
     setUpdate(!update)
   }
@@ -60,7 +72,7 @@ const ManageService = ({ dispatch, navigate }) => {
     }).then(async (rs) => {
       if (rs.isConfirmed) {
         // Delete here
-        const response = await apiDeletePost({ postId: pid })
+        const response = await apiDeleteService({ serviceId: pid })
         if (response.success) {
           toast.success(response.message)
           render()
@@ -68,11 +80,23 @@ const ManageService = ({ dispatch, navigate }) => {
       }
     })
   }
+  const handleCheckSupplier = async () => {
+    try {
+      const response = await apiCheckSupplierExited();
+      if (response.success) {
+        navigate(`/${path.SUPPLIER}/${path.CREATE_SERVICE}`);
+      } else {
+        navigate(`/${path.SUPPLIER}/${path.INFORMATION_SUPPLIER}`);
+      }
+    } catch (error) {
+      console.error("Failed to check supplier status:", error);
+    }
+  }
   return (
     <section className="mb-[200px]">
       <Title title="Quản lý Dịch Vụ">
         <Button
-          onClick={() => navigate(`/${path.SUPPLIER}/${path.CREATE_SERVICE}`)}
+          onClick={handleCheckSupplier}
         >
           Đăng tin mới
         </Button>

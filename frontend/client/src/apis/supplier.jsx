@@ -18,3 +18,9 @@ export const apiSuppliers = () =>
         url: "/supplier/getAll",
         method: "GET"
     })
+export const apiCheckSupplierExited = () => {
+    return axios({
+        url: "/supplier/supplier-is-exit-by-userId",
+        method: "GET"
+    })
+}

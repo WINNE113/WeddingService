@@ -37,121 +37,6 @@ export const menuColors = [
 
 export const menu = [];
 
-export const distances = [
-  {
-    label: "Dưới 500m",
-    name: "Dưới 500m",
-    value: [0, 500],
-  },
-  {
-    label: "Từ 500m - 1km",
-    name: "Từ 500m - 1km",
-    value: [500, 1000],
-  },
-  {
-    label: "Từ 1km - 3km",
-    name: "Từ 1km - 3km",
-    value: [1000, 3000],
-  },
-  {
-    label: "Từ 3km - 5km",
-    name: "Từ 3km - 5km",
-    value: [3000, 5000],
-  },
-  {
-    label: "Trên 5km",
-    name: "Trên 5km",
-    value: [5000, 99999999],
-  },
-]
-export const priceOptions = [
-  {
-    value: "Dưới 1 triệu",
-    min: 0,
-    max: 999999,
-    type: "PRICE",
-  },
-  {
-    value: "Từ 1 - 2 triệu",
-    min: 1000000,
-    max: 2000000,
-    type: "PRICE",
-  },
-  {
-    value: "Từ 2 - 3 triệu",
-    min: 2000000,
-    max: 3000000,
-    type: "PRICE",
-  },
-  {
-    value: "Từ 3 - 5 triệu",
-    min: 3000000,
-    max: 5000000,
-    type: "PRICE",
-  },
-  {
-    value: "Từ 5 - 7 triệu",
-    min: 5000000,
-    max: 7000000,
-    type: "PRICE",
-  },
-  {
-    value: "Từ 7 - 10 triệu",
-    min: 7000000,
-    max: 10000000,
-    type: "PRICE",
-  },
-  {
-    value: "Từ 10 - 15 triệu",
-    min: 10000000,
-    max: 15000000,
-    type: "PRICE",
-  },
-  {
-    value: "Trên 15 triệu",
-    min: 15000000,
-    max: 999999999999,
-    type: "PRICE",
-  },
-]
-export const areaOptions = [
-  {
-    value: "Dưới 20 m²",
-    min: 0,
-    max: 19.99,
-    type: "AREA",
-  },
-  {
-    value: "Từ 20 - 30 m²",
-    min: 20,
-    max: 30,
-    type: "AREA",
-  },
-  {
-    value: "Từ 30 - 50 m²",
-    min: 30,
-    max: 50,
-    type: "AREA",
-  },
-  {
-    value: "Từ 50 - 70 m²",
-    min: 50,
-    max: 70,
-    type: "AREA",
-  },
-  {
-    value: "Từ 70 - 90 m²",
-    min: 70,
-    max: 90,
-    type: "AREA",
-  },
-  {
-    value: "Trên 90 m²",
-    min: 90.01,
-    max: 999999999999,
-    type: "AREA",
-  },
-]
 export const targets = [
   {
     value: "1",
@@ -288,98 +173,6 @@ export const memberSidebar = [
     type: "SINGLE",
   },
 ]
-export const postTypes = [
-  {
-    id: 1,
-    code: "P1",
-    name: "Cho thuê phòng trọ",
-  },
-  {
-    id: 1,
-    code: "P2",
-    name: "Cho thuê căn hộ",
-  },
-  {
-    id: 1,
-    code: "P3",
-    name: "Tìm người ở ghép",
-  },
-]
-
-export const convenients = [
-  {
-    id: 1,
-    name: "Gác lửng",
-  },
-  {
-    id: 2,
-    name: "Phòng tắm",
-  },
-  {
-    id: 3,
-    name: "Máy giặt",
-  },
-  {
-    id: 4,
-    name: "Tủ lạnh",
-  },
-  {
-    id: 5,
-    name: "Ban công / Sân thượng",
-  },
-  {
-    id: 6,
-    name: "Camara an ninh",
-  },
-  {
-    id: 7,
-    name: "Wifi",
-  },
-  {
-    id: 8,
-    name: "Bình nóng lạnh",
-  },
-  {
-    id: 9,
-    name: "Tivi",
-  },
-  {
-    id: 10,
-    name: "Giường nệm",
-  },
-  {
-    id: 11,
-    name: "Thang máy",
-  },
-  {
-    id: 12,
-    name: "Hồ bơi",
-  },
-  {
-    id: 13,
-    name: "Vệ sinh trong",
-  },
-  {
-    id: 14,
-    name: "Điều hòa",
-  },
-  {
-    id: 15,
-    name: "Tủ quần áo",
-  },
-  {
-    id: 16,
-    name: "Bãi để xe riêng",
-  },
-  {
-    id: 17,
-    name: "Sân vườn",
-  },
-  {
-    id: 18,
-    name: "Kệ bếp",
-  },
-]
 export const cities = [
   {
     image: "/hanoi.jpg",
@@ -450,51 +243,121 @@ export const statuses = [
     value: "REJECTED",
   },
 ]
-export const superAdminSidebar = [
+export const areaOptions = [
   {
-    id: 1,
-    name: "Thống kê",
-    path: `${path.DASHBOARD}`,
-    icon: <BsFillPieChartFill size={20} />,
-    type: "SINGLE",
+    value: "Dưới 20 m²",
+    min: 0,
+    max: 19.99,
+    type: "AREA",
   },
   {
-    id: 2,
-    name: "Quản lý Nhà",
-    icon: <BsFillHouseGearFill size={20} />,
-    type: "SINGLE",
-    path: `${path.MANAGER_HOUSE}`,
+    value: "Từ 20 - 30 m²",
+    min: 20,
+    max: 30,
+    type: "AREA",
   },
   {
-    id: 3,
-    name: "Quản lý dịch vụ phòng",
-    icon: <BsStack size={20} />,
-    type: "SINGLE",
-    path: `${path.MANAGER_SERVICE}`,
+    value: "Từ 30 - 50 m²",
+    min: 30,
+    max: 50,
+    type: "AREA",
   },
   {
-    id: 4,
-    name: "Quản lý điện & nước",
-    icon: <BsDropletHalf size={20} />,
-    type: "SINGLE",
-    path: `${path.MANAGER_ELECTRIC_WATER}`,
+    value: "Từ 50 - 70 m²",
+    min: 50,
+    max: 70,
+    type: "AREA",
   },
   {
-    id: 5,
-    name: "Quản lý tiền phòng",
-    icon: <BsCashCoin size={20} />,
-    type: "SINGLE",
-    path: `${path.MANAGER_PAYMENT}`,
+    value: "Từ 70 - 90 m²",
+    min: 70,
+    max: 90,
+    type: "AREA",
   },
   {
-    id: 6,
-    name: "Tới Homepage",
-    path: `/`,
-    icon: <RiShareForwardFill size={20} />,
-    type: "SINGLE",
+    value: "Trên 90 m²",
+    min: 90.01,
+    max: 999999999999,
+    type: "AREA",
   },
 ]
-
+export const distances = [
+  {
+    label: "Dưới 500m",
+    name: "Dưới 500m",
+    value: [0, 500],
+  },
+  {
+    label: "Từ 500m - 1km",
+    name: "Từ 500m - 1km",
+    value: [500, 1000],
+  },
+  {
+    label: "Từ 1km - 3km",
+    name: "Từ 1km - 3km",
+    value: [1000, 3000],
+  },
+  {
+    label: "Từ 3km - 5km",
+    name: "Từ 3km - 5km",
+    value: [3000, 5000],
+  },
+  {
+    label: "Trên 5km",
+    name: "Trên 5km",
+    value: [5000, 99999999],
+  },
+]
+export const priceOptions = [
+  {
+    value: "Dưới 1 triệu",
+    min: 0,
+    max: 999999,
+    type: "PRICE",
+  },
+  {
+    value: "Từ 1 - 2 triệu",
+    min: 1000000,
+    max: 2000000,
+    type: "PRICE",
+  },
+  {
+    value: "Từ 2 - 3 triệu",
+    min: 2000000,
+    max: 3000000,
+    type: "PRICE",
+  },
+  {
+    value: "Từ 3 - 5 triệu",
+    min: 3000000,
+    max: 5000000,
+    type: "PRICE",
+  },
+  {
+    value: "Từ 5 - 7 triệu",
+    min: 5000000,
+    max: 7000000,
+    type: "PRICE",
+  },
+  {
+    value: "Từ 7 - 10 triệu",
+    min: 7000000,
+    max: 10000000,
+    type: "PRICE",
+  },
+  {
+    value: "Từ 10 - 15 triệu",
+    min: 10000000,
+    max: 15000000,
+    type: "PRICE",
+  },
+  {
+    value: "Trên 15 triệu",
+    min: 15000000,
+    max: 999999999999,
+    type: "PRICE",
+  },
+]
 // supplierData.js
 export const suppliers = [
   { id: 1, value: 'Supplier A' },
@@ -503,4 +366,3 @@ export const suppliers = [
   { id: 4, value: 'Supplier D' },
   { id: 5, value: 'Supplier E' },
 ];
-

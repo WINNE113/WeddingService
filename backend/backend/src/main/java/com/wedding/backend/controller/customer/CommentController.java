@@ -19,18 +19,22 @@ public class CommentController {
 
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGE')")
     @PostMapping("/new")
-    public ResponseEntity<?> saveNewCommentPost(@RequestBody CommentPostDto commentPostDTO, Principal connectedUser) {
+    public ResponseEntity<?> saveNewCommentPost(@RequestBody CommentPostDto commentPostDTO,
+                                                Principal connectedUser) {
         return ResponseEntity.ok(service.saveNewComment(commentPostDTO, connectedUser));
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateCommentPost(@RequestParam Long commentId, @RequestBody CommentPostDto commentPostDTO, Principal connectedUser) {
+    public ResponseEntity<?> updateCommentPost(@RequestParam(name = "commentId") Long commentId,
+                                               @RequestBody CommentPostDto commentPostDTO,
+                                               Principal connectedUser) {
         return ResponseEntity.ok(service.updateComment(commentId, commentPostDTO, connectedUser));
     }
 
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGE','ROLE_ADMIN')")
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteCommentPost(@RequestParam Long commentId, Principal connectedUser) {
+    public ResponseEntity<?> deleteCommentPost(@RequestParam(name = "commentId") Long commentId,
+                                               Principal connectedUser) {
         return ResponseEntity.ok(service.deleteComment(commentId, connectedUser));
     }
 

@@ -34,12 +34,13 @@ public class UserController {
     }
 
     @GetMapping("/get/{userId}")
-    public ResponseEntity<?> getUser(@RequestParam String userId) {
+    public ResponseEntity<?> getUser(@RequestParam(name = "userId") String userId) {
         return ResponseEntity.ok(userService.getUser(userId));
     }
 
     @PostMapping(value = "/update-profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> updateProfile(@RequestParam String profileRequest, @RequestPart (required = false, name = "profileImage") @Valid MultipartFile profileImage, Principal connectedUser) throws IOException {
+    public ResponseEntity<?> updateProfile(@RequestParam(name = "profileRequest") String profileRequest,
+                                           @RequestPart (required = false, name = "profileImage") @Valid MultipartFile profileImage, Principal connectedUser) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         UpdateProfileRequest profile = objectMapper.readValue(profileRequest, UpdateProfileRequest.class);

@@ -20,12 +20,15 @@ public class WishListController {
     private final IWishListService wishListService;
 
     @PostMapping(value = "/add")
-    public ResponseEntity<?> addWishList(@RequestParam(name = "postId") Long postId, @RequestParam(name = "wishlistName") String wishlistName, Principal connectedUser) {
+    public ResponseEntity<?> addWishList(@RequestParam(name = "postId") Long postId,
+                                         @RequestParam(name = "wishlistName") String wishlistName,
+                                         Principal connectedUser) {
         return wishListService.addServiceToWishlist(connectedUser, postId, wishlistName);
     }
 
     @GetMapping(value = "/get")
-    public ResponseEntity<?> getWishListByNameAndUser(Principal connectedUser, @RequestParam(name = "wishListName") String wishListName,
+    public ResponseEntity<?> getWishListByNameAndUser(Principal connectedUser,
+                                                      @RequestParam(name = "wishListName") String wishListName,
                                                       @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                                       @RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
         Pageable pageable = PageRequest.of(page, size);

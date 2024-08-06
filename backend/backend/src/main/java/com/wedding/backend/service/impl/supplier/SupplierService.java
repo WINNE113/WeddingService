@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -119,5 +120,19 @@ public class SupplierService implements ISupplierService {
             throw new ResourceNotFoundException(ex.getMessage());
         }
         return result;
+    }
+
+    @Override
+    public BaseResult checkSupplierExitByUserId(Principal connectedUser) {
+        try {
+            var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+            Optional<SupplierEntity> dataFromDb = repository.findByUser_Id(user.getId());
+            if (dataFromDb.isPresent()) {
+                return new BaseResult(true, "Supplier is exited!");
+            }
+            return new BaseResult(false, "Supplier is not found!");
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
     }
 }

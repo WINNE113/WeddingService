@@ -1,10 +1,8 @@
 package com.wedding.backend.controller.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wedding.backend.dto.service.AlbumRequestDTO;
 import com.wedding.backend.dto.service.UpSertServiceDTO;
 import com.wedding.backend.service.IService.service.IService;
-import com.wedding.backend.util.message.MessageUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -61,7 +59,7 @@ public class ServiceController {
                     MediaType.APPLICATION_JSON_VALUE
             })
     public ResponseEntity<?> upSertService(
-            @RequestPart String serviceDto,
+            @RequestPart(required = false, name = "serviceDto") String serviceDto,
             @RequestPart(required = false, name = "images") @Valid MultipartFile avatar,
             @RequestPart(required = false, name = "albums") @Valid List<MultipartFile> albums,
             Principal connectedUser
@@ -73,5 +71,15 @@ public class ServiceController {
         } catch (Exception ex) {
             return ResponseEntity.ok(ex.getMessage());
         }
+    }
+
+    @DeleteMapping(value = "delete-by-id")
+    public ResponseEntity<?> deleteService(@RequestParam(name = "serviceId") Long serviceId) {
+        return ResponseEntity.ok(service.deleteById(serviceId));
+    }
+
+    @DeleteMapping(value = "delete-by-ids")
+    public ResponseEntity<?> deleteService(Long[] serviceIds) {
+        return ResponseEntity.ok(service.deleteByIds(serviceIds));
     }
 }

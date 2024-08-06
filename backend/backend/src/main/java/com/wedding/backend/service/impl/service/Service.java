@@ -5,12 +5,10 @@ import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.common.StatusCommon;
 import com.wedding.backend.dto.service.*;
-import com.wedding.backend.entity.ServiceEntity;
-import com.wedding.backend.entity.ServiceTypeEntity;
-import com.wedding.backend.entity.SupplierEntity;
-import com.wedding.backend.entity.UserEntity;
+import com.wedding.backend.entity.*;
 import com.wedding.backend.exception.ResourceNotFoundException;
 import com.wedding.backend.mapper.ServiceMapper;
+import com.wedding.backend.repository.ServiceAlbumRepository;
 import com.wedding.backend.repository.ServiceRepository;
 import com.wedding.backend.repository.ServiceTypeRepository;
 import com.wedding.backend.repository.SupplierRepository;
@@ -20,21 +18,22 @@ import com.wedding.backend.util.message.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class service implements IService {
+public class Service implements IService {
     private final ServiceRepository repository;
     private final ServiceMapper mapper;
     private final ServiceTypeRepository serviceTypeRepository;
     private final SupplierRepository supplierRepository;
     private final FileHandler fileHandler;
+    private final ServiceAlbumRepository serviceAlbumRepository;
 
     @Override
     public BaseResultWithDataAndCount<List<ServiceDTO>> getAllByFalseDeletedAndAcceptStatus(Pageable pageable) {
@@ -165,15 +164,57 @@ public class service implements IService {
                 service.setImage(fileHandler.getFileUrls(avatar));
             }
 
-            // TODO: set serviceAlbum && set ServicePromotion
-            // You may want to handle album and promotion updates/insertions here
 
             // Save or update the service entity
-            repository.save(service);
+            ServiceEntity serviceFromDb = repository.save(service);
 
+            // TODO: set serviceAlbum && set ServicePromotion
+            if (albums != null && !albums.isEmpty()) {
+                List<String> imagesURL = new ArrayList<>();
+                for (MultipartFile file : albums) {
+                    imagesURL.add(fileHandler.getFileUrls(file));
+                }
+                ServiceAlbumEntity serviceAlbum = new ServiceAlbumEntity();
+                serviceAlbum.setServiceServiceAlbum(serviceFromDb);
+                serviceAlbum.setName("default");
+                serviceAlbum.setDescription("default");
+                serviceAlbum.setImageUrlList(imagesURL);
+                //TODO: Setup video if have
+                serviceAlbumRepository.save(serviceAlbum);
+            }
+            // You may want to handle album and promotion updates/insertions here
             return new BaseResult(true, MessageUtil.MSG_ADD_SUCCESS);
         } catch (Exception ex) {
             return new BaseResult(false, ex.getMessage());
+        }
+    }
+
+    @Override
+    public BaseResult deleteByIds(Long[] serviceIds) {
+        try {
+            for (Long id : serviceIds
+            ) {
+                Optional<ServiceEntity> dataFromDb = repository.findById(id);
+                dataFromDb.ifPresent(serviceEntity -> serviceEntity.setDeleted(true));
+            }
+            return new BaseResult(true, MessageUtil.MSG_DELETE_SUCCESS);
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public BaseResult deleteById(Long serviceId) {
+        try {
+            Optional<ServiceEntity> dataFromDb = repository.findById(serviceId);
+            if (dataFromDb.isPresent()) {
+                dataFromDb.get().setDeleted(true);
+                repository.save(dataFromDb.get());
+                return new BaseResult(true, MessageUtil.MSG_DELETE_SUCCESS);
+            }
+            return new BaseResult(false, "Delete is failed!");
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
         }
     }
 

@@ -76,7 +76,7 @@ const DetailPost = ({ navigate, location, dispatch }) => {
 
   const getAlbum = async () => {
     try {
-      const response = await apiGetAlbumOfService({ serviceId: pid, albName: "dream" });
+      const response = await apiGetAlbumOfService({ serviceId: pid });
       if (response && response.data) {
         setAlbums(response.data);
       } else {
@@ -265,7 +265,7 @@ const DetailPost = ({ navigate, location, dispatch }) => {
                 })
               )
             }
-            src={albums[0]?.imageURL}
+            src={albums[1]?.imageURL}
             alt="avatar"
             className="col-span-1 w-full h-full row-span-1 object-cover cursor-pointer"
           />
@@ -282,7 +282,7 @@ const DetailPost = ({ navigate, location, dispatch }) => {
                 })
               )
             }
-            src={albums[0]?.imageURL}
+            src={albums[2]?.imageURL}
             alt="avatar"
             className="col-span-1 w-full h-full row-span-1 object-cover cursor-pointer rounded-tr-md"
           />
@@ -299,7 +299,7 @@ const DetailPost = ({ navigate, location, dispatch }) => {
                 })
               )
             }
-            src={albums[0]?.imageURL}
+            src={albums[3]?.imageURL}
             alt="avatar"
             className="col-span-1 w-full h-full row-span-1 object-cover cursor-pointer"
           />
@@ -316,7 +316,7 @@ const DetailPost = ({ navigate, location, dispatch }) => {
                 })
               )
             }
-            src={albums[0]?.imageURL}
+            src={albums[4]?.imageURL}
             alt="avatar"
             className="col-span-1 w-full h-full row-span-1 object-cover cursor-pointer rounded-br-md"
           />

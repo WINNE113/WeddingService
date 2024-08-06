@@ -227,7 +227,7 @@ const CreateService = ({ navigate }) => {
         setIsLoading(false)
         if (response.success) {
             toast.success("Tạo tin đăng thành công")
-            navigate("/" + path.MANAGER + "/" + path.MANAGE_SERVICE)
+            navigate("/" + path.SUPPLIER + "/" + path.MANAGE_SERVICE)
         } else toast.error("Tạo tin đăng không thành công, hãy thử lại")
     }
     return (

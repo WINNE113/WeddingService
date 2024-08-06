@@ -36,7 +36,7 @@ public class GuestController {
     private final SupplierRepository supplierRepository;
 
     @PostMapping(value = "/service/filters", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> searchPost(@RequestPart(required = false) String json,
+    public ResponseEntity<?> searchPost(@RequestPart(required = false, name = "json") String json,
 
                                         @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                         @RequestParam(name = "size", required = false, defaultValue = "5") Integer size, Principal connectedUser) throws SQLException {
@@ -70,7 +70,8 @@ public class GuestController {
     }
 
     @GetMapping("/albByName")
-    public ResponseEntity<?> getAlbumOfServiceByNameAlb(@RequestParam Long serviceId, @RequestParam String albName) {
+    public ResponseEntity<?> getAlbumOfServiceByNameAlb(@RequestParam(name = "serviceId") Long serviceId,
+                                                        @RequestParam(name = "albName", defaultValue = "default") String albName) {
         return ResponseEntity.ok(service.getAlbumOfServiceByNameAlb(serviceId, albName));
     }
 

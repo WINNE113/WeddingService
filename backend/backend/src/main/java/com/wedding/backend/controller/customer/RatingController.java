@@ -25,13 +25,14 @@ public class RatingController {
 
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @PutMapping("/update")
-    public ResponseEntity<?> updateRating(@RequestParam Long ratingId, @RequestBody RatingDto ratingDto) {
+    public ResponseEntity<?> updateRating(@RequestParam(name = "ratingId") Long ratingId,
+                                          @RequestBody RatingDto ratingDto) {
         return ResponseEntity.ok(ratingService.updateRating(ratingId, ratingDto));
     }
 
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteCommentPost(@RequestParam Long ratingId) {
+    public ResponseEntity<?> deleteCommentPost(@RequestParam(name = "ratingId") Long ratingId) {
         return ResponseEntity.ok(ratingService.deleteRating(ratingId));
     }
 
@@ -41,7 +42,7 @@ public class RatingController {
     }
 
     @GetMapping("/list/group")
-    public ResponseEntity<?> getGroupRatingOfPost(@RequestParam Long postId) {
+    public ResponseEntity<?> getGroupRatingOfPost(@RequestParam(name = "postId") Long postId) {
         return ResponseEntity.ok(ratingService.getGroupRatingByPost(postId));
     }
 }
