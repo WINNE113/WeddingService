@@ -194,7 +194,7 @@ const Pricing = () => {
       >
         Bảng Giá Dịch Vụ
       </h1>
-      <div className="mt-4 grid grid-cols-4 gap-4">
+      <div className="mt-4 grid grid-cols-3 gap-3">
         {pricings?.map((el) => (
           <PricingItem key={el.servicePackageId} {...el} />
         ))}

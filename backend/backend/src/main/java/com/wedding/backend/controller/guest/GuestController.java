@@ -9,6 +9,7 @@ import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.repository.SupplierRepository;
 import com.wedding.backend.service.IService.service.IDatabaseSearch;
 import com.wedding.backend.service.IService.service.IService;
+import com.wedding.backend.service.IService.service.IServicePackage;
 import com.wedding.backend.service.IService.supplier.ISupplierService;
 import com.wedding.backend.util.extensions.ConvertStringToArrayExtension;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,9 @@ public class GuestController {
 
     private final SupplierRepository supplierRepository;
 
+    private final IServicePackage servicePackage;
+
+
     @PostMapping(value = "/service/filters", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> searchPost(@RequestPart(required = false, name = "json") String json,
 
@@ -56,7 +60,7 @@ public class GuestController {
                             if (supplier.isPresent()) {
                                 map.replace("supplier_id", supplier.get().getId());
                             }
-                        }else {
+                        } else {
                             map.remove("supplierId");
                         }
                     }
@@ -75,5 +79,11 @@ public class GuestController {
         return ResponseEntity.ok(service.getAlbumOfServiceByNameAlb(serviceId, albName));
     }
 
+    @GetMapping(value = "/service/service-package")
+    public ResponseEntity<?> getAllServicePackage(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                  @RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return servicePackage.getAllServicePackage(pageable);
 
+    }
 }
