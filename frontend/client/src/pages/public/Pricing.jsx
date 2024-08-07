@@ -20,6 +20,7 @@ const PricingItem = ({
 }) => {
   const dispatch = useDispatch()
   const { current } = useSelector((s) => s.user)
+  console.log("Current: " + JSON.stringify(current));
   const handleSubcribe = async () => {
     Swal.fire({
       icon: "info",
