@@ -41,6 +41,14 @@ export const apiGetAlbumOfService = (params) => {
     })
 }
 
+export const apiGetServiceByPackageVIP = (params) => {
+    return axios({
+        url: "/guest/service/services-by-package-vip",
+        method: "GET",
+        params
+    })
+}
+
 export const apiGetServiceBySupplier = (params) => {
     return axios({
         url: "/service/getBySupplier",

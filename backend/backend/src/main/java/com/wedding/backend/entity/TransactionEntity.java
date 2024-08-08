@@ -29,9 +29,9 @@ public class TransactionEntity {
     private boolean expired;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", updatable = false)
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id", updatable = false)
     @JsonBackReference
-    private UserEntity userTransaction;
+    private SupplierEntity userTransaction;
 
     @ManyToOne
     @JoinColumn(name = "package_id", referencedColumnName = "id")

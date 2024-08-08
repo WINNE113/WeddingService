@@ -1,7 +1,7 @@
 package com.wedding.backend.dto.transaction;
 
 import com.wedding.backend.dto.servicePackage.PartServicePackage;
-import com.wedding.backend.dto.user.PartUser;
+import com.wedding.backend.dto.supplier.PartSupplier;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +23,7 @@ public class TransactionDto {
 
     private boolean expired;
 
-    private PartUser partUser;
+    private PartSupplier partSupplier;
 
     private PartServicePackage partServicePackage;
 }

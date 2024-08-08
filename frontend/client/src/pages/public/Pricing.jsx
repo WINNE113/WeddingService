@@ -20,7 +20,6 @@ const PricingItem = ({
 }) => {
   const dispatch = useDispatch()
   const { current } = useSelector((s) => s.user)
-  console.log("Current: " + JSON.stringify(current));
   const handleSubcribe = async () => {
     Swal.fire({
       icon: "info",
@@ -44,13 +43,16 @@ const PricingItem = ({
       }
     })
   }
+
+  // Đảm bảo giá trị boolean cho thuộc tính disabled
+  const isDisabled = current?.servicePackageUsed === name;
   return (
     <div className={clsx("col-span-1 h-full mb-[150px]")}>
       <h3
         className={clsx(
           "text-center p-4 border border-emerald-500 bg-emerald-700 text-white font-semibold rounded-t-md",
           current?.servicePackageUsed === name &&
-            "bg-orange-700 border-orange-700"
+          "bg-orange-700 border-orange-700"
         )}
       >
         {name}

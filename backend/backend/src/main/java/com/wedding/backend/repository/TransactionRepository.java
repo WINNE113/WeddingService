@@ -10,11 +10,12 @@ import java.util.Optional;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<TransactionEntity, Long> {
-    Optional<TransactionEntity> findByUserTransaction_IdAndExpiredFalse(String userId);
+    Optional<TransactionEntity> findByUserTransaction_IdAndExpiredFalse(Long userId);
 
-    List<TransactionEntity> findByUserTransactionIdOrderByPurchaseDateDesc(String userId, Pageable pageable);
+
+    List<TransactionEntity> findByUserTransactionIdOrderByPurchaseDateDesc(Long userId, Pageable pageable);
 
     List<TransactionEntity> findAllByOrderByPurchaseDateDesc(Pageable pageable);
 
-    Long countByUserTransaction_Id(String userId);
+    Long countByUserTransaction_Id(Long userId);
 }

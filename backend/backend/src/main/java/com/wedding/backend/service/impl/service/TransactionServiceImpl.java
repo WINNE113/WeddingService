@@ -3,13 +3,11 @@ package com.wedding.backend.service.impl.service;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.common.StatusCommon;
 import com.wedding.backend.entity.ServicePackageEntity;
+import com.wedding.backend.entity.SupplierEntity;
 import com.wedding.backend.entity.TransactionEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.mapper.TransactionMapper;
-import com.wedding.backend.repository.RoleRepository;
-import com.wedding.backend.repository.ServicePackageRepository;
-import com.wedding.backend.repository.TransactionRepository;
-import com.wedding.backend.repository.UserRepository;
+import com.wedding.backend.repository.*;
 import com.wedding.backend.service.IService.service.ITransactionService;
 import com.wedding.backend.service.IService.twilio.ITwilioService;
 import com.wedding.backend.util.helper.HashHelper;
@@ -44,6 +42,9 @@ public class TransactionServiceImpl implements ITransactionService {
     private UserRepository userRepository;
 
     @Autowired
+    private SupplierRepository supplierRepository;
+
+    @Autowired
     private ITwilioService twilioService;
 
     @Autowired
@@ -57,74 +58,78 @@ public class TransactionServiceImpl implements ITransactionService {
             var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
             if (user != null) {
-                Optional<ServicePackageEntity> servicePackageEntity = servicePackageRepository.findById(servicePackageId);
-                if (servicePackageEntity.isPresent()) {
-                    //TODO: CHECK Balance Of User > service package price
-                    if (user.getBalance().compareTo(servicePackageEntity.get().getPrice()) >= 0) {
-                        //TODO: Extension service package if user have before and expirationDate > now
-                        Optional<TransactionEntity> transactionEntity = transactionRepository.findByUserTransaction_IdAndExpiredFalse(user.getId());
-                        if (transactionEntity.isPresent() && transactionEntity.get().getExpirationDate().after(new Date())) {
-                            Instant instant = transactionEntity.get().getExpirationDate().toInstant();
-                            LocalDateTime expirationDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).plusDays(servicePackageEntity.get().getDurationDays());
-                            transactionEntity.get().setExpirationDate(Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant()));
+                Optional<SupplierEntity> supplier = supplierRepository.findByUser_Id(user.getId());
+                if (supplier.isPresent()) {
+                    Optional<ServicePackageEntity> servicePackageEntity = servicePackageRepository.findById(servicePackageId);
+                    if (servicePackageEntity.isPresent()) {
+                        //TODO: CHECK Balance Of User > service package price
+                        if (user.getBalance().compareTo(servicePackageEntity.get().getPrice()) >= 0) {
+                            //TODO: Extension service package if user have before and expirationDate > now
+                            Optional<TransactionEntity> transactionEntity = transactionRepository.findByUserTransaction_IdAndExpiredFalse(supplier.get().getId());
+                            if (transactionEntity.isPresent() && transactionEntity.get().getExpirationDate().after(new Date())) {
+                                Instant instant = transactionEntity.get().getExpirationDate().toInstant();
+                                LocalDateTime expirationDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).plusDays(servicePackageEntity.get().getDurationDays());
+                                transactionEntity.get().setExpirationDate(Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant()));
 
-                            //Số ngày gia hạn
-                            Integer newExtensionDays = transactionEntity.get().getExtensionDays() + servicePackageEntity.get().getDurationDays();
-                            transactionEntity.get().setExtensionDays(newExtensionDays);
+                                //Số ngày gia hạn
+                                Integer newExtensionDays = transactionEntity.get().getExtensionDays() + servicePackageEntity.get().getDurationDays();
+                                transactionEntity.get().setExtensionDays(newExtensionDays);
 
-                            transactionEntity.get().setServicePackage(servicePackageEntity.get());
+                                transactionEntity.get().setServicePackage(servicePackageEntity.get());
 
-                            transactionRepository.save(transactionEntity.get());
+                                transactionRepository.save(transactionEntity.get());
 
-                            //TODO: Minus balance of user
-                            BigDecimal newBalance = user.getBalance().subtract(servicePackageEntity.get().getPrice());
-                            user.setBalance(newBalance);
-                            userRepository.save(user);
-                            //TODO: Send Message To PhoneNumber
+                                //TODO: Minus balance of user
+                                BigDecimal newBalance = user.getBalance().subtract(servicePackageEntity.get().getPrice());
+                                user.setBalance(newBalance);
+                                userRepository.save(user);
+                                //TODO: Send Message To PhoneNumber
 
-                            ResponseEntity<?> responseEntity = twilioService.sendSMSNotification(
-                                    "Cảm ơn bạn đã gia hạn đăng kí dịch vụ đăng tin ở Sweet Dream với gọi dịch vụ đã đăng kí: "
-                                            + servicePackageEntity.get().getName()
-                                            + " Trong vòng: "
-                                            + servicePackageEntity.get().getDurationDays()
-                                            + " Ngày. Từ ngày: "
-                                            + dateFormat.format(transactionEntity.get().getPurchaseDate())
-                                            + " Đến Hết Ngày: "
-                                            + dateFormat.format(transactionEntity.get().getExpirationDate())
-                                    , user.getPhoneNumber());
-                            if (responseEntity != null && responseEntity.getBody() != null) {
-                                if (responseEntity.getBody().equals(StatusCommon.DELIVERED)) {
-                                    return new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_TRANSACTION_EXTENSION_SERVICE_SUCCESS_WITH_SMS + ": " + servicePackageEntity.get().getName()), HttpStatus.OK);
+                                ResponseEntity<?> responseEntity = twilioService.sendSMSNotification(
+                                        "Cảm ơn bạn đã gia hạn đăng kí dịch vụ đăng tin ở Sweet Dream với gọi dịch vụ đã đăng kí: "
+                                                + servicePackageEntity.get().getName()
+                                                + " Trong vòng: "
+                                                + servicePackageEntity.get().getDurationDays()
+                                                + " Ngày. Từ ngày: "
+                                                + dateFormat.format(transactionEntity.get().getPurchaseDate())
+                                                + " Đến Hết Ngày: "
+                                                + dateFormat.format(transactionEntity.get().getExpirationDate())
+                                        , user.getPhoneNumber());
+                                if (responseEntity != null && responseEntity.getBody() != null) {
+                                    if (responseEntity.getBody().equals(StatusCommon.DELIVERED)) {
+                                        return new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_TRANSACTION_EXTENSION_SERVICE_SUCCESS_WITH_SMS + ": " + servicePackageEntity.get().getName()), HttpStatus.OK);
+                                    }
                                 }
-                            }
-                            return new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_TRANSACTION_EXTENSION_SERVICE_SUCCESS_WITHOUT_SMS + ": " + servicePackageEntity.get().getName()), HttpStatus.OK);
-                        } else {
+                                return new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_TRANSACTION_EXTENSION_SERVICE_SUCCESS_WITHOUT_SMS + ": " + servicePackageEntity.get().getName()), HttpStatus.OK);
+                            } else {
 
-                            //TODO: Insert To Transaction Table
-                            TransactionEntity transactionInsert = new TransactionEntity();
-                            transactionInsert.setId((long) HashHelper.generateRandomNumbers());
-                            transactionInsert.setPurchaseDate(new Date());
-                            // ExpirationDate = now + duration_data
-                            Instant instant = Instant.now();
-                            LocalDateTime expirationDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).plusDays(servicePackageEntity.get().getDurationDays());
-                            transactionInsert.setExpirationDate(Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant()));
+                                //TODO: Insert To Transaction Table
+                                TransactionEntity transactionInsert = new TransactionEntity();
+                                transactionInsert.setId((long) HashHelper.generateRandomNumbers());
+                                transactionInsert.setPurchaseDate(new Date());
+                                // ExpirationDate = now + duration_data
+                                Instant instant = Instant.now();
+                                LocalDateTime expirationDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).plusDays(servicePackageEntity.get().getDurationDays());
+                                transactionInsert.setExpirationDate(Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant()));
 
 
-                            transactionInsert.setExtensionDays(0);
+                                transactionInsert.setExtensionDays(0);
 
-                            transactionInsert.setExpired(false);
+                                transactionInsert.setExpired(false);
 
-                            transactionInsert.setUserTransaction(user);
+                                //TODO: get supplier by user
 
-                            transactionInsert.setServicePackage(servicePackageEntity.get());
+                                transactionInsert.setUserTransaction(supplier.get());
 
-                            transactionRepository.save(transactionInsert);
+                                transactionInsert.setServicePackage(servicePackageEntity.get());
 
-                            //TODO: Minus balance of user
-                            BigDecimal newBalance = user.getBalance().subtract(servicePackageEntity.get().getPrice());
-                            user.setBalance(newBalance);
+                                transactionRepository.save(transactionInsert);
 
-                            //TODO: Up role user to ROLE_UTIL_MANAGE --> REMOVE
+                                //TODO: Minus balance of user
+                                BigDecimal newBalance = user.getBalance().subtract(servicePackageEntity.get().getPrice());
+                                user.setBalance(newBalance);
+
+                                //TODO: Up role user to ROLE_UTIL_MANAGE --> REMOVE
 //                            Optional<RoleEntity> role = Optional.of(roleRepository.findByName(ModelCommon.ULTI_MANAGER));
 //                            if (role.isPresent()) {
 //                                user.getRoles().add(role.get());
@@ -133,29 +138,32 @@ public class TransactionServiceImpl implements ITransactionService {
 //                                return response = new ResponseEntity<>(BaseResponse.error(MessageUtil.MSG_ROLE_NOT_FOUND), HttpStatus.NOT_FOUND);
 //                            }
 
-                            //TODO: Send Message To PhoneNumber
-                            ResponseEntity<?> responseEntity = twilioService.sendSMSNotification(
-                                    "Cảm ơn bạn đã đăng kí dịch vụ đăng tin ở Sweet Dream với gọi dịch vụ đã đăng kí: "
-                                            + servicePackageEntity.get().getName()
-                                            + " Trong vòng: "
-                                            + servicePackageEntity.get().getDurationDays()
-                                            + " Ngày. Từ ngày: "
-                                            + dateFormat.format(transactionInsert.getPurchaseDate())
-                                            + " Đến Hết Ngày: "
-                                            + dateFormat.format(transactionInsert.getExpirationDate())
-                                    , user.getPhoneNumber());
-                            if (responseEntity != null && responseEntity.getBody() != null) {
-                                if (responseEntity.getBody().equals(StatusCommon.DELIVERED)) {
-                                    return response = new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_TRANSACTION_SERVICE_SUCCESS_WITH_SMS + ": " + servicePackageEntity.get().getName()), HttpStatus.OK);
+                                //TODO: Send Message To PhoneNumber
+                                ResponseEntity<?> responseEntity = twilioService.sendSMSNotification(
+                                        "Cảm ơn bạn đã đăng kí dịch vụ đăng tin ở Sweet Dream với gọi dịch vụ đã đăng kí: "
+                                                + servicePackageEntity.get().getName()
+                                                + " Trong vòng: "
+                                                + servicePackageEntity.get().getDurationDays()
+                                                + " Ngày. Từ ngày: "
+                                                + dateFormat.format(transactionInsert.getPurchaseDate())
+                                                + " Đến Hết Ngày: "
+                                                + dateFormat.format(transactionInsert.getExpirationDate())
+                                        , user.getPhoneNumber());
+                                if (responseEntity != null && responseEntity.getBody() != null) {
+                                    if (responseEntity.getBody().equals(StatusCommon.DELIVERED)) {
+                                        return response = new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_TRANSACTION_SERVICE_SUCCESS_WITH_SMS + ": " + servicePackageEntity.get().getName()), HttpStatus.OK);
+                                    }
                                 }
+                                response = new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_TRANSACTION_SERVICE_SUCCESS_WITHOUT_SMS + ": " + servicePackageEntity.get().getName()), HttpStatus.OK);
                             }
-                            response = new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_TRANSACTION_SERVICE_SUCCESS_WITHOUT_SMS + ": " + servicePackageEntity.get().getName()), HttpStatus.OK);
+                        } else {
+                            response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_BALANCE_NOT_ENOUGH), HttpStatus.BAD_REQUEST);
                         }
                     } else {
-                        response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_BALANCE_NOT_ENOUGH), HttpStatus.BAD_REQUEST);
+                        response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SERVICE_NOT_FOUND), HttpStatus.NOT_FOUND);
                     }
                 } else {
-                    response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SERVICE_NOT_FOUND), HttpStatus.NOT_FOUND);
+                    response = new ResponseEntity<>(new BaseResult(false, MessageUtil.SUPPLIER_NOT_FOUND), HttpStatus.NOT_FOUND);
                 }
             } else {
                 response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_USER_BY_TOKEN_NOT_FOUND), HttpStatus.NOT_FOUND);
@@ -178,11 +186,16 @@ public class TransactionServiceImpl implements ITransactionService {
                 userId = ((UserEntity) principal).getId();
             }
             if (userId != null) {
-                Optional<TransactionEntity> transaction = transactionRepository.findByUserTransaction_IdAndExpiredFalse(userId);
-                if (transaction.isPresent()) {
-                    response = new ResponseEntity<>(transaction.get(), HttpStatus.OK);
+                Optional<SupplierEntity> supplier = supplierRepository.findByUser_Id(userId);
+                if (supplier.isPresent()) {
+                    Optional<TransactionEntity> transaction = transactionRepository.findByUserTransaction_IdAndExpiredFalse(supplier.get().getId());
+                    if (transaction.isPresent()) {
+                        response = new ResponseEntity<>(transaction.get(), HttpStatus.OK);
+                    } else {
+                        response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SERVICE_NOT_FOUND), HttpStatus.NOT_FOUND);
+                    }
                 } else {
-                    response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SERVICE_NOT_FOUND), HttpStatus.NOT_FOUND);
+                    response = new ResponseEntity<>(new BaseResult(false, MessageUtil.SUPPLIER_NOT_FOUND), HttpStatus.NOT_FOUND);
                 }
             } else {
                 response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_USER_BY_TOKEN_NOT_FOUND), HttpStatus.NOT_FOUND);

@@ -1,16 +1,13 @@
 package com.wedding.backend.controller.guest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wedding.backend.dto.service.ServiceDTO;
 import com.wedding.backend.entity.SupplierEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.repository.SupplierRepository;
 import com.wedding.backend.service.IService.service.IDatabaseSearch;
 import com.wedding.backend.service.IService.service.IService;
 import com.wedding.backend.service.IService.service.IServicePackage;
-import com.wedding.backend.service.IService.supplier.ISupplierService;
 import com.wedding.backend.util.extensions.ConvertStringToArrayExtension;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -85,5 +82,13 @@ public class GuestController {
         Pageable pageable = PageRequest.of(page, size);
         return servicePackage.getAllServicePackage(pageable);
 
+    }
+
+    @GetMapping("/service/services-by-package-vip")
+    public ResponseEntity<?> getServicesByPackageVIP(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                     @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+                                                     @RequestParam(name = "packageId") Long packageId) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(service.getServiceByPackageVIP(pageable, packageId));
     }
 }

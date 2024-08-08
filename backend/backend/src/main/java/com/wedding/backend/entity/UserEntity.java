@@ -105,10 +105,6 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @JsonManagedReference
     private List<PaymentEntity> payments;
 
-    @OneToMany(mappedBy = "userTransaction")
-    @JsonManagedReference
-    private List<TransactionEntity> transactionEntities;
-
     /**
      * Retrieves the authorities (roles) assigned to the user.
      * This method is used by Spring Security to determine the user's
