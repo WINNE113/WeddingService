@@ -35,6 +35,7 @@ import { MdOutlineReportProblem } from "react-icons/md"
 import { modal } from "@/redux/appSlice"
 import { Slide, toast } from "react-toastify"
 import { apiAddWishlist, apiRemoveWishlist } from "@/apis/user"
+import { apiCreateNewBooking } from "@/apis/service"
 import { getWishlist } from "@/redux/action"
 import { FaHeart, FaRegHeart } from "react-icons/fa"
 import { useForm } from "react-hook-form"
@@ -62,10 +63,6 @@ const DetailPost = ({ navigate, location, dispatch }) => {
     reset,
     watch,
   } = useForm()
-
-  const handleSendPriceQuote = async (data) => {
-
-  }
 
   const { current, wishlist } = useSelector((s) => s.user)
 
@@ -97,6 +94,33 @@ const DetailPost = ({ navigate, location, dispatch }) => {
   //   if (response) setPosts(response.data)
   //   else setPosts([])
   // }
+
+const handleSendPriceQuote = async (data) => {
+  try {
+    const requestBody = {
+      name: data.name,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      notes: data.content,
+      serviceId: pid, // Đặt serviceId mặc định là 1, có thể thay đổi tùy theo nhu cầu
+    };
+
+    const response = await apiCreateNewBooking(requestBody);
+
+    if (response.success) {
+      // Xử lý khi gửi yêu cầu thành công
+      console.log('Yêu cầu báo giá thành công:', response.data);
+      toast.success('Yêu cầu báo giá của bạn đã được gửi thành công!');
+    } else {
+      // Xử lý khi có lỗi xảy ra
+      console.error('Có lỗi xảy ra khi gửi yêu cầu báo giá:', response.status);
+      toast.error('Có lỗi xảy ra khi gửi yêu cầu báo giá. Vui lòng thử lại.');
+    }
+  } catch (error) {
+    console.error('Lỗi:', error);
+    toast.error('Đã xảy ra lỗi khi gửi yêu cầu. Vui lòng thử lại sau.');
+  }
+};
 
   const fetchRating = async () => {
     const response = await apiGetRatings({ postId: pid })
