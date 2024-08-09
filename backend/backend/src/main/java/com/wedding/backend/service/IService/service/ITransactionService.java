@@ -9,8 +9,8 @@ public interface ITransactionService {
     ResponseEntity<?> purchasePackageByUser(Principal connectedUser, Long servicePackageId);
 
     ResponseEntity<?> purchasedServiceByUser();
-//
-//    ResponseEntity<?> getAllTransactionServiceByUser(Principal connectedUser, Pageable pageable);
-//
+
+    ResponseEntity<?> getAllTransactionServiceByUser(Principal connectedUser, Pageable pageable);
+
 //    ResponseEntity<?> getAllTransactionService(Pageable pageable);
 }

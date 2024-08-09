@@ -1,18 +1,24 @@
 package com.wedding.backend.service.impl.service;
 
 import com.wedding.backend.base.BaseResult;
+import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.common.StatusCommon;
+import com.wedding.backend.dto.transaction.TransactionDto;
 import com.wedding.backend.entity.ServicePackageEntity;
 import com.wedding.backend.entity.SupplierEntity;
 import com.wedding.backend.entity.TransactionEntity;
 import com.wedding.backend.entity.UserEntity;
 import com.wedding.backend.mapper.TransactionMapper;
-import com.wedding.backend.repository.*;
+import com.wedding.backend.repository.ServicePackageRepository;
+import com.wedding.backend.repository.SupplierRepository;
+import com.wedding.backend.repository.TransactionRepository;
+import com.wedding.backend.repository.UserRepository;
 import com.wedding.backend.service.IService.service.ITransactionService;
 import com.wedding.backend.service.IService.twilio.ITwilioService;
 import com.wedding.backend.util.helper.HashHelper;
 import com.wedding.backend.util.message.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +33,9 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionServiceImpl implements ITransactionService {
@@ -205,26 +213,30 @@ public class TransactionServiceImpl implements ITransactionService {
         }
         return response;
     }
-//    @Override
-//    public ResponseEntity<?> getAllTransactionServiceByUser(Principal connectedUser, Pageable pageable) {
-//        ResponseEntity<?> response = null;
-//        BaseResultWithDataAndCount<List<TransactionDto>> resultWithDataAndCount = new BaseResultWithDataAndCount<>();
-//        try {
-//            var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-//            if (user != null) {
-//                List<TransactionDto> transactionDtos = transactionRepository.findByUserTransactionIdOrderByPurchaseDateDesc(user.getId(), pageable)
-//                        .stream()
-//                        .map(transaction -> transactionMapper.entityToDto(transaction))
-//                        .collect(Collectors.toList());
-//                Long count = transactionRepository.countByUserTransaction_Id(user.getId());
-//                resultWithDataAndCount.set(transactionDtos, count);
-//                response = new ResponseEntity<>(resultWithDataAndCount, HttpStatus.OK);
-//            }
-//        } catch (Exception ex) {
-//            response = new ResponseEntity<>(BaseResponse.error(MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//        return response;
-//    }
+
+    @Override
+    public ResponseEntity<?> getAllTransactionServiceByUser(Principal connectedUser, Pageable pageable) {
+        ResponseEntity<?> response = null;
+        BaseResultWithDataAndCount<List<TransactionDto>> resultWithDataAndCount = new BaseResultWithDataAndCount<>();
+        try {
+            var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+            if (user != null) {
+                Optional<SupplierEntity> supplier = supplierRepository.findByUser_Id(user.getId());
+                if (supplier.isPresent()) {
+                    List<TransactionDto> transactionDtos = transactionRepository.findByUserTransactionIdOrderByPurchaseDateDesc(supplier.get().getId(), pageable)
+                            .stream()
+                            .map(transaction -> transactionMapper.entityToDto(transaction))
+                            .collect(Collectors.toList());
+                    resultWithDataAndCount.set(transactionDtos, (long) transactionDtos.size());
+                    return new ResponseEntity<>(resultWithDataAndCount, HttpStatus.OK);
+                }
+                response = new ResponseEntity<>(new BaseResult(false, MessageUtil.SUPPLIER_NOT_FOUND), HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception ex) {
+            response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return response;
+    }
 //
 //    @Override
 //    public ResponseEntity<?> getAllTransactionService(Pageable pageable) {

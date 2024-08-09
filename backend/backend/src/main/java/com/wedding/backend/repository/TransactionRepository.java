@@ -14,6 +14,7 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
 
 
     List<TransactionEntity> findByUserTransactionIdOrderByPurchaseDateDesc(Long userId, Pageable pageable);
+    List<TransactionEntity> findByUserTransaction(Long userId, Pageable pageable);
 
     List<TransactionEntity> findAllByOrderByPurchaseDateDesc(Pageable pageable);
 

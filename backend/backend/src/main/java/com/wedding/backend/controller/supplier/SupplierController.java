@@ -68,7 +68,7 @@ public class SupplierController {
         return ResponseEntity.ok(service.addSupplier(supplierDTO, supplierImage, connectedUser));
     }
 
-    @GetMapping(value = "supplier-is-exit-by-userId")
+    @GetMapping(value = "/supplier-is-exit-by-userId")
     public ResponseEntity<?> supplierIsExitedByUserId(Principal connectedUser) {
         return ResponseEntity.ok(service.checkSupplierExitByUserId(connectedUser));
     }
@@ -77,5 +77,14 @@ public class SupplierController {
     public ResponseEntity<?> purchasePackageByUser(@RequestParam(name = "servicePackageId") Long servicePackageId,
                                                    Principal connectedUser) {
         return transactionService.purchasePackageByUser(connectedUser, servicePackageId);
+    }
+
+    @GetMapping(value = "/transaction/service-package")
+    public ResponseEntity<?> transactionPackageServiceBySupplier(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                                 @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+                                                                 Principal connectedUser) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return ResponseEntity.ok(transactionService.getAllTransactionServiceByUser(connectedUser, pageable));
     }
 }
