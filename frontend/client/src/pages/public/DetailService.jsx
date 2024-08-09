@@ -5,6 +5,8 @@ import { AiOutlineHeart, AiOutlineUnorderedList } from "react-icons/ai"
 import { GoLocation } from "react-icons/go"
 import { BsPhoneVibrate } from "react-icons/bs"
 import { createSearchParams, useParams } from "react-router-dom"
+import Swal from "sweetalert2"
+
 
 // import { apiGetDetailPost, apiGetPosts, apiGetRatings } from "@/apis/post"
 
@@ -95,32 +97,33 @@ const DetailPost = ({ navigate, location, dispatch }) => {
   //   else setPosts([])
   // }
 
-const handleSendPriceQuote = async (data) => {
-  try {
-    const requestBody = {
-      name: data.name,
-      email: data.email,
-      phoneNumber: data.phoneNumber,
-      notes: data.content,
-      serviceId: pid, // Đặt serviceId mặc định là 1, có thể thay đổi tùy theo nhu cầu
-    };
-
-    const response = await apiCreateNewBooking(requestBody);
-
-    if (response.success) {
-      // Xử lý khi gửi yêu cầu thành công
-      console.log('Yêu cầu báo giá thành công:', response.data);
-      toast.success('Yêu cầu báo giá của bạn đã được gửi thành công!');
-    } else {
-      // Xử lý khi có lỗi xảy ra
-      console.error('Có lỗi xảy ra khi gửi yêu cầu báo giá:', response.status);
-      toast.error('Có lỗi xảy ra khi gửi yêu cầu báo giá. Vui lòng thử lại.');
-    }
-  } catch (error) {
-    console.error('Lỗi:', error);
-    toast.error('Đã xảy ra lỗi khi gửi yêu cầu. Vui lòng thử lại sau.');
-  }
-};
+  const handleSendPriceQuote = async (data) => {
+    Swal.fire({
+      icon: "warning",
+      title: "Xác nhận thao tác",
+      text: "Bạn có chắc muốn gửi thông tin nhận báo giá dịch vụ này?",
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: "Gửi",
+      cancelButtonText: "Quay lại",
+    }).then(async (rs) => {
+      if (rs.isConfirmed) {
+        const requestBody = {
+          name: data.name,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          notes: data.content,
+          serviceId: pid
+        }
+        // Delete here
+        const response = await apiCreateNewBooking(requestBody);
+        if (response.success) {
+          toast.success(response.message)
+          render()
+        } else toast.error("Có lỗi hãy thử lại sau")
+      }
+    })
+  };
 
   const fetchRating = async () => {
     const response = await apiGetRatings({ postId: pid })
