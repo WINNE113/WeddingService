@@ -24,7 +24,7 @@ import ManageDeposit from "./pages/supplier/ManageDeposit"
 import ManageService from "./pages/supplier/ManageService"
 import CreateService from "./pages/supplier/CreateService"
 import Pricing from "./pages/public/Pricing"
-
+import SupplierDetail from "./pages/supplier/SupplierDetail"
 function App() {
   const { isLoading, isShowModal, modalContent } = useSelector(
     (state) => state.app
@@ -58,6 +58,7 @@ function App() {
           <Route path={path.DETAIL_POST__PID__TITLE} element={<DetailService />} />
           <Route path={path.INVALID} element={<Home />} />
           <Route path={path.PRICING} element={<Pricing />} />
+          <Route path={path.SUPPLIER_DETAIL__SID__NAME} element={<SupplierDetail />} />
         </Route>
         <Route path={path.LOGIN} element={<Login />} />
         {/* Member routes */}

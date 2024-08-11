@@ -19,6 +19,7 @@ const path = {
     MANAGE_DEPOSIT: "quan-ly-nap-tien",
     MANAGE_SERVICE: "quan-ly-dich-vu",
     CREATE_SERVICE: "tao-moi-dich-vu",
-    PRICING: "bang-gia-goi"
+    PRICING: "bang-gia-goi",
+    SUPPLIER_DETAIL__SID__NAME: "chi-tiet-nha-cung-cap/:supplierId/:supplierName"
 }
 export default path
