@@ -246,6 +246,38 @@ public class Service implements IService {
         return result;
     }
 
+    @Override
+    public BaseResult setIsApprovedPosts(Long[] listServiceId) {
+        try {
+            for (Long id : listServiceId) {
+                Optional<ServiceEntity> dataFromDb = repository.findById(id);
+                if (dataFromDb.isPresent()) {
+                    dataFromDb.get().setStatus(StatusCommon.APPROVED);
+                    repository.save(dataFromDb.get());
+                }
+            }
+        } catch (Exception ex) {
+            return new BaseResult(false, ex.getMessage());
+        }
+        return new BaseResult(true, MessageUtil.UPDATE_STATUS_SERVICE_SUCCESS);
+    }
+
+    @Override
+    public BaseResult setIsRejectedPosts(Long[] listServiceId) {
+        try {
+            for (Long id : listServiceId) {
+                Optional<ServiceEntity> dataFromDb = repository.findById(id);
+                if (dataFromDb.isPresent()) {
+                    dataFromDb.get().setStatus(StatusCommon.REJECTED);
+                    repository.save(dataFromDb.get());
+                }
+            }
+        } catch (Exception ex) {
+            return new BaseResult(false, ex.getMessage());
+        }
+        return new BaseResult(true, MessageUtil.UPDATE_STATUS_SERVICE_SUCCESS);
+    }
+
     public ImageAlbDTOConvert convertData(ImageAlbDTO dataConvert) {
         return ImageAlbDTOConvert.builder()
                 .imageURL(dataConvert.getImagesURL())

@@ -34,4 +34,8 @@ public interface IService {
     BaseResultWithDataAndCount<?> getServiceByPackageVIP(Pageable pageable, Long packageId);
 
     BaseResultWithDataAndCount<List<ServiceDTO>> getServiceBySupplierId(Long supplierId, Pageable pageable);
+
+    BaseResult setIsApprovedPosts(Long[] listServiceId);
+
+    BaseResult setIsRejectedPosts(Long[] listServiceId);
 }

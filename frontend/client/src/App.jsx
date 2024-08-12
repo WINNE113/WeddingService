@@ -25,6 +25,14 @@ import ManageService from "./pages/supplier/ManageService"
 import CreateService from "./pages/supplier/CreateService"
 import Pricing from "./pages/public/Pricing"
 import SupplierDetail from "./pages/supplier/SupplierDetail"
+import Dashboard from "./pages/admin/Dashboard"
+import LayoutAdmin from "./pages/admin/LayoutAdmin"
+import ManageServices from "./pages/admin/ManageServices"
+import ManageUser from "./pages/admin/ManageUser"
+import ManagePricing from "./pages/admin/ManagePricing"
+import CreatePricing from "./pages/admin/CreatePricing"
+
+
 function App() {
   const { isLoading, isShowModal, modalContent } = useSelector(
     (state) => state.app
@@ -75,6 +83,16 @@ function App() {
           <Route path={path.MANAGE_SERVICE} element={<ManageService />} />
           <Route path={path.CREATE_SERVICE} element={<CreateService />} />
         </Route>
+
+        {/* Admin routes */}
+        <Route path={path.ADMIN} element={<LayoutAdmin />}>
+          <Route path={path.DASHBOARD} element={<Dashboard />} />
+          <Route path={path.MANAGE_SERVICES_ALL} element={<ManageServices />} />
+          <Route path={path.MANAGE_USER} element={<ManageUser />} />
+          <Route path={path.MANAGE_PRICING} element={<ManagePricing />} />
+          <Route path={path.CREATE_PRICING} element={<CreatePricing />} />
+        </Route>
+
         <Route path={path.PAYMENT_RESULT} element={<PaymentResult />} />
 
       </Routes>

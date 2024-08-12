@@ -40,4 +40,5 @@ public class MessageUtil {
     public static final String MSG_SEND_BOOKING_SUCCESS = "Gửi báo giá thành công";
     public static final String ADD_REPORT_SUCCESS = "Cam on thong tin bao cao dich vu cua ban";
     public static final String MSG_SUCCESS = "Success";
+    public static final String UPDATE_STATUS_SERVICE_SUCCESS = "Cap nhat trang thai dich vu thanh cong!";
 }
