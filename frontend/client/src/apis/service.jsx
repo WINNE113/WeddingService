@@ -113,3 +113,9 @@ export const apiUpdateRejectedService = (params) =>
         method: "patch",
         params,
     })
+export const apiUpdateStatusBooking = (params) =>
+    axios({
+        url: "/booking-service/change/status-booking",
+        method: "patch",
+        params,
+    })

@@ -12,12 +12,6 @@ import Swal from "sweetalert2"
 import useDebounce from "@/hooks/useDebounce"
 import { useSelector } from "react-redux"
 import clsx from "clsx"
-// import {
-//   apiDeletePost,
-//   apiGetPosts,
-//   apiUpdateApprovedPost,
-//   apiUpdateRejectedPost,
-// } from "@/apis/post"
 
 import { apiDeleteService, apiGetServices, apiUpdateRejectedService, apiUpdateApprovedService } from "@/apis/service"
 import path from "@/ultils/path"

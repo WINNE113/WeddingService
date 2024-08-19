@@ -250,6 +250,24 @@ export const statuses = [
     value: "REJECTED",
   },
 ]
+
+export const statusesBooking = [
+  {
+    name: "Đã liên hệ",
+    label: "Đã liên hệ",
+    value: "SUCCESS",
+  },
+  {
+    name: "Đang xử lý",
+    label: "Đang xử lý",
+    value: "PROCESS",
+  },
+  {
+    name: "Lỗi liên hệ",
+    label: "Lỗi liên hệ",
+    value: "FAILED",
+  },
+]
 export const areaOptions = [
   {
     value: "Dưới 20 m²",

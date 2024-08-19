@@ -42,4 +42,9 @@ public interface IUserService {
 
     ResponseEntity<?> getUserAccountStatus();
 
+    BaseResult followSupplier(Long supplierId, Principal connectedUser);
+
+    BaseResult unFollowSupplier(Long supplierId, Principal connectedUser);
+
+    ResponseEntity<Boolean> checkUserIsFollowSupplier(Long supplierId, Principal connectedUser);
 }

@@ -139,7 +139,7 @@ const ManageService = ({ dispatch, navigate }) => {
                   Ảnh đại diện
                 </th>
                 <th className="p-2 border font-medium text-center">Tiêu đề</th>
-                <th className="p-2 border font-medium text-center">Giá</th>
+                <th className="p-2 border font-medium text-center">Địa chỉ</th>
                 <th className="p-2 border font-medium text-center">
                   Ngày tạo mới
                 </th>
@@ -177,7 +177,7 @@ const ManageService = ({ dispatch, navigate }) => {
                     </a>
                   </td>
                   <td className="p-2 text-center">
-                    {formatMoney(el.price) + " VNĐ"}
+                    {el.address}
                   </td>
                   <td className="p-2 text-center">
                     {moment(el.createdDate).format("DD/MM/YYYY")}

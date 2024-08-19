@@ -19,7 +19,6 @@ const Card = ({
   image,
   title,
   address,
-  price,
   createdDate,
   id,
   isLike,

@@ -29,9 +29,6 @@ public class ServiceEntity extends BaseEntityWithIDIncrement {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "price")
-    private BigDecimal price;
-
     @Column(name = "address")
     private String address;
 
