@@ -3,9 +3,11 @@ package com.wedding.backend.service.impl.service;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
+import com.wedding.backend.common.ModelCommon;
 import com.wedding.backend.common.StatusCommon;
 import com.wedding.backend.dto.payment.PaymentByMonthDto;
 import com.wedding.backend.dto.service.*;
+import com.wedding.backend.dto.supplier.ServiceLimitResponse;
 import com.wedding.backend.entity.*;
 import com.wedding.backend.exception.ResourceNotFoundException;
 import com.wedding.backend.mapper.ServiceMapper;
@@ -139,6 +141,8 @@ public class Service implements IService {
                 // Insert new service
                 service = new ServiceEntity();
                 supplier.ifPresent(service::setSupplier);
+                service.setSelected(false);
+                service.setDeleted(false); // Might want to check if this should only be set on creation
             } else {
                 // Update existing service
                 Optional<ServiceEntity> optionalService = repository.findById(serviceDTO.getId());
@@ -156,7 +160,7 @@ public class Service implements IService {
             service.setLinkWebsite(serviceDTO.getLinkWebsite());
             service.setLinkFacebook(serviceDTO.getLinkFacebook());
             service.setRotation(serviceDTO.getRotation());
-            service.setDeleted(false); // Might want to check if this should only be set on creation
+
             service.setStatus(isNewService ? StatusCommon.REVIEW : service.getStatus());
 
             Optional<ServiceTypeEntity> serviceType = serviceTypeRepository.findById(serviceDTO.getServiceTypeId());
@@ -328,5 +332,33 @@ public class Service implements IService {
             responseEntity = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
+    }
+
+    @Override
+    public BaseResult updateServiceSelected(Long serviceId) {
+        try {
+            Optional<ServiceEntity> service = repository.findById(serviceId);
+            if (service.isPresent()) {
+                if (service.get().isSelected()) {
+                    service.get().setSelected(false);
+                } else if (service.get().getStatus().equals(StatusCommon.REVIEW) || service.get().getStatus().equals(StatusCommon.REJECTED)) {
+                    return new BaseResult(false, MessageUtil.MSG_STATUS_SERVICE_NOT_APPROVED);
+                } else {
+                    Long countServiceSelected = repository.countBySupplier_IdAndIsSelected(service.get().getSupplier().getId(), true);
+                    ServiceLimitResponse serviceLimitOfPackageVIP = supplierRepository.getServiceLimitOfPackageVIP(service.get().getSupplier().getId());
+                    if (countServiceSelected < serviceLimitOfPackageVIP.getServiceLimit()) {
+                        service.get().setSelected(true);
+                    } else {
+                        return new BaseResult(false, MessageUtil.MSG_SERVICE_LIMIT_OF_PACKAGE_VIP);
+                    }
+                }
+                repository.save(service.get());
+                return new BaseResult(true, MessageUtil.MSG_UPDATE_SUCCESS);
+            } else {
+                return new BaseResult(false, MessageUtil.MSG_SERVICE_NOT_FOUND);
+            }
+        } catch (Exception ex) {
+            return new BaseResult(false, ex.getMessage());
+        }
     }
 }

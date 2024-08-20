@@ -44,6 +44,9 @@ public class ServiceEntity extends BaseEntityWithIDIncrement {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
+    @Column(name = "is_selected")
+    private boolean isSelected; // Trường này để đánh dấu dịch vụ có được chọn hay không
+
     @Enumerated(EnumType.STRING)
     private StatusCommon status;
 

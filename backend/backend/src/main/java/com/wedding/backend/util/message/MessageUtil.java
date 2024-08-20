@@ -46,4 +46,6 @@ public class MessageUtil {
     public static final String UNFOLLOWING_SUCCESS = "Bạn đã hủy theo dõi";
     public static final String MSG_FOUND_BOOKING = "Chúng tôi đã nhận được yêu cầu báo giá của bạn.";
     public static final String BOOKING_NOT_FOUND = "Khong tim thay bao gia";
+    public static final String MSG_SERVICE_LIMIT_OF_PACKAGE_VIP = "Bạn đã đạt đến giới hạn số lượng dịch vụ cho phép trong gói VIP của mình. Vui lòng nâng cấp gói hoặc liên hệ với bộ phận hỗ trợ để biết thêm chi tiết.";
+    public static final String MSG_STATUS_SERVICE_NOT_APPROVED = "Bạn không thể chọn các dịch vụ chưa được phê duyệt.";
 }

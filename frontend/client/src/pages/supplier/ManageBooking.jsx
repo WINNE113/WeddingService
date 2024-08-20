@@ -48,6 +48,7 @@ const ManageBooking = () => {
         if (response) {
             toast.success(response.message);
             setEditBooking(null)
+            fetchBookingHistories()
             render()
         } else toast.error(response.message);
     }

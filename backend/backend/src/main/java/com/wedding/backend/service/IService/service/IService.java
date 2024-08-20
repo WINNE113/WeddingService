@@ -7,7 +7,6 @@ import com.wedding.backend.dto.service.ImageAlbDTOConvert;
 import com.wedding.backend.dto.service.ServiceDTO;
 import com.wedding.backend.dto.service.ServiceDetail;
 import com.wedding.backend.dto.service.UpSertServiceDTO;
-import com.wedding.backend.service.impl.service.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +38,10 @@ public interface IService {
     BaseResult setIsApprovedPosts(Long[] listServiceId);
 
     BaseResult setIsRejectedPosts(Long[] listServiceId);
+
     ResponseEntity<?> getTotalPaymentServiceByMonth();
+
     ResponseEntity<?> getStatusService();
+
+    BaseResult updateServiceSelected(Long serviceId);
 }

@@ -81,6 +81,8 @@ public class BookingService implements IBookingService {
                     booking.get().setStatus(StatusCommon.SUCCESS);
                 } else if (status.equals(StatusCommon.FAILED.name())) {
                     booking.get().setStatus(StatusCommon.FAILED);
+                } else if (status.equals(StatusCommon.PROCESS.name())) {
+                    booking.get().setStatus(StatusCommon.PROCESS);
                 }
                 bookingRepository.save(booking.get());
                 return new BaseResult(true, MessageUtil.MSG_UPDATE_SUCCESS);

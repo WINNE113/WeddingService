@@ -93,7 +93,7 @@ join services as s on b.service_id = s.id
 join supplier as sup on s.supplier_id = sup.id
 where sup.id = 2;
 
-
+--- query vip service--
 WITH RankedServices AS (
  SELECT 
   s.id,
@@ -108,10 +108,18 @@ ROW_NUMBER() OVER (PARTITION BY s.supplier_id ORDER BY s.created_date DESC) AS r
                     INNER JOIN transaction AS t ON t.supplier_id = sup.id
                      WHERE t.package_id = 1
                         AND s.status = 'APPROVED'
-                       AND s.is_deleted = FALSE
+                       AND s.is_deleted = FALSE and t.is_active = false
                     )
                     SELECT *
                     FROM RankedServices
                     WHERE rn <= 5
-                    ORDER BY  supplierId,  purchaseDate DESC
+                    ORDER BY  supplierId,  purchaseDate DESC;
+ SELECT b.id, b.name as nameCustomer, b.email, b.created_date as createdDate, b.phone_number as phoneNumber, b.note, b.service_id as serviceId, s.title as titleService, b.status
+FROM bookings as b
+JOIN services as s ON b.service_id = s.id
+JOIN supplier as sup ON s.supplier_id = sup.id
+WHERE sup.id = 1;
+
+ALTER TABLE Bookings
+DROP COLUMN Status;
 

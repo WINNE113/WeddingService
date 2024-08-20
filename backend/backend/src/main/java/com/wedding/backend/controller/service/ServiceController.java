@@ -80,7 +80,12 @@ public class ServiceController {
     }
 
     @DeleteMapping(value = "delete-by-ids")
-    public ResponseEntity<?> deleteService(Long[] serviceIds) {
+    public ResponseEntity<?> deleteService(@RequestParam(name = "serviceIds") Long[] serviceIds) {
         return ResponseEntity.ok(service.deleteByIds(serviceIds));
+    }
+
+    @PatchMapping(value = "/update/service-selected/{serviceId}")
+    public ResponseEntity<?> updateServiceSelected(@PathVariable(name = "serviceId") Long serviceId){
+        return ResponseEntity.ok(service.updateServiceSelected(serviceId));
     }
 }

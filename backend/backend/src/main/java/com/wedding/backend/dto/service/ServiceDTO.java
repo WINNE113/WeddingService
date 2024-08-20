@@ -19,5 +19,6 @@ public class ServiceDTO {
     private boolean isDeleted;
     private String status;
     private ServiceTypeEntity serviceType;
+    private boolean isSelected;
     private Date createdDate;
 }

@@ -86,12 +86,12 @@ public class AdminController {
 
     //TODO: CRUD Post
     @PatchMapping(value = "/setIsApprovedService")
-    public ResponseEntity<?> setIsApprovedPosts(Long[] listServiceId) {
+    public ResponseEntity<?> setIsApprovedPosts(@RequestParam(name = "listServiceId") Long[] listServiceId) {
         return ResponseEntity.ok(service.setIsApprovedPosts(listServiceId));
     }
 
     @PatchMapping(value = "/setIsRejectedService")
-    public ResponseEntity<?> setIsRejectedPosts(Long[] listServiceId) {
+    public ResponseEntity<?> setIsRejectedPosts(@RequestParam(name = "listServiceId") Long[] listServiceId) {
         return ResponseEntity.ok(service.setIsRejectedPosts(listServiceId));
 
     }

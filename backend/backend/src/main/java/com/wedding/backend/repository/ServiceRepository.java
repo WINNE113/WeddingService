@@ -57,7 +57,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
                     "    INNER JOIN transaction AS t ON t.supplier_id = sup.id\n" +
                     "    WHERE t.package_id =:packageId \n" +
                     "      AND s.status = 'APPROVED' \n" +
-                    "      AND s.is_deleted = FALSE\n" +
+                    "      AND s.is_deleted = FALSE and s.is_selected = true\n" +
                     ")\n" +
                     "SELECT *\n" +
                     "FROM RankedServices\n" +
@@ -79,5 +79,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
     Long countByStatus(StatusCommon status);
 
     Long countByIsDeletedFalseAndStatus(StatusCommon status);
+
+    Long countBySupplier_IdAndIsSelected(Long supplierId, boolean selected);
 
 }

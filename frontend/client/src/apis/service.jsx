@@ -119,3 +119,9 @@ export const apiUpdateStatusBooking = (params) =>
         method: "patch",
         params,
     })
+
+export const apiUpdateServiceSelected = (serviceId) => 
+    axios({
+        url: `/service/update/service-selected/${serviceId}`,
+        method: "patch",
+    })
