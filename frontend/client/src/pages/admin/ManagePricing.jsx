@@ -36,6 +36,7 @@ const ManagePricing = ({ dispatch }) => {
     searchParamsObject.limit = 5
     fetchPricings(searchParamsObject)
   }, [update, searchParams])
+  
   const handleDeletePricing = (id) => {
     Swal.fire({
       icon: "warning",

@@ -112,11 +112,6 @@ const ManageServices = ({ dispatch, navigate }) => {
               Hủy
             </Button>
           )}
-          <Button
-            onClick={() => navigate(`/${path.SUPPLIER}/${path.CREATE_SERVICE}`)}
-          >
-            Đăng tin mới
-          </Button>
         </div>
       </Title>
       <div className="p-4 mt-4">

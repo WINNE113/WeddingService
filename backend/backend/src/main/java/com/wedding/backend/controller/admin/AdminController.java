@@ -122,7 +122,7 @@ public class AdminController {
     }
 
     @DeleteMapping(value = "/user/delete")
-    public ResponseEntity<?> deleteAccount(@RequestParam(name = "listId") String[] listId) {
+    public ResponseEntity<?> deleteAccount(@RequestParam(name = "listId") String listId) {
         return userService.deleteUserByIds(listId);
     }
 

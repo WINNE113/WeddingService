@@ -218,17 +218,16 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseEntity<?> deleteUserByIds(String[] listId) {
+    public ResponseEntity<?> deleteUserByIds(String listId) {
         ResponseEntity<?> response = null;
-        long count = 0L;
         try {
-            for (String item : listId
-            ) {
-                Optional<UserEntity> user = userRepository.findById(item);
-                user.ifPresent(userEntity -> userEntity.setDeleted(true));
-                count++;
+            Optional<UserEntity> user = userRepository.findById(listId);
+            if (user.isPresent()) {
+                user.get().setDeleted(true);
+                userRepository.save(user.get());
             }
-            response = new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_DELETE_SUCCESS + " " + count + " tài khoản."), HttpStatus.OK);
+            response = new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_DELETE_SUCCESS), HttpStatus.OK);
+
         } catch (Exception ex) {
             response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }

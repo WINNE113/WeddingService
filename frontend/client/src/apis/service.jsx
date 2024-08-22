@@ -72,7 +72,7 @@ export const apiGetServiceByPackageVIP1AndVIP2 = (params) => {
     return axios({
         url: "/guest/service/services-by-package-VIP1-VIP2",
         method: "GET",
-        params
+        params,
     })
 }
 

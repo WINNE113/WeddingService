@@ -63,7 +63,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
                     "SELECT *\n" +
                     "FROM RankedServices\n" +
                     "WHERE rn <= 5\n" +
-                    "ORDER BY supplierId, purchaseDate DESC", nativeQuery = true
+                    "ORDER BY purchaseDate DESC", nativeQuery = true
     )
     List<ServiceByPackageDTO> serviceByPackageId(@Param("packageId") Long packageId, Pageable pageable);
 

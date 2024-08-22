@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import Header from "@/components/header/Header";
-import Navigation from "@/components/navigation/Navigation";
+import React, { useEffect, useState, useCallback } from "react";
 import Search from "@/components/search/Search";
 import CustomSlider from "@/components/common/CustomSlider";
 import Section from "@/components/common/Section";
@@ -11,9 +9,10 @@ import { apiCheckTransactionServicePackageIsExpired } from "@/apis/supplier"
 import Card from "@/components/posts/Card";
 import { useDispatch, useSelector } from "react-redux"
 import { VideoPlayer } from "@/components";
-import Session from "redux-persist/lib/storage/session";
 import { ImageSlider } from "@/components";
 import { ServiceTypeGrid, Pagination } from "@/components";
+import { useSearchParams } from "react-router-dom"
+
 
 
 const Home = () => {
@@ -22,40 +21,30 @@ const Home = () => {
     const [serviceFollow, setServiceFollow] = useState()
     const [serviceVIP3, setServiceVIP3] = useState([])
     const [serviceVIP1And2, setServiceVIP1And2] = useState([])
-    const [countServiceVIP1And2, setCountServiceVIP1And2] = useState()
+    const [countServiceVIP1And2, setCountServiceVIP1And2] = useState(0)
     const [serviceSuggested, setServiceSuggested] = useState([])
     const { wishlist } = useSelector((s) => s.user)
+    const [searchParams] = useSearchParams()
+    const [update, setUpdate] = useState(false)
 
+
+    const render = useCallback(() => {
+        setUpdate(!update)
+      }, [update])
 
     const fetchHomeData = async () => {
         const response = await apiGetServiceByDeleted({ size: 8 })
         if (response?.data) setSerivces(response.data)
     }
 
-    const fetchServicesVip1And2 = async () => {
-        const response = await apiGetServiceByPackageVIP1AndVIP2({ size: 8 });
-        if (response?.data) setServiceVIP1And2(response.data);
-        if (response?.count) setCountServiceVIP1And2(response.count)
+    const fetchServicesVip1And2 = async (searchParamsObject) => {
+        const response = await apiGetServiceByPackageVIP1AndVIP2(searchParamsObject);
+        if(response.data){
+            setServiceVIP1And2(response.data)
+            setCountServiceVIP1And2(response.count)
+        }
     }
 
-    // const fetchServiceByVIP3Data = async () => {
-    //     const packageIds = [3, 2, 1]; // Danh sách các packageId
-    //     let response = null;
-
-    //     for (const packageId of packageIds) {
-    //       response = await apiGetServiceByPackageVIP({ packageId, size: 30 });
-
-    //       if (response?.data && response.count > 0) {
-    //         setServiceVIP3(response.data);
-    //         break; // Dừng vòng lặp nếu có dữ liệu
-    //       }
-    //     }
-
-    //     // Nếu không có dữ liệu từ bất kỳ packageId nào, bạn có thể xử lý lỗi hoặc thông báo ở đây
-    //     if (!response?.data) {
-    //       console.error('No data found for any packageId');
-    //     }
-    //   };
     const fetchServiceByVIP3Data = async () => {
         const packageIds = [3, 2, 1]; // Danh sách các packageId
         let response = null;
@@ -126,11 +115,21 @@ const Home = () => {
     };
 
     useEffect(() => {
+        const { page, ...searchParamsObject } = Object.fromEntries([
+            ...searchParams,
+        ])
+        if (page && Number(page)) searchParamsObject.page = Number(page) - 1
+        else searchParamsObject.page = 0
+        searchParamsObject.size = 8
+        fetchServicesVip1And2(searchParamsObject)
+    }, [update, searchParams])
+
+
+    useEffect(() => {
         fetchHomeData()
         fetchServiceBySuggested()
         checkTransactionServicePackageIsExpired()
         fetchServiceByVIP3Data()
-        fetchServicesVip1And2()
     }, [])
 
 

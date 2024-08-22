@@ -207,7 +207,7 @@ const ManageUser = ({ dispatch }) => {
                   </td>
                   <td className="flex items-center justify-center gap-2 p-2">
                     <span
-                      onClick={() => handleDeleteUser(el.userId)}
+                      onClick={() => handleDeleteUser(el.customerId)}
                       className="text-lg text-main-red cursor-pointer px-1"
                     >
                       <AiFillDelete />

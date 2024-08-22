@@ -38,7 +38,7 @@ public interface IUserService {
 
     ResponseEntity<?> findAllAccountByRoleName(Pageable pageable, String roleName);
 
-    ResponseEntity<?> deleteUserByIds(String[] listId);
+    ResponseEntity<?> deleteUserByIds(String listId);
 
     ResponseEntity<?> getUserAccountStatus();
 
