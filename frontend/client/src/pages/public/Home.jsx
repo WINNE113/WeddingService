@@ -6,25 +6,36 @@ import CustomSlider from "@/components/common/CustomSlider";
 import Section from "@/components/common/Section";
 import { apiGetServiceByPackageVIP } from "@/apis/service";
 import ProvinceItem from "@/components/topProvince/ProvinceItem";
-import { apiGetServiceByDeleted, apiGetServiceByServiceType } from "@/apis/service";
+import { apiGetServiceByDeleted, apiGetServiceBySuggested, apiGetServiceByPackageVIP1AndVIP2 } from "@/apis/service";
+import { apiCheckTransactionServicePackageIsExpired } from "@/apis/supplier"
 import Card from "@/components/posts/Card";
 import { useDispatch, useSelector } from "react-redux"
 import { VideoPlayer } from "@/components";
 import Session from "redux-persist/lib/storage/session";
 import { ImageSlider } from "@/components";
-import { ServiceTypeGrid } from "@/components";
+import { ServiceTypeGrid, Pagination } from "@/components";
 
 
 const Home = () => {
     const dispatch = useDispatch()
     const [service, setSerivces] = useState()
+    const [serviceFollow, setServiceFollow] = useState()
     const [serviceVIP3, setServiceVIP3] = useState([])
-    const [serviceByType, setServiceByType] = useState()
+    const [serviceVIP1And2, setServiceVIP1And2] = useState([])
+    const [countServiceVIP1And2, setCountServiceVIP1And2] = useState()
+    const [serviceSuggested, setServiceSuggested] = useState([])
     const { wishlist } = useSelector((s) => s.user)
+
 
     const fetchHomeData = async () => {
         const response = await apiGetServiceByDeleted({ size: 8 })
         if (response?.data) setSerivces(response.data)
+    }
+
+    const fetchServicesVip1And2 = async () => {
+        const response = await apiGetServiceByPackageVIP1AndVIP2({ size: 8 });
+        if (response?.data) setServiceVIP1And2(response.data);
+        if (response?.count) setCountServiceVIP1And2(response.count)
     }
 
     // const fetchServiceByVIP3Data = async () => {
@@ -67,7 +78,7 @@ const Home = () => {
                     }
                 }
 
-                // Xử lý dữ liệu cho VIP 2 và VIP 1
+                // Xử lý dữ liệu cho VIP 2
                 if (packageId === 2) {
                     if (response.count >= 5) {
                         // Nếu số lượng dữ liệu từ VIP 2 đủ lớn, kết hợp với dữ liệu từ VIP 3 nếu có
@@ -80,9 +91,10 @@ const Home = () => {
                     }
                 }
 
+                // Xử lý dữ liệu cho VIP 1
                 if (packageId === 1) {
                     // Kết hợp dữ liệu từ VIP 1 với các dữ liệu đã có
-                    allData = [...(dataVIP3 || []), ...response.data];
+                    allData = [...allData, ...response.data];
                     setServiceVIP3(allData);
                     return; // Dừng hàm sau khi đã xử lý gói VIP 1
                 }
@@ -95,19 +107,30 @@ const Home = () => {
         }
     };
 
-
-
-
-    const fetchServiceByTypeDate = async () => {
-        const response = await apiGetServiceByServiceType({ size: 8 })
-        if (response?.data) setServiceByType(response.data)
+    const fetchServiceBySuggested = async () => {
+        const response = await apiGetServiceBySuggested({ size: 8 })
+        if (response?.data) setServiceSuggested(response.data)
     }
 
+    const checkTransactionServicePackageIsExpired = async () => {
+        try {
+            const response = await apiCheckTransactionServicePackageIsExpired();
+            if (response.status === 200) {
+                console.log("Transaction package is valid.");
+            } else {
+                console.log("Transaction package has expired or not found.");
+            }
+        } catch (error) {
+            console.error("Error checking transaction service package:", error);
+        }
+    };
 
     useEffect(() => {
         fetchHomeData()
-        fetchServiceByTypeDate()
+        fetchServiceBySuggested()
+        checkTransactionServicePackageIsExpired()
         fetchServiceByVIP3Data()
+        fetchServicesVip1And2()
     }, [])
 
 
@@ -124,21 +147,22 @@ const Home = () => {
             <div className="bg-pink-100">
                 <Section
                     className="w-main mx-auto text-neutral-400"
-                    title="BÀI VIẾT NỔI BẬT"
+                    title="DỊCH VỤ NỔI BẬT"
                 >
                     <CustomSlider count={4}>
                         {serviceVIP3.map((el, idx) => (
                             <ProvinceItem key={idx} {...el} />
                         ))}
                     </CustomSlider>
+
                 </Section>
             </div>
             <Section
                 className="w-main mx-auto text-neutral-400"
-                title="Nhà Cung Cấp"
+                title="Gợi ý dành riêng cho bạn"
                 contentClassName="grid grid-cols-4 gap-4"
             >
-                {service?.map((el) => (
+                {serviceSuggested?.map((el) => (
                     <Card
                         isLike={wishlist?.some((n) => n.id === el.id)}
                         {...el}
@@ -153,6 +177,32 @@ const Home = () => {
             >
                 <div>
                     <ImageSlider images={images} />
+                </div>
+            </Section>
+
+
+            {/* Dịch vụ khác */}
+            <Section
+                className="w-main mx-auto text-neutral-400"
+                title="Dịch vụ khác"
+                contentClassName="grid grid-cols-1 gap-4"
+            >
+                <div className="grid grid-cols-4 gap-4 mt-6 w-full">
+                    {serviceVIP1And2?.map((el) => (
+                        <Card
+                            isLike={wishlist?.some((n) => n.id === el.id)}
+                            id={el.id}
+                            image={el.image}
+                            title={el.title}
+                            address={el.address}
+                            createdDate={el.createdDate}
+                            key={el.id}
+                        />
+                    ))}
+                </div>
+
+                <div className="mt-6 col-span-4">
+                    <Pagination totalCount={countServiceVIP1And2 || 1} />
                 </div>
             </Section>
 

@@ -143,7 +143,7 @@ const ManageServices = ({ dispatch, navigate }) => {
         <div className="mt-6 w-full">
           <table className="table-fixed w-full">
             <thead>
-              <tr>
+              <tr className="text-pink-500">
                 <th className="p-2 border font-medium text-center">Mã tin</th>
                 <th className="p-2 border font-medium text-center">
                   Ảnh đại diện

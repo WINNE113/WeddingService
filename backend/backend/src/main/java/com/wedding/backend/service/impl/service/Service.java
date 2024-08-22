@@ -3,7 +3,6 @@ package com.wedding.backend.service.impl.service;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
-import com.wedding.backend.common.ModelCommon;
 import com.wedding.backend.common.StatusCommon;
 import com.wedding.backend.dto.payment.PaymentByMonthDto;
 import com.wedding.backend.dto.service.*;
@@ -238,6 +237,20 @@ public class Service implements IService {
     }
 
     @Override
+    public BaseResultWithDataAndCount<?> getServiceByPackageVIP1AndVIP2(Pageable pageable) {
+        BaseResultWithDataAndCount<List<ServiceByPackageDTO>> result = new BaseResultWithDataAndCount<>();
+        try {
+            List<ServiceByPackageDTO> dataVIP1FromDb = repository.serviceByPackageId(pageable);
+
+
+            result.set(dataVIP1FromDb, (long) dataVIP1FromDb.size());
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+        return result;
+    }
+
+    @Override
     public BaseResultWithDataAndCount<List<ServiceDTO>> getServiceBySupplierId(Long supplierId, Pageable pageable) {
         BaseResultWithDataAndCount<List<ServiceDTO>> result = new BaseResultWithDataAndCount<>();
         try {
@@ -361,4 +374,47 @@ public class Service implements IService {
             return new BaseResult(false, ex.getMessage());
         }
     }
+
+    @Override
+    public BaseResultWithDataAndCount<List<ServiceBySuggest>> serviceByUserFollowingSupplier(Principal connectedUser, Pageable pageable) {
+        BaseResultWithDataAndCount<List<ServiceBySuggest>> result = new BaseResultWithDataAndCount<>();
+        try {
+            List<ServiceBySuggest> dataFromDb;
+
+            // Nếu có người dùng kết nối: dang nhap roi
+            if (connectedUser != null) {
+                var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
+                // Kiểm tra nếu không có thông tin người dùng
+                if (user == null) {
+                    throw new ResourceNotFoundException(MessageUtil.MSG_USER_BY_TOKEN_NOT_FOUND);
+                }
+
+                // Lấy dịch vụ từ các nhà cung cấp mà người dùng theo dõi
+                dataFromDb = repository.serviceByUserFollowingSupplier(user.getId(), pageable);
+
+                // Nếu không có dịch vụ nào từ nhà cung cấp mà người dùng theo dõi, lấy dịch vụ dựa trên xếp hạng trung bình
+                if (dataFromDb.isEmpty()) {
+                    dataFromDb = repository.serviceByAverageRating(pageable);
+                }
+            } else {
+                // Nếu người dùng không đăng nhập, chỉ lấy dịch vụ dựa trên xếp hạng trung bình
+                dataFromDb = repository.serviceByAverageRating(pageable);
+            }
+
+            // Đặt kết quả và số lượng dữ liệu trả về
+            result.set(dataFromDb, (long) dataFromDb.size());
+
+        } catch (ResourceNotFoundException ex) {
+            // Xử lý ngoại lệ cụ thể
+            throw ex;
+        } catch (Exception ex) {
+            // Xử lý ngoại lệ chung
+            throw new ResourceNotFoundException("An error occurred while fetching services: " + ex.getMessage());
+        }
+
+        return result;
+    }
+
+
 }

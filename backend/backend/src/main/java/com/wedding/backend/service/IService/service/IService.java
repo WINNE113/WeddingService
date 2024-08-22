@@ -3,10 +3,7 @@ package com.wedding.backend.service.IService.service;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
-import com.wedding.backend.dto.service.ImageAlbDTOConvert;
-import com.wedding.backend.dto.service.ServiceDTO;
-import com.wedding.backend.dto.service.ServiceDetail;
-import com.wedding.backend.dto.service.UpSertServiceDTO;
+import com.wedding.backend.dto.service.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +29,7 @@ public interface IService {
     BaseResult deleteById(Long serviceId);
 
     BaseResultWithDataAndCount<?> getServiceByPackageVIP(Pageable pageable, Long packageId);
+    BaseResultWithDataAndCount<?> getServiceByPackageVIP1AndVIP2(Pageable pageable);
 
     BaseResultWithDataAndCount<List<ServiceDTO>> getServiceBySupplierId(Long supplierId, Pageable pageable);
 
@@ -44,4 +42,6 @@ public interface IService {
     ResponseEntity<?> getStatusService();
 
     BaseResult updateServiceSelected(Long serviceId);
+
+    BaseResultWithDataAndCount<List<ServiceBySuggest>> serviceByUserFollowingSupplier(Principal connectedUser, Pageable pageable);
 }

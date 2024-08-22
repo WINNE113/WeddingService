@@ -41,6 +41,13 @@ public class ServiceController {
         return ResponseEntity.ok(service.getAllByServiceTypeAndAcceptStatus(serviceTypeId, pageable));
     }
 
+    @GetMapping("/suggest-by-follow-or-not")
+    public ResponseEntity<?> serviceByUserFollowingSupplier(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                            @RequestParam(name = "size", required = false, defaultValue = "5") Integer size, Principal connectedUser) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(service.serviceByUserFollowingSupplier(connectedUser, pageable));
+    }
+
     @GetMapping("/detail-service")
     public ResponseEntity<?> getDetailServiceById(@RequestParam("serviceId") Long serviceId) {
         return ResponseEntity.ok(service.getDetailServiceById(serviceId));
@@ -85,7 +92,7 @@ public class ServiceController {
     }
 
     @PatchMapping(value = "/update/service-selected/{serviceId}")
-    public ResponseEntity<?> updateServiceSelected(@PathVariable(name = "serviceId") Long serviceId){
+    public ResponseEntity<?> updateServiceSelected(@PathVariable(name = "serviceId") Long serviceId) {
         return ResponseEntity.ok(service.updateServiceSelected(serviceId));
     }
 }

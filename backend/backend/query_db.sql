@@ -106,20 +106,61 @@ ROW_NUMBER() OVER (PARTITION BY s.supplier_id ORDER BY s.created_date DESC) AS r
                 FROM services AS s
                INNER JOIN supplier AS sup ON s.supplier_id = sup.id
                     INNER JOIN transaction AS t ON t.supplier_id = sup.id
-                     WHERE t.package_id = 1
+                     WHERE t.package_id = 2
                         AND s.status = 'APPROVED'
-                       AND s.is_deleted = FALSE and t.is_active = false
+                       AND s.is_deleted = FALSE and s.is_selected = true and t.expired = false
                     )
                     SELECT *
                     FROM RankedServices
                     WHERE rn <= 5
                     ORDER BY  supplierId,  purchaseDate DESC;
+                    
+-- Get 5 service if user follow supplier --
+WITH RankedFollowedServices AS (
+    SELECT 
+        s.id,
+        s.title,
+        s.image,
+        s.address,
+        s.created_date,
+        sup.id as supplierId,
+        ROW_NUMBER() OVER (PARTITION BY s.supplier_id ORDER BY s.created_date DESC) AS rn
+    FROM 
+        user_supplier_follow AS fl
+    INNER JOIN 
+        supplier AS sup ON fl.supplier_id = sup.id
+    INNER JOIN 
+        services AS s ON sup.id = s.supplier_id
+    WHERE 
+        fl.user_id = 'efa916fadf42477e9d4a47c164c32b90'
+        AND s.status = 'APPROVED'
+        AND s.is_deleted = FALSE
+)
+SELECT 
+    id, 
+    title, 
+    image, 
+    address, 
+    created_date  as createdDate
+FROM 
+    RankedFollowedServices
+WHERE 
+    rn <= 5
+ORDER BY 
+    supplierId, createdDate DESC;
+
+-- END -- 
+                    
+                    
  SELECT b.id, b.name as nameCustomer, b.email, b.created_date as createdDate, b.phone_number as phoneNumber, b.note, b.service_id as serviceId, s.title as titleService, b.status
 FROM bookings as b
 JOIN services as s ON b.service_id = s.id
 JOIN supplier as sup ON s.supplier_id = sup.id
 WHERE sup.id = 1;
 
-ALTER TABLE Bookings
-DROP COLUMN Status;
+ALTER TABLE transaction
+DROP COLUMN is_active;
+
+select * from services where services.is_selected = true
+
 

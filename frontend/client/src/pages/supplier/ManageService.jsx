@@ -9,7 +9,7 @@ import { AiFillDelete, AiFillStar, AiOutlineEdit } from "react-icons/ai"
 import { Link, useSearchParams } from "react-router-dom"
 import { toast } from "react-toastify"
 import Swal from "sweetalert2"
-// import UpdatePost from "./UpdatePost"
+import UpdateService from "./UpdateService"
 import useDebounce from "@/hooks/useDebounce"
 import { useSelector } from "react-redux"
 import clsx from "clsx"
@@ -237,7 +237,7 @@ const ManageService = ({ dispatch, navigate }) => {
                           dispatch(
                             modal({
                               isShowModal: true,
-                              modalContent: <UpdatePost postId={el.id} />,
+                              modalContent: <UpdateService serviceId={el.id} />,
                             })
                           )
                         }

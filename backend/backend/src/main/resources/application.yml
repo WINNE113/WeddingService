@@ -31,9 +31,9 @@ spring:
       file-size-threshold: 0
       location: /tmp
 twilio:
-  account_sid: AC0b34ce3d996ee5c31d9addf80af6b1110
-  auth_token: f8dbacdf48f3c009a70bb7eb105ec844d
-  trial_number: +132593928665
+  account_sid: AC0b34ce3d996ee5c31d9addf80af6b110
+  auth_token: f8dbacdf48f3c009a70bb7eb105ec84d
+  trial_number: +13259392865
 
 vnpay:
   returnUrl: http://localhost:8080/api/v1/payment/vnpay-return

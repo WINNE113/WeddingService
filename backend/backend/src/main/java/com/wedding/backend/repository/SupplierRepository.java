@@ -28,7 +28,7 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> 
     @Query(value = "Select supplier.id as supplierId , service_limit as serviceLimit from supplier \n" +
             "inner join transaction on supplier.id = transaction.supplier_id\n" +
             "inner join service_package on transaction.package_id = service_package.id \n" +
-            "where supplier.id =:supplierId", nativeQuery = true)
+            "where supplier.id =:supplierId and transaction.expired = false", nativeQuery = true)
     ServiceLimitResponse getServiceLimitOfPackageVIP(@Param("supplierId") Long supplierId);
 
 }

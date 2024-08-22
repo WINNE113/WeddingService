@@ -45,3 +45,9 @@ export const apiCheckUserIsFollowingSupplier = (id) =>
        url: `user/check-user-is-follow-supplier/${id}`,
        method: "GET" 
     })
+
+export const apiCheckTransactionServicePackageIsExpired = () =>
+    axios({
+        url: "supplier/transaction/is-expired",
+        method: "patch"
+    })
