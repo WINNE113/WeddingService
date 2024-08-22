@@ -75,7 +75,7 @@ const Filter = ({ location, navigate, dispatch }) => {
             ward?.ward_name,
             ward?.ward_name && ",",
             district?.district_name,
-            district?.ndistrict_nameame && ",",
+            district?.district_name && ",",
             province?.province_name
         )
         const textModified = text
