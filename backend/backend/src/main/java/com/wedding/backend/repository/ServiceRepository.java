@@ -177,8 +177,6 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
 
     Long countByIsDeletedFalse();
 
-    Long countByStatus(StatusCommon status);
-
     Long countByIsDeletedFalseAndStatus(StatusCommon status);
 
     Long countBySupplier_IdAndIsSelected(Long supplierId, boolean selected);

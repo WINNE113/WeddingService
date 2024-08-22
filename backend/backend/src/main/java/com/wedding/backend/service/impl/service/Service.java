@@ -327,9 +327,9 @@ public class Service implements IService {
         ResponseEntity<?> responseEntity = null;
         try {
             Long countPost = this.repository.countByIsDeletedFalse();
-            Long countApprovedPost = this.repository.countByStatus(StatusCommon.APPROVED);
-            Long countRejectedPost = this.repository.countByStatus(StatusCommon.REJECTED);
-            Long countReviewPost = this.repository.countByStatus(StatusCommon.REVIEW);
+            Long countApprovedPost = this.repository.countByIsDeletedFalseAndStatus(StatusCommon.APPROVED);
+            Long countRejectedPost = this.repository.countByIsDeletedFalseAndStatus(StatusCommon.REJECTED);
+            Long countReviewPost = this.repository.countByIsDeletedFalseAndStatus(StatusCommon.REVIEW);
             StatusService status;
             if (countPost == 0) {
                 status = new StatusService(0L, 0L, 0L);

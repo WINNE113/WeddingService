@@ -37,7 +37,7 @@ const Dashboard = () => {
   const [paymentTransactionData, setPaymentTransactionData] = useState([]);
 
 
-  
+
   const dataCircleChart = [
     { value: postStatusPercent[0], color: '#3cb371' }, // Approved color
     { value: postStatusPercent[1], color: '#ff0000' }, // Rejected color
@@ -46,6 +46,7 @@ const Dashboard = () => {
   ];
 
   const dataUserCircleChart = [
+    { value: 1, color: '#db323b' }, // percent user
     // { value: userStatusPercent[0], color: '#ff0000' }, // totalAccount
     { value: userStatusPercent[1], color: '#3cb371' }, // percent user
     // { value: userStatusPercent[2], color: '#3cb371' }, // totalUser
@@ -53,7 +54,7 @@ const Dashboard = () => {
     // { value: userStatusPercent[4], color: '#ee82ee' }, //  totalManage
     // { value: userStatusPercent[5], color: '#6a5acd' }, // percentUltiManage
     // { value: userStatusPercent[6], color: '#0096889c' }, // totalUltimange
-    { value: 100 - userStatusPercent[1] - userStatusPercent[3] , color: '#5858580f' }, // Background color
+    { value: 100 - userStatusPercent[1] - userStatusPercent[3] - 1, color: '#5858580f' }, // Background color
   ];
 
   const dataLineChart = {
@@ -129,83 +130,87 @@ const Dashboard = () => {
     setcallApi(!callApi)
   }
 
-return (
-  <div>
-    <Title title="Thống kê"></Title>
-    <div className="grid grid-cols-2 grid-rows-2">
-      <div className="mx-2 my-2 border border-[#E6E9ED] rounded-md shadow">
-        <div className="border-b-2 border-[#E6E9ED] mx-4 py-2">
-          <h1 className="text-2xl font-bold text-[#73879E] px-2">Trạng thái bài viết dịch vụ</h1>
-        </div>
-        <div className="grid grid-cols-2 w-full px-2">
-          <PieChart className="px-4"
-            data={dataCircleChart}
-            style={{ width: '240px', height: '240px' }} // Adjust the size as needed
-            startAngle={-90}
-            animate
-          />
-          <div className="flex flex-col pt-5">
-            <span className="text-sm font-semibold text-[white] rounded-full bg-[#37d4b29c] px-3 py-2 mb-2 text-center min-w-[6rem]">Đang sử lý</span>
-            <span className="text-sm font-semibold text-[black] border rounded-full bg-[#3cb371] px-3 py-2 mb-2 text-center min-w-[6rem]">Chấp nhận</span>
-            <span className="text-sm font-semibold text-[black] border rounded-full bg-[#ff0000] px-3 py-2 mb-2 text-center min-w-[6rem]">Từ chối</span>
+  return (
+    <div>
+      <Title title="Thống kê"></Title>
+      <div className="grid grid-cols-2 grid-rows-2">
+        <div className="mx-2 my-2 border border-[#E6E9ED] rounded-md shadow">
+          <div className="border-b-2 border-[#E6E9ED] mx-4 py-2">
+            <h1 className="text-2xl font-bold text-[#73879E] px-2">Trạng thái bài viết dịch vụ</h1>
+          </div>
+          <div className="grid grid-cols-2 w-full px-2">
+            <PieChart className="px-4"
+              data={dataCircleChart}
+              style={{ width: '240px', height: '240px' }} // Adjust the size as needed
+              startAngle={-90}
+              animate
+            />
+            <div className="flex flex-col pt-5">
+              <span className="text-sm font-semibold text-[white] rounded-full bg-[#37d4b29c] px-3 py-2 mb-2 text-center min-w-[6rem]">Đang sử lý</span>
+              <span className="text-sm font-semibold text-[black] border rounded-full bg-[#3cb371] px-3 py-2 mb-2 text-center min-w-[6rem]">Chấp nhận</span>
+              <span className="text-sm font-semibold text-[black] border rounded-full bg-[#ff0000] px-3 py-2 mb-2 text-center min-w-[6rem]">Từ chối</span>
+            </div>
+          </div>
+          <div className="flex space-x-2 ml-7">
+            <div className="flex-1 border border-[#E6E9ED] rounded-full bg-[#37d4b29c] flex items-center justify-center">
+              <span className="py-2 text-center text-[white] text-sm font-semibold">{postStatusPercent[2]}%</span>
+            </div>
+            <div className="flex-1 border border-[#E6E9ED] rounded-full bg-[#3cb371] flex items-center flex items-center justify-center">
+              <span className="py-2 text-center text-[white] text-sm font-semibold">{postStatusPercent[0]}%</span>
+            </div>
+            <div className="flex-1 border border-[#E6E9ED] rounded-full bg-[#ff0000] flex items-center flex items-center justify-center">
+              <span className="py-2 text-center text-[white] text-sm font-semibold">{postStatusPercent[1]}%</span>
+            </div>
           </div>
         </div>
-        <div className="flex space-x-2 ml-7">
-          <div className="flex-1 border border-[#E6E9ED] rounded-full bg-[#37d4b29c] flex items-center justify-center">
-            <span className="py-2 text-center text-[white] text-sm font-semibold">{postStatusPercent[2]}%</span>
+        <div className="mx-2 my-2 border border-[#E6E9ED] rounded-md shadow">
+          <div className="border-b-2 border-[#E6E9ED] mx-4 py-2">
+            <h1 className="text-2xl font-bold text-[#73879E] px-2">Trạng thái tài khoản người dùng</h1>
           </div>
-          <div className="flex-1 border border-[#E6E9ED] rounded-full bg-[#3cb371] flex items-center flex items-center justify-center">
-            <span className="py-2 text-center text-[white] text-sm font-semibold">{postStatusPercent[0]}%</span>
+          <div className="grid grid-cols-2 w-full px-2">
+            <PieChart className="px-4"
+              data={dataUserCircleChart}
+              style={{ width: '240px', height: '240px' }} // Adjust the size as needed
+              startAngle={-90}
+              animate
+            />
+            <div className="flex flex-col pt-5">
+              <span className="text-sm font-semibold text-[white] rounded-full bg-[#db323b] px-3 py-2 mb-2 text-center min-w-[6rem]">Admin</span>
+              <span className="text-sm font-semibold text-[white] rounded-full bg-[#3cb371] px-3 py-2 mb-2 text-center min-w-[6rem]">Thành viên</span>
+              <span className="text-sm font-semibold text-[black] border rounded-full bg-[#0000ff] px-3 py-2 mb-2 text-center min-w-[6rem]">Nhà cung cấp</span>
+            </div>
           </div>
-          <div className="flex-1 border border-[#E6E9ED] rounded-full bg-[#ff0000] flex items-center flex items-center justify-center">
-            <span className="py-2 text-center text-[white] text-sm font-semibold">{postStatusPercent[1]}%</span>
-          </div>
-        </div>
-      </div>
-      <div className="mx-2 my-2 border border-[#E6E9ED] rounded-md shadow">
-        <div className="border-b-2 border-[#E6E9ED] mx-4 py-2">
-          <h1 className="text-2xl font-bold text-[#73879E] px-2">Trạng thái tài khoản người dùng</h1>
-        </div>
-        <div className="grid grid-cols-2 w-full px-2">
-          <PieChart className="px-4"
-            data={dataUserCircleChart}
-            style={{ width: '240px', height: '240px' }} // Adjust the size as needed
-            startAngle={-90}
-            animate
-          />
-          <div className="flex flex-col pt-5">
-            <span className="text-sm font-semibold text-[white] rounded-full bg-[#3cb371] px-3 py-2 mb-2 text-center min-w-[6rem]">Thành viên</span>
-            <span className="text-sm font-semibold text-[black] border rounded-full bg-[#0000ff] px-3 py-2 mb-2 text-center min-w-[6rem]">Nhà cung cấp</span>
-          </div>
-        </div>
-        <div className="flex space-x-2 ml-7">
-          <div className="flex-1 border border-[#E6E9ED] rounded-full bg-[#3cb371] flex items-center justify-center">
-            <span className="py-2 text-center text-[white] text-sm font-semibold">{userStatusPercent[2]} account</span>
-          </div>
-          <div className="flex-1 border border-[#E6E9ED] rounded-full bg-[#0000ff] flex items-center flex items-center justify-center">
-            <span className="py-2 text-center text-[white] text-sm font-semibold">{userStatusPercent[4]} account</span>
+          <div className="flex space-x-2 ml-7">
+            <div className="flex-1 border border-[#E6E9ED] rounded-full bg-[#db323b] flex items-center justify-center">
+              <span className="py-2 text-center text-[white] text-sm font-semibold">1 account</span>
+            </div>
+            <div className="flex-1 border border-[#E6E9ED] rounded-full bg-[#3cb371] flex items-center justify-center">
+              <span className="py-2 text-center text-[white] text-sm font-semibold">{userStatusPercent[2]} account</span>
+            </div>
+            <div className="flex-1 border border-[#E6E9ED] rounded-full bg-[#0000ff] flex items-center flex items-center justify-center">
+              <span className="py-2 text-center text-[white] text-sm font-semibold">{userStatusPercent[4]} account</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="mx-2 my-2 border border-[#E6E9ED] rounded-md shadow">
-        <div className="border-b-2 border-[#E6E9ED] mx-4 py-2">
-          <h1 className="text-2xl font-bold text-[#73879E] px-2">Doanh thu dịch vụ gói dịch vụ</h1>
+        <div className="mx-2 my-2 border border-[#E6E9ED] rounded-md shadow">
+          <div className="border-b-2 border-[#E6E9ED] mx-4 py-2">
+            <h1 className="text-2xl font-bold text-[#73879E] px-2">Doanh thu gói dịch vụ</h1>
+          </div>
+          <div>
+            <Line data={dataLineChart} />
+          </div>
         </div>
-        <div>
-          <Line data={dataLineChart} />
-        </div>
-      </div>
-      <div className="mx-2 my-2 border border-[#E6E9ED] rounded-md shadow">
-        <div className="border-b-2 border-[#E6E9ED] mx-4 py-2">
-          <h1 className="text-2xl font-bold text-[#73879E] px-2">Doanh thu nạp tiền vào hệ thống</h1>
-        </div>
-        <div>
-          <Line data={dataLineChartPaymentTransaction} />
+        <div className="mx-2 my-2 border border-[#E6E9ED] rounded-md shadow">
+          <div className="border-b-2 border-[#E6E9ED] mx-4 py-2">
+            <h1 className="text-2xl font-bold text-[#73879E] px-2">Nạp tiền vào hệ thống</h1>
+          </div>
+          <div>
+            <Line data={dataLineChartPaymentTransaction} />
+          </div>
         </div>
       </div>
     </div>
-  </div>
-)
+  )
 }
 
 export default Dashboard

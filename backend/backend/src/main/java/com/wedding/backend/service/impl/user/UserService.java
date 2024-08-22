@@ -253,7 +253,9 @@ public class UserService implements IUserService {
                     .flatMap(user -> user.getRoles().stream())
                     .collect(Collectors.groupingBy(RoleEntity::getName, Collectors.counting()));
 
-            Long totalUsers = (long) allUsers.size();
+//            Long totalUsers = (long) allUsers.size();
+            Long totalUsers = roleCounts.getOrDefault(ModelCommon.CUSTOMER, 0L) +  roleCounts.getOrDefault(ModelCommon.MANAGE, 0L);
+
 
             Long percentUser = roleCounts.getOrDefault(ModelCommon.CUSTOMER, 0L) * 100 / totalUsers;
             Long percentManage = roleCounts.getOrDefault(ModelCommon.MANAGE, 0L) * 100 / totalUsers;
