@@ -66,7 +66,7 @@ const Login = ({ navigate, dispatch, location }) => {
         } else {
           Swal.fire({
             icon: "success",
-            text: response.body,
+            text: response.body.message,
             title: "Congrats!",
             showConfirmButton: true,
             confirmButtonText: "Đi tới đăng nhập",
@@ -74,7 +74,7 @@ const Login = ({ navigate, dispatch, location }) => {
             return isConfirmed && setVariant("LOGIN")
           })
         }
-      } else Swal.fire("Oops!", response.body, "error")
+      } else Swal.fire("Oops!", response.body.message, "error")
     }
   }
   const toggleVariant = useCallback(() => {
