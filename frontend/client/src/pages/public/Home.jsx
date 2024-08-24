@@ -4,16 +4,16 @@ import CustomSlider from "@/components/common/CustomSlider";
 import Section from "@/components/common/Section";
 import { apiGetServiceByPackageVIP } from "@/apis/service";
 import ProvinceItem from "@/components/topProvince/ProvinceItem";
-import { apiGetServiceByDeleted, apiGetServiceBySuggested, apiGetServiceByPackageVIP1AndVIP2 } from "@/apis/service";
+import { apiGetServiceByDeleted, apiGetServiceBySuggested, apiGetServiceByPackageVIP1AndVIP2, apiGetServiceByLocation, apiGetServiceType } from "@/apis/service";
 import { apiCheckTransactionServicePackageIsExpired } from "@/apis/supplier"
 import Card from "@/components/posts/Card";
 import { useDispatch, useSelector } from "react-redux"
 import { VideoPlayer } from "@/components";
 import { ImageSlider } from "@/components";
-import { ServiceTypeGrid, Pagination } from "@/components";
+import { ServiceTypeGrid, Pagination, LongCard, BoxFilter } from "@/components";
 import { useSearchParams } from "react-router-dom"
-
-
+import { NavLink } from "react-router-dom";
+import path from "@/ultils/path";
 
 const Home = () => {
     const dispatch = useDispatch()
@@ -27,10 +27,14 @@ const Home = () => {
     const [searchParams] = useSearchParams()
     const [update, setUpdate] = useState(false)
 
+    const [location, setLocation] = useState(null);
+    const [serviceLocation, setServiceLocation] = useState([]);
+    const [serviceTypes, setServiceTypes] = useState([])
+
 
     const render = useCallback(() => {
         setUpdate(!update)
-      }, [update])
+    }, [update])
 
     const fetchHomeData = async () => {
         const response = await apiGetServiceByDeleted({ size: 8 })
@@ -39,11 +43,38 @@ const Home = () => {
 
     const fetchServicesVip1And2 = async (searchParamsObject) => {
         const response = await apiGetServiceByPackageVIP1AndVIP2(searchParamsObject);
-        if(response.data){
+        if (response.data) {
             setServiceVIP1And2(response.data)
             setCountServiceVIP1And2(response.count)
         }
     }
+
+    const fetchserviceTypes = async () => {
+        const response = await apiGetServiceType()
+        setServiceTypes(response.data || [])
+    }
+
+    const fetchCurrentLocation = async () => {
+        if (navigator.geolocation) {
+            try {
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject);
+                });
+
+                const { latitude, longitude } = position.coords;
+                setLocation({ latitude, longitude });
+
+                // Gửi tọa độ về server và nhận kết quả từ API
+                const response = await apiGetServiceByLocation({ latitude: latitude, longitude: longitude, radiusInKm: 10 });
+                if (response.statusCodeValue === 200) setServiceLocation(response.body);
+
+            } catch (error) {
+                toast.error("Lỗi lấy tạo độ người dùng")
+            }
+        } else {
+            toast.error("Geolocation không hỗ trợ browser.")
+        }
+    };
 
     const fetchServiceByVIP3Data = async () => {
         const packageIds = [3, 2, 1]; // Danh sách các packageId
@@ -130,6 +161,8 @@ const Home = () => {
         fetchServiceBySuggested()
         checkTransactionServicePackageIsExpired()
         fetchServiceByVIP3Data()
+        fetchCurrentLocation()
+        fetchserviceTypes()
     }, [])
 
 
@@ -211,6 +244,40 @@ const Home = () => {
                 contentClassName="grid grid-cols-1 gap-4"
             >
                 <ServiceTypeGrid />
+            </Section>
+
+            <Section
+                className="w-main mx-auto mt-10 text-neutral-400"
+                title="TÌM KIẾM QUANH ĐÂY"
+                contentClassName="grid grid-cols-10 gap-4"
+            >
+                <div className="col-span-7 flex flex-col gap-4">
+                    {serviceLocation?.map((el) => (
+                        <LongCard key={el.id} {...el} />
+                    ))}
+                </div>
+                <div className="col-span-3 flex flex-col gap-4">
+                    <BoxFilter
+                        className="flex justify-center items-center text-xl font-semibold"
+                        title="Chuyên Mục"
+                        containerClassName="bg-white border"
+                    >
+                        <div className="p-4 flex flex-col text-gray-700 gap-3 text-base">
+                            {serviceTypes?.map((el) => (
+                                <NavLink
+                                    to={`/${path.LIST}?service_type_id=${el.id}`}
+                                    key={el.id}
+                                    className="border-b capitalize"
+                                >
+                                    <span>
+                                        {el.name}{" "}
+                                        <span className="text-sm font-normal">{`(1254)`}</span>
+                                    </span>
+                                </NavLink>
+                            ))}
+                        </div>
+                    </BoxFilter>
+                </div>
             </Section>
 
             <Section

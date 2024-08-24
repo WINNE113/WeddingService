@@ -139,3 +139,9 @@ export const apiUpdateServiceSelected = (serviceId) =>
         url: `/service/update/service-selected/${serviceId}`,
         method: "patch",
     })
+export const apiGetServiceByLocation = (params) =>
+    axios({
+        url: "/guest/service/location",
+        method: "get",
+        params,
+    })
