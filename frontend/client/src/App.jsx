@@ -34,6 +34,7 @@ import CreatePricing from "./pages/admin/CreatePricing"
 import ManagePayment from "./pages/admin/ManagePayment"
 import ManageReport from "./pages/admin/ManageReport"
 import ManageBooking from "./pages/supplier/ManageBooking"
+import ChangePassword from "./pages/member/ChangePassword"
 
 
 function App() {
@@ -76,6 +77,7 @@ function App() {
         <Route path={path.MEMBER} element={<LayoutMember />}>
           <Route path={path.WISHLIST} element={<Wishlist />} />
           <Route path={path.PERSONAL} element={<Personal />} />
+          <Route path={path.CHANGE_PASSWORD} element={<ChangePassword />} />
         </Route>
         {/* Supplier routes */}
         <Route path={path.SUPPLIER} element={<LayoutSupplier />}>
@@ -86,7 +88,7 @@ function App() {
           <Route path={path.MANAGE_SERVICE} element={<ManageService />} />
           <Route path={path.CREATE_SERVICE} element={<CreateService />} />
           <Route path={path.MANAGE_BOOKING} element={<ManageBooking />} />
-
+          <Route path={path.CHANGE_PASSWORD} element={<ChangePassword />} />
         </Route>
 
         {/* Admin routes */}

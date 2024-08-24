@@ -18,14 +18,30 @@ const Rating = ({
   detail = [],
 }) => {
   const { current } = useSelector((state) => state.user)
+
+  const handleCancelRating = async () => {
+    const confirmed = await Swal.fire({
+      icon: "info",
+      title: "Xác nhận thao tác",
+      text: "Bạn phải đăng nhập để có thể đánh giá dịch vụ",
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: "Đăng nhập",
+      cancelButtonText: "Quay lại",
+    });
+    if (confirmed.isConfirmed) {
+      navigate("/" + path.LOGIN)
+    }
+    return;
+  }
+
   return (
     <div className="relative border rounded-md mt-6 bg-white p-4">
       <h3 className="text-base font-bold">{`Đánh giá & nhận xét ${name}`}</h3>
       <div className="flex border rounded-md mt-8">
         <div className="flex-auto w-2/5 border-r flex flex-col gap-1 items-center justify-center">
-          <span className="text-[24px] font-bold">{`${
-            Math.round(averageStarPoint * 10) / 10
-          }/5`}</span>
+          <span className="text-[24px] font-bold">{`${Math.round(averageStarPoint * 10) / 10
+            }/5`}</span>
           <span className="flex items-center">
             {renderStarFromNumber(averageStarPoint)?.map((item, index) => (
               <span key={index}>{item}</span>
@@ -41,7 +57,7 @@ const Rating = ({
               voter={detail?.find((i) => +i.starPoint === 5 - item)?.count}
               percent={Math.round(
                 (detail?.find((i) => +i.starPoint === 5 - item)?.count * 100) /
-                  detail?.reduce((sum, n) => sum + n.count, 0)
+                detail?.reduce((sum, n) => sum + n.count, 0)
               )}
             />
           ))}
@@ -62,16 +78,10 @@ const Rating = ({
                 })
               )
             } else {
-              Swal.fire(
-                "Oops!",
-                "Hãy đăng nhập tài khoản tìm kiếm để đánh giá~",
-                "info"
-              ).then(() => {
-                navigate("/" + path.LOGIN)
-              })
+              handleCancelRating();
             }
           }}
-        >
+        > 
           Đánh giá ngay
         </Button>
       </div>

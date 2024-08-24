@@ -19,7 +19,7 @@ const SupplierDetail = () => {
   const [countServices, setCountServices] = useState(0);
   const [serviceType, setServiceType] = useState([])
   const [isLiked, setIsLiked] = useState(false);
-  const { wishlist } = useSelector((s) => s.user);
+  const { wishlist, current } = useSelector((s) => s.user);
   const [serviceByType, setServiceByType] = useState([]);
 
 
@@ -71,19 +71,21 @@ const SupplierDetail = () => {
     }
   };
   const handleFollowClick = async () => {
-    if (isLiked) {
-      await apiUnfollowSupplier(supplierId);
-      setIsLiked(false);
-    } else {
-      await apifollowSupplier(supplierId);
-      setIsLiked(true);
+    if (current != null) {
+      if (isLiked) {
+        await apiUnfollowSupplier(supplierId);
+        setIsLiked(false);
+      } else {
+        await apifollowSupplier(supplierId);
+        setIsLiked(true);
+      }
+      await fetchSupplierDetail();
     }
-    await fetchSupplierDetail();
   };
 
   const checkUserIsFollowSupplier = async () => {
     var response = await apiCheckUserIsFollowingSupplier(supplierId);
-    if(response.body){
+    if (response.body) {
       setIsLiked(true);
     }
   }
@@ -99,7 +101,16 @@ const SupplierDetail = () => {
   }, []);
 
 
-  if (!supplier) return <div>Loading...</div>;
+  if (!supplier) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-rose-500"></div>
+          <p className="text-rose-500 text-lg font-semibold">Đang tải...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="view-shop">

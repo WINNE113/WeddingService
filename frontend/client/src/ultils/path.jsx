@@ -22,6 +22,7 @@ const path = {
     PRICING: "bang-gia-goi",
     SUPPLIER_DETAIL__SID__NAME: "chi-tiet-nha-cung-cap/:supplierId/:supplierName",
     MANAGE_BOOKING: "danh-sach-yeu-cau-bao-gia",
+    CHANGE_PASSWORD: "doi-mat-khau",
 
     ADMIN: "admin",
     DASHBOARD: "dashboard",

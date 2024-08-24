@@ -146,7 +146,7 @@ public class AdminController {
     }
 
     @DeleteMapping(value = "/report/delete")
-    public ResponseEntity<?> deleteReportByIds(@RequestParam Long[] ids) {
+    public ResponseEntity<?> deleteReportByIds(@RequestParam(name = "ids") Long ids) {
         return reportService.deleteReportByIds(ids);
     }
 }

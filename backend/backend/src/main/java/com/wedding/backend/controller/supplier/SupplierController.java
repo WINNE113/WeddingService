@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,7 +37,12 @@ public class SupplierController {
         return ResponseEntity.ok(service.getSuppliersByFalseDeleted(pageable));
     }
 
-
+    @GetMapping("/get-all-by-service-package")
+    public ResponseEntity<?> getSuppliersByFalseDeletedAndByPackageService(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                                           @RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(service.getSuppliersByFalseDeletedAndByPackageService(pageable));
+    }
 
 
     @GetMapping("/getByUser")
@@ -86,7 +92,7 @@ public class SupplierController {
     }
 
     @PatchMapping(value = "/transaction/is-expired")
-    public ResponseEntity<?> checkTransactionServicePackageIsExpired(Principal connectedUser){
+    public ResponseEntity<?> checkTransactionServicePackageIsExpired(Principal connectedUser) {
         return ResponseEntity.ok(transactionService.checkTransactionServicePackageIsExpired(connectedUser));
     }
 }

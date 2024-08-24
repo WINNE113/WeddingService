@@ -60,8 +60,8 @@ const CustomSlider = ({
               {slides?.map((el, idx) => (
                 <img
                   onClick={() => goToSlide(idx)}
-                  key={el?.image}
-                  src={el?.image}
+                  key={el?.imageURL}
+                  src={el?.imageURL}
                   alt="avatar"
                   className={twMerge(
                     clsx(

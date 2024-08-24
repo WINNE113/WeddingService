@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api/v1/merchant")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class MerchantController {
 
     private final IMerchantService merchantService;

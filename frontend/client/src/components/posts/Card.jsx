@@ -45,7 +45,7 @@ const Card = ({
     } else toast.error(response.message)
   }
   return (
-    <div className="w-full col-span-1 flex flex-col rounded-md border">
+    <div className="w-full col-span-1 flex flex-col rounded-md border transition-transform duration-300 hover:scale-105 hover:shadow-xl hover:shadow-gray-500">
       <div className="w-full h-[156px] relative">
         {!isLike && (
           <span
@@ -92,7 +92,7 @@ const Card = ({
                 })
               )
             }
-            className="bg-pink-500"
+            className="bg-pink-500 text-white hover:bg-pink-600 transition-colors duration-300"
           >
             <MdForwardToInbox size={22} />
             Nhận báo giá

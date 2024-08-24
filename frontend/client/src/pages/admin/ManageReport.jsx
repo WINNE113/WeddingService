@@ -42,7 +42,7 @@ const ManageReport = () => {
       cancelButtonText: "Quay lại",
     }).then(async (rs) => {
       if (rs.isConfirmed) {
-        const response = await apiDeleteReport({ ids: [id] })
+        const response = await apiDeleteReport({ ids: id })
         if (response.success) {
           toast.success(response.message)
           render()

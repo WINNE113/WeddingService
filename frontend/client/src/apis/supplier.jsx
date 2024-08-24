@@ -17,6 +17,12 @@ export const apiSuppliers = () =>
         url: "/supplier/getAll",
         method: "GET"
     })
+export const apiSuppliersByServicePackage = (params) =>
+    axios({
+        url: "/supplier/get-all-by-service-package",
+        method: "GET",
+        params,
+    })
 export const apiCheckSupplierExited = () => {
     return axios({
         url: "/supplier/supplier-is-exit-by-userId",
@@ -42,8 +48,8 @@ export const apifollowSupplier = (id) =>
 
 export const apiCheckUserIsFollowingSupplier = (id) =>
     axios({
-       url: `user/check-user-is-follow-supplier/${id}`,
-       method: "GET" 
+        url: `user/check-user-is-follow-supplier/${id}`,
+        method: "GET"
     })
 
 export const apiCheckTransactionServicePackageIsExpired = () =>

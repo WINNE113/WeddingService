@@ -5,10 +5,7 @@ import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.common.ModelCommon;
-import com.wedding.backend.dto.auth.LoginResponse;
-import com.wedding.backend.dto.auth.OTPRequestDto;
-import com.wedding.backend.dto.auth.OTPValidationRequestDto;
-import com.wedding.backend.dto.auth.ResponseSendOTP;
+import com.wedding.backend.dto.auth.*;
 import com.wedding.backend.dto.user.UpdateProfileRequest;
 import com.wedding.backend.dto.user.UserDTO;
 import com.wedding.backend.dto.user.UserStatus;
@@ -33,6 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -58,10 +56,12 @@ public class UserService implements IUserService {
     private final TokenHandler tokenHandler;
     private final SupplierRepository supplierRepository;
     private final SupplierFollowRepository supplierFollowRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
 
     @Override
     public Optional<UserEntity> findByPhoneNumber(String phoneNumber) {
-        return userRepository.findByPhoneNumber(phoneNumber);
+        return userRepository.findByPhoneNumberAndIsDeletedFalse(phoneNumber);
     }
 
     @Override
@@ -254,7 +254,7 @@ public class UserService implements IUserService {
                     .collect(Collectors.groupingBy(RoleEntity::getName, Collectors.counting()));
 
 //            Long totalUsers = (long) allUsers.size();
-            Long totalUsers = roleCounts.getOrDefault(ModelCommon.CUSTOMER, 0L) +  roleCounts.getOrDefault(ModelCommon.MANAGE, 0L);
+            Long totalUsers = roleCounts.getOrDefault(ModelCommon.CUSTOMER, 0L) + roleCounts.getOrDefault(ModelCommon.MANAGE, 0L);
 
 
             Long percentUser = roleCounts.getOrDefault(ModelCommon.CUSTOMER, 0L) * 100 / totalUsers;
@@ -350,6 +350,25 @@ public class UserService implements IUserService {
 
         } catch (Exception ex) {
             return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public BaseResult changePassword(ChangePasswordRequest changePasswordRequest, Principal connectedUser) {
+        try {
+            var user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
+            if (!passwordEncoder.matches(changePasswordRequest.getCurrentPassword(), user.getPassword())) {
+                return new BaseResult(false, "Mật khẩu hiện tại không chính xác. Vui lòng kiểm tra lại.");
+            }
+            if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmationPassword())) {
+                return new BaseResult(false, "Xác nhận mật khẩu không khớp với mật khẩu mới. Vui lòng kiểm tra lại.");
+            }
+            user.setPasswordHash(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+            userRepository.save(user);
+            return new BaseResult(true, "Mật khẩu đã được cập nhật thành công. Vui lòng đăng nhập lại để tiếp tục.");
+        } catch (Exception ex) {
+            return new BaseResult(false, "Đã xảy ra lỗi khi cập nhật mật khẩu. Vui lòng thử lại sau.");
         }
     }
 

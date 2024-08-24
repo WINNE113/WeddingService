@@ -33,8 +33,8 @@ const DetailImages = ({ dispatch, images = [], currentImage }) => {
           >
             {images.map((el) => (
               <img
-                key={el?.image}
-                src={el?.image}
+                key={el?.imageURL}
+                src={el?.imageURL}
                 alt="avatar"
                 className="h-[450px] object-contain m-auto"
               />

@@ -53,7 +53,7 @@ public class AuthenticationService implements IAuthenticationService {
                 return response;
             }
 
-            Optional<UserEntity> existingUser = userRepository.findByPhoneNumber(PhoneNumberValidator.normalizePhoneNumber(request.getPhoneNumber()));
+            Optional<UserEntity> existingUser = userRepository.findByPhoneNumberAndIsDeletedFalse(PhoneNumberValidator.normalizePhoneNumber(request.getPhoneNumber()));
 
             if (existingUser.isPresent()) {
                 BaseResult baseResult = new BaseResult(false, MessageUtil.MSG_PHONE_NUMBER_IS_EXITED);
@@ -109,7 +109,7 @@ public class AuthenticationService implements IAuthenticationService {
             return LoginResponse.error(MessageUtil.MSG_AUTHENTICATION_FAIL);
         }
 
-        var user = userRepository.findByPhoneNumber(normalizePhoneNumber);
+        var user = userRepository.findByPhoneNumberAndIsDeletedFalse(normalizePhoneNumber);
         if (user.isPresent()) {
             var jwtToken = jwtService.generateToken(user.get());
 

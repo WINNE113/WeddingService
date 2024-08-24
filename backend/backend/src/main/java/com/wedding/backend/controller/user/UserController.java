@@ -1,6 +1,7 @@
 package com.wedding.backend.controller.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wedding.backend.dto.auth.ChangePasswordRequest;
 import com.wedding.backend.dto.auth.OTPRequestDto;
 import com.wedding.backend.dto.auth.OTPValidationRequestDto;
 import com.wedding.backend.dto.user.UpdateProfileRequest;
@@ -50,6 +51,12 @@ public class UserController {
         return ResponseEntity.ok(userService.updateProfile(profile, profileImage, connectedUser));
     }
 
+
+    @PatchMapping("/update-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest, Principal connectedUser) {
+        return ResponseEntity.ok(userService.changePassword(changePasswordRequest, connectedUser));
+    }
+
     @GetMapping("/view-profile")
     public UserDTO viewProfile(Principal connectedUser) {
         return userService.viewProfile(connectedUser);
@@ -77,7 +84,7 @@ public class UserController {
     }
 
     @GetMapping("/check-user-is-follow-supplier/{supplierId}")
-    public ResponseEntity<?> checkUserIsFollowSupplier(@PathVariable(name = "supplierId") Long supplierId, Principal connectedUser){
+    public ResponseEntity<?> checkUserIsFollowSupplier(@PathVariable(name = "supplierId") Long supplierId, Principal connectedUser) {
         return ResponseEntity.ok(userService.checkUserIsFollowSupplier(supplierId, connectedUser));
     }
 }

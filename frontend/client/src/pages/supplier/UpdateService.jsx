@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { ImBin } from "react-icons/im";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const UpdateService = ({ serviceId }) => {
     const {
@@ -34,6 +35,8 @@ const UpdateService = ({ serviceId }) => {
     const [avtImgFile, setAvtImgFile] = useState(null);
     const [imageHover, setImageHover] = useState(null);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
 
     const images = watch("images");
 
@@ -86,7 +89,7 @@ const UpdateService = ({ serviceId }) => {
             reader.readAsDataURL(file);
         });
     };
-    
+
 
     // useEffect(() => {
     //     if (images && images instanceof FileList) {
@@ -99,13 +102,13 @@ const UpdateService = ({ serviceId }) => {
         if (images && images instanceof FileList) {
             // Chuyển đổi FileList thành Array
             const filesArray = Array.from(images);
-    
+
             const convertFilesToBase64 = async () => {
                 try {
                     // Lấy danh sách base64 từ các file mới
                     const base64Promises = filesArray.map(file => convertFileToBase64(file));
                     const base64Array = await Promise.all(base64Promises);
-    
+
                     // Thêm các hình ảnh mới vào danh sách hiện tại
                     setImagesBase64(prevImages => [...prevImages, ...base64Array]);
                 } catch (error) {
@@ -113,11 +116,11 @@ const UpdateService = ({ serviceId }) => {
                     toast.error("Failed to convert files to base64.");
                 }
             };
-    
+
             convertFilesToBase64();
         }
     }, [images]);
-    
+
 
 
     useEffect(() => {
@@ -130,9 +133,11 @@ const UpdateService = ({ serviceId }) => {
         if (detailPost && postTypes.length) {
             reset({
                 address: detailPost.addressService,
-                post_type: detailPost.serviceTypeName,
+                serviceTypeId: postTypes.find(
+                    (el) => el.name?.trim() === detailPost?.serviceTypeName.trim()
+                )?.id,
                 title: detailPost.title,
-                description: detailPost.information,
+                information: detailPost.information,
                 linkFacebook: detailPost.linkFacebook,
                 linkWebsite: detailPost.linkWebsite,
             });
@@ -141,26 +146,44 @@ const UpdateService = ({ serviceId }) => {
     }, [detailPost, postTypes, reset]);
 
     const handleUpdate = async (data) => {
-        try {
-            setIsLoading(true);
-            const avtImgBase64 = avtImgFile ? await getBase64(avtImgFile) : null;
-            const updatedData = {
-                ...data,
-                avtImgBase64,
-                imagesBase64: imagesBase64.length > 0 ? imagesBase64 : null,
-            };
-            const response = await apiCreateNewService(updatedData);
-            if (response.success) {
-                toast.success("Service updated successfully!");
-                dispatch(modal({ isShowModal: false, modalContent: null }));
-            } else {
-                toast.error("Failed to update service.");
-            }
-        } catch (error) {
-            toast.error("An error occurred while updating the service.");
-        } finally {
-            setIsLoading(false);
+        const {
+            street,
+            ward,
+            district,
+            province,
+            serviceTypeId,
+            images,
+            title,
+            information,
+            linkFacebook,
+            linkWebsite,
+            avtImgBase64,
+            ...dto
+        } = getValues()
+        const payload = {
+            id: serviceId,
+            title,
+            information,
+            address,
+            linkWebsite,
+            linkFacebook,
+            serviceTypeId,
+            ...dto,
         }
+        // setIsLoading(true)
+        const formData = new FormData()
+        formData.append("serviceDto", JSON.stringify(payload))
+
+        if (avtImgBase64) {
+            formData.append("image", avtImgBase64);
+        }
+        setIsLoading(true)
+        const response = await apiCreateNewService(formData)
+        setIsLoading(false)
+        if (response.success) {
+            toast.success("cập nhật tin đăng thành công")
+            dispatch(modal({ isShowModal: false, modalContent: null }))
+        } else toast.error("Cập nhật tin đăng không thành công, hãy thử lại")
     };
 
     const handleImageChange = (event) => {
@@ -220,19 +243,19 @@ const UpdateService = ({ serviceId }) => {
                         </label>
                         <select
                             className="form-select border-gray-200 rounded-md"
-                            {...register("post_type", {
+                            {...register("serviceTypeId", {
                                 required: "Trường này không được bỏ trống.",
                             })}
                         >
                             {postTypes?.map((el) => (
-                                <option key={el.code} value={el.code}>
+                                <option key={el.id} value={el.id}>
                                     {el.name}
                                 </option>
                             ))}
                         </select>
-                        {errors["post_type"] && (
+                        {errors["serviceTypeId"] && (
                             <small className="text-xs text-red-500">
-                                {errors["post_type"]?.message}
+                                {errors["serviceTypeId"]?.message}
                             </small>
                         )}
                     </div>
@@ -249,14 +272,14 @@ const UpdateService = ({ serviceId }) => {
                     </div>
                     <div className="mt-4">
                         <MdEditor
-                            id="description"
+                            id="information"
                             errors={errors}
                             validate={{ required: "Trường này không được bỏ trống." }}
                             register={register}
                             label="Nội dung mô tả"
                             height={400}
                             setValue={setValue}
-                            value={getValues("description")}
+                            value={getValues("information")}
                         />
                     </div>
 
@@ -311,7 +334,6 @@ const UpdateService = ({ serviceId }) => {
                         <input
                             multiple
                             {...register("images", {
-                                required: "Trường này không được bỏ trống.",
                             })}
                             type="file"
                             id="images"

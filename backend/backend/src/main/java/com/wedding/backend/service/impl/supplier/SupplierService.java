@@ -39,7 +39,7 @@ public class SupplierService implements ISupplierService {
             Optional<SupplierEntity> supplier = repository.findById(supplierId);
             if (supplier.isPresent()) {
                 result.Set(true, MessageUtil.MSG_SUCCESS, supplierMapper.entityToDto(supplier.get()));
-            }else {
+            } else {
                 result.Set(false, MessageUtil.SUPPLIER_NOT_FOUND, null);
             }
         } catch (Exception ex) {
@@ -147,6 +147,21 @@ public class SupplierService implements ISupplierService {
         BaseResultWithDataAndCount<List<SupplierDTO>> result = new BaseResultWithDataAndCount<>();
         try {
             List<SupplierDTO> resultFromDB = repository.findAllByIsDeletedFalse(pageable)
+                    .stream()
+                    .map(supplierMapper::entityToDto)
+                    .toList();
+            result.set(resultFromDB, (long) resultFromDB.size());
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public BaseResultWithDataAndCount<List<SupplierDTO>> getSuppliersByFalseDeletedAndByPackageService(Pageable pageable) {
+        BaseResultWithDataAndCount<List<SupplierDTO>> result = new BaseResultWithDataAndCount<>();
+        try {
+            List<SupplierDTO> resultFromDB = repository.findAllByTransactionEntitiesAndIsDeletedFalse(pageable)
                     .stream()
                     .map(supplierMapper::entityToDto)
                     .toList();

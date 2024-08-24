@@ -42,14 +42,6 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public void deleteReportById(Long[] reportId) {
-        for (Long item : reportId
-        ) {
-            repository.deleteById(item);
-        }
-    }
-
-    @Override
     public ResponseEntity<?> getAllReport(Pageable pageable) {
         ResponseEntity<?> response = null;
         BaseResultWithDataAndCount<List<ReportDto>> resultWithDataAndCount = new BaseResultWithDataAndCount<>();
@@ -68,14 +60,11 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public ResponseEntity<?> deleteReportByIds(Long[] reportId) {
+    public ResponseEntity<?> deleteReportByIds(Long reportId) {
         ResponseEntity<?> response = null;
         try {
-            for (Long item : reportId
-            ) {
-                repository.deleteById(item);
-                response = new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_DELETE_SUCCESS), HttpStatus.OK);
-            }
+            repository.deleteById(reportId);
+            response = new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_DELETE_SUCCESS), HttpStatus.OK);
         } catch (Exception ex) {
             response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }

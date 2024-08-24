@@ -4,7 +4,7 @@ import withBaseTopping from "@/hocs/WithBaseTopping";
 import Button from "../common/Button";
 import { modal } from "@/redux/appSlice";
 import { suppliers } from "@/ultils/constant" // Import the fake data
-import { apiSuppliers } from "@/apis/supplier";
+import { apiSuppliersByServicePackage } from "@/apis/supplier";
 
 const SearchNameSupplier = ({ getValue, valRange = "" }) => {
   const [selectedOption, setSelectedOption] = useState(valRange);
@@ -25,7 +25,7 @@ const SearchNameSupplier = ({ getValue, valRange = "" }) => {
 
 
   const getSupplier = async () => {
-    const response = await apiSuppliers()
+    const response = await apiSuppliersByServicePackage({size: 8})
     if (response) setSupplier(response.data)
     else setSupplier([])
   }
@@ -54,7 +54,7 @@ const SearchNameSupplier = ({ getValue, valRange = "" }) => {
           placeholder="Nhập tên nhà cung cấp"
         />
         <div className="mt-4">
-          <h3 className="font-semibold">Danh sách nhà cung cấp:</h3>
+          <h3 className="font-semibold">Danh sách một số nhà cung cấp:</h3>
           <div className="mt-3 grid grid-cols-4 gap-3">
             {supplier.map((option) => (
               <span

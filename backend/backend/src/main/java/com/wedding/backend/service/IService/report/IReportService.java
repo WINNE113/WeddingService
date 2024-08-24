@@ -12,9 +12,7 @@ public interface IReportService {
 
     List<ReportDto> getAllReportByPostId(Long postId);
 
-    void deleteReportById(Long[] reportId);
-
     ResponseEntity<?> getAllReport(Pageable pageable);
 
-    ResponseEntity<?> deleteReportByIds(Long[] reportId);
+    ResponseEntity<?> deleteReportByIds(Long reportId);
 }

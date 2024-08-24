@@ -87,3 +87,9 @@ export const apiGetUsersDeletedByAdmin = (params) =>
         method: "get",
         params,
     })
+export const apiChangePassword = (data) =>
+    axios({
+        url: "/user/update-password",
+        method: "patch",
+        data,
+    })

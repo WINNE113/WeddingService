@@ -290,7 +290,7 @@ const DetailPost = ({ navigate, location, dispatch }) => {
                 modal({
                   isShowModal: true,
                   modalContent: (
-                    <DetailImages currentImage={0} images={albums?.imageURL} />
+                    <DetailImages currentImage={0} images={albums} />
                   ),
                 })
               )
@@ -307,7 +307,7 @@ const DetailPost = ({ navigate, location, dispatch }) => {
                 modal({
                   isShowModal: true,
                   modalContent: (
-                    <DetailImages currentImage={1} images={albums?.imageURL} />
+                    <DetailImages currentImage={1} images={albums} />
                   ),
                 })
               )
@@ -324,7 +324,7 @@ const DetailPost = ({ navigate, location, dispatch }) => {
                 modal({
                   isShowModal: true,
                   modalContent: (
-                    <DetailImages currentImage={2} images={albums?.imageURL} />
+                    <DetailImages currentImage={2} images={albums} />
                   ),
                 })
               )
@@ -341,7 +341,7 @@ const DetailPost = ({ navigate, location, dispatch }) => {
                 modal({
                   isShowModal: true,
                   modalContent: (
-                    <DetailImages currentImage={3} images={albums?.imageURL} />
+                    <DetailImages currentImage={3} images={albums} />
                   ),
                 })
               )

@@ -3,6 +3,7 @@ package com.wedding.backend.service.IService.user;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
+import com.wedding.backend.dto.auth.ChangePasswordRequest;
 import com.wedding.backend.dto.auth.OTPRequestDto;
 import com.wedding.backend.dto.auth.OTPValidationRequestDto;
 import com.wedding.backend.dto.user.UpdateProfileRequest;
@@ -47,4 +48,6 @@ public interface IUserService {
     BaseResult unFollowSupplier(Long supplierId, Principal connectedUser);
 
     ResponseEntity<Boolean> checkUserIsFollowSupplier(Long supplierId, Principal connectedUser);
+
+    BaseResult changePassword(ChangePasswordRequest changePasswordRequest, Principal connectedUser);
 }

@@ -10,7 +10,7 @@ import { MdOutlineCheckCircle } from "react-icons/md"
 import clsx from "clsx"
 import { getCurrent } from "@/redux/action"
 import Swal from "sweetalert2"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import path from "@/ultils/path"
 
 const PricingItem = ({
@@ -24,7 +24,24 @@ const PricingItem = ({
 }) => {
   const dispatch = useDispatch()
   const { current } = useSelector((s) => s.user)
+  const navigate = useNavigate();
   const handleSubcribe = async () => {
+    if (current == null) {
+      const toLogin = await Swal.fire({
+        icon: "info",
+        title: "Xác nhận thao tác",
+        text: `Bạn phải đăng nhập trước để mua gói dịch vụ ${name}.`,
+        showCancelButton: true,
+        showConfirmButton: true,
+        confirmButtonText: "Đăng nhập",
+        cancelButtonText: "Quay lại",
+      });
+      if (toLogin.isConfirmed) {
+        navigate("/" + path.LOGIN)
+        return;
+      }
+      return;
+    }
     const result = await Swal.fire({
       icon: "info",
       title: "Xác nhận thao tác",
@@ -61,10 +78,10 @@ const PricingItem = ({
   // Đảm bảo giá trị boolean cho thuộc tính disabled
   // const isDisabled = current?.servicePackageUsed === name;
   return (
-    <div className={clsx("col-span-1 h-full mb-[150px]")}>
+    <div className="col-span-1 mb-[150px] transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg">
       <h3
         className={clsx(
-          "text-center p-4 border border-pink-500 bg-pink-700 text-white font-semibold rounded-t-md",
+          "text-center p-4 border border-pink-500 bg-pink-700 text-white font-semibold rounded-t-md transition-colors duration-300",
           current?.servicePackageUsed === name &&
           "bg-green-500 border-green-700"
         )}
@@ -73,8 +90,8 @@ const PricingItem = ({
       </h3>
       <div
         className={clsx(
-          "flex rounded-b-md border h-[260px] border-emerald-500 flex-col gap-2 justify-between items-center py-3",
-          current?.servicePackageUsed === name && " border-green-700"
+          "flex rounded-b-md border h-[260px] border-emerald-500 flex-col gap-2 justify-between items-center py-3 transition-transform duration-300 ease-in-out",
+          current?.servicePackageUsed === name && "border-green-700"
         )}
       >
         <div className="flex flex-col gap-2 items-center">
@@ -107,7 +124,7 @@ const PricingItem = ({
           ) : (
             <Button
               onClick={handleSubcribe}
-              className="bg-transparent text-emerald-700 border rounded-md border-emerald-700 py-2 w-full"
+              className="bg-transparent text-emerald-700 border rounded-md border-emerald-700 py-2 w-full hover:bg-emerald-700 hover:text-white transition-colors duration-300"
               disabled={isDisabled}
             >
               Đăng ký
@@ -134,12 +151,8 @@ const Pricing = () => {
     <div className="mx-auto w-main py-8">
       <header className="page-header category clearfix">
         <h1
-          className="page-h1 text-2xl font-bold"
+          className="page-h1 text-2xl font-bold text-center mt-12 mb-8 transition-transform duration-500 transform hover:scale-105"
           style={{
-            float: "none",
-            marginTop: "50px",
-            marginBottom: "30px",
-            textAlign: "center",
             fontSize: "2em",
             color: "#e91e63", // Bright pink for headings
           }}
@@ -147,45 +160,38 @@ const Pricing = () => {
           Nâng Tầm Tin Đăng Của Bạn với Các Gói VIP
         </h1>
       </header>
-      <div className="container clearfix">
-        <section
-          className="section"
-          style={{
-            padding: "20px",
-            border: 0,
-            boxShadow: "0 0 30px 10px rgb(0 0 0 / 3%)",
-            background: 'url("https://matchthemes.com/demohtml/tilia/images/pages/img-about1.jpg") no-repeat center center',
-            backgroundSize: 'cover',
-            color: '#fff',
-            backgroundColor: 'rgba(233, 30, 99, 0.9)', // Overlay pink color for a cohesive look
-          }}
-        >
-          <div className="section-content">
-            <p style={{ lineHeight: "1.5", fontSize: "1.2em", textAlign: "justify" }}>
-              Chào mừng bạn đến với sweetdream.com - nền tảng dịch vụ cưới hỏi hàng đầu!
-              Chúng tôi cung cấp các gói dịch vụ VIP để giúp tin đăng của bạn nổi bật
-              trên trang chủ, thu hút được nhiều khách hàng hơn.
-            </p>
-            <p style={{ fontSize: "1.1em", marginTop: "20px" }}>ƯU ĐIỂM GÓI VIP:</p>
-            <div className="benefit-item" style={{ color: "#ff80ab" }}>
-              <FaCheck className="benefit-icon" />
-              <strong>Tăng Hiển Thị:</strong> Đảm bảo tin đăng của bạn luôn xuất hiện trên trang chủ.
-            </div>
-            <div className="benefit-item" style={{ color: "#ff80ab" }}>
-              <FaCheck className="benefit-icon" />
-              <strong>Tiếp Cận Nhiều Khách Hàng Hơn:</strong> Gói VIP giúp bạn tiếp cận đúng đối tượng khách hàng.
-            </div>
-            <div className="benefit-item" style={{ color: "#ff80ab" }}>
-              <FaCheck className="benefit-icon" />
-              <strong>Tùy Chọn Linh Hoạt:</strong> Chọn gói VIP phù hợp với nhu cầu và ngân sách của bạn.
-            </div>
-            <div className="benefit-item" style={{ color: "#ff80ab" }}>
-              <FaCheck className="benefit-icon" />
-              <strong>Hỗ Trợ Tận Tình:</strong> Đội ngũ hỗ trợ luôn sẵn sàng giúp đỡ bạn bất cứ lúc nào.
-            </div>
+      <section
+        className="section bg-cover bg-center p-8 rounded-lg transition-transform duration-500 hover:scale-105"
+        style={{
+          backgroundImage: 'url("https://matchthemes.com/demohtml/tilia/images/pages/img-about1.jpg")',
+          backgroundColor: 'rgba(233, 30, 99, 0.9)', // Overlay pink color
+        }}
+      >
+        <div className="section-content text-center">
+          <p className="mb-4 text-lg leading-relaxed text-white">
+            Chào mừng bạn đến với sweetdream.com - nền tảng dịch vụ cưới hỏi hàng đầu!
+            Chúng tôi cung cấp các gói dịch vụ VIP để giúp tin đăng của bạn nổi bật
+            trên trang chủ, thu hút được nhiều khách hàng hơn.
+          </p>
+          <p className="font-semibold text-lg text-white">ƯU ĐIỂM GÓI VIP:</p>
+          <div className="benefit-item text-pink-200 flex items-center space-x-2">
+            <FaCheck className="text-2xl" />
+            <strong>Tăng Hiển Thị:</strong> Đảm bảo tin đăng của bạn luôn xuất hiện trên trang chủ.
           </div>
-        </section>
-      </div>
+          <div className="benefit-item text-pink-200 flex items-center space-x-2 mt-2">
+            <FaCheck className="text-2xl" />
+            <strong>Tiếp Cận Nhiều Khách Hàng Hơn:</strong> Gói VIP giúp bạn tiếp cận đúng đối tượng khách hàng.
+          </div>
+          <div className="benefit-item text-pink-200 flex items-center space-x-2 mt-2">
+            <FaCheck className="text-2xl" />
+            <strong>Tùy Chọn Linh Hoạt:</strong> Chọn gói VIP phù hợp với nhu cầu và ngân sách của bạn.
+          </div>
+          <div className="benefit-item text-pink-200 flex items-center space-x-2 mt-2">
+            <FaCheck className="text-2xl" />
+            <strong>Hỗ Trợ Tận Tình:</strong> Đội ngũ hỗ trợ luôn sẵn sàng giúp đỡ bạn bất cứ lúc nào.
+          </div>
+        </div>
+      </section>
       <h1
         className="page-h1 text-2xl font-bold"
         style={{

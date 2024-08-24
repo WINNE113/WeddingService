@@ -23,6 +23,9 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> 
 
     List<SupplierEntity> findAllByIsDeletedFalse(Pageable pageable);
 
+    @Query("SELECT s from SupplierEntity as s join TransactionEntity as t on s.id = t.userTransaction.id where s.isDeleted = false order by t.purchaseDate desc")
+    List<SupplierEntity> findAllByTransactionEntitiesAndIsDeletedFalse(Pageable pageable);
+
     Optional<SupplierEntity> findByUser_Id(String userId);
 
     @Query(value = "Select supplier.id as supplierId , service_limit as serviceLimit from supplier \n" +

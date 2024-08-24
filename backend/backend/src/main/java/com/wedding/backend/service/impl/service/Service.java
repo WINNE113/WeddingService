@@ -158,7 +158,9 @@ public class Service implements IService {
             service.setAddress(serviceDTO.getAddress());
             service.setLinkWebsite(serviceDTO.getLinkWebsite());
             service.setLinkFacebook(serviceDTO.getLinkFacebook());
-            service.setRotation(serviceDTO.getRotation());
+            if (serviceDTO.getRotation() != null) {
+                service.setRotation(serviceDTO.getRotation());
+            }
 
             service.setStatus(isNewService ? StatusCommon.REVIEW : service.getStatus());
 

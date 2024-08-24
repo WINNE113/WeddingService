@@ -1,6 +1,6 @@
 import axios from "axios"
 const instance = axios.create({
-  baseURL: "http://localhost:8080/api/v1",
+  baseURL: "https://sweetdream-gjdaath6dchyfwhp.eastus-01.azurewebsites.net/api/v1",
 })
 instance.interceptors.request.use(
   function (config) {

@@ -84,11 +84,11 @@ const Personal = ({ dispatch }) => {
             id="phoneNumber"
             validate={{ required: "Trường này không được bỏ trống." }}
             inputClassName={clsx(
-              current?.roles?.some((el) => el.name === "ROLE_MANAGE") &&
-                "border-gray-300 bg-gray-200 focus:outline-none focus:ring-transparent focus:ring-offset-0 focus:border-transparent focus: ring-0 cursor-default"
+              current?.roles?.some((el) => el.name === "ROLE_SUPPLIER") &&
+              "border-gray-300 bg-gray-200 focus:outline-none focus:ring-transparent focus:ring-offset-0 focus:border-transparent focus: ring-0 cursor-default"
             )}
             readOnly={current?.roles?.some(
-              (el) => el.name === "ROLE_MANAGE"
+              (el) => el.name === "ROLE_SUPPLIER"
             )}
             fullWidth
           />
@@ -149,15 +149,15 @@ const Personal = ({ dispatch }) => {
           </div>
           <Link
             to={
-              current?.roles?.some((el) => el.name === "ROLE_MANAGE")
-                ? `/${path.MANAGER}/${path.CHANGE_PASSWORD}`
+              current?.roles?.some((el) => el.name === "ROLE_SUPPLIER")
+                ? `/${path.SUPPLIER}/${path.CHANGE_PASSWORD}`
                 : `/${path.MEMBER}/${path.CHANGE_PASSWORD}`
             }
             className="text-emerald-600 hover:underline cursor-pointer text-sm"
           >
             Đổi mật khẩu
           </Link>
-          {current?.roles?.some((el) => el.name === "ROLE_MANAGE") && (
+          {current?.roles?.some((el) => el.name === "ROLE_SUPPLIER") && (
             <Link
               to={`/${path.MANAGER}/${path.CHANGE_PHONE}`}
               className="text-emerald-600 hover:underline cursor-pointer text-sm"
