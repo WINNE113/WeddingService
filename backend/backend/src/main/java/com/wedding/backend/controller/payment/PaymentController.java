@@ -69,7 +69,7 @@ public class PaymentController {
     public void vnpayReturnView(@ModelAttribute ViewPaymentReturnDto response, HttpServletResponse httpServletResponse) throws IOException {
         ResponseEntity<?> responseEntity = paymentService.vnpayReturnView(response);
         BaseResult baseResult = (BaseResult) responseEntity.getBody();
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("https://66c91c23f02c1b3c1016b81c--astonishing-fox-e1d136.netlify.app/payment/status")
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://sweetdream.info.vn/payment/status")
                 .queryParam("message", baseResult.getMessage())
                 .queryParam("success", baseResult.isSuccess());
         httpServletResponse.sendRedirect(builder.toUriString());

@@ -44,4 +44,6 @@ public interface IService {
     BaseResult updateServiceSelected(Long serviceId);
 
     BaseResultWithDataAndCount<List<ServiceBySuggest>> serviceByUserFollowingSupplier(Principal connectedUser, Pageable pageable);
+
+    ResponseEntity<?> findServicesAroundLocation(double latitude, double longitude, double radiusInKm);
 }

@@ -8,9 +8,9 @@ spring:
     name: backend
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: 123456789Aaa!
-    url: jdbc:mysql://srv1098.hstgr.io/u898129453_testdb
-    username: u898129453_root25
+    password: Huuthang3001
+    url: jdbc:mysql://weddingdb.cdysm68wgj3j.us-east-1.rds.amazonaws.com/wedding_db
+    username: admin
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -25,31 +25,18 @@ spring:
 
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: 128MB
+      max-request-size: 128MB
       enabled: true
       file-size-threshold: 0
       location: /tmp
-
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: trouytin@gmail.com
-    password: auux cbjy mang mjcm
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-
 twilio:
-  account_sid: ACc2a522ebd3172b9f66ac39c838814f51
-  auth_token: b32ec809812a18c11b411bb2b9702a5e
-  trial_number: +12314004777
+  account_sid: AC0b34ce3d996ee5c31d9addf80af6b110
+  auth_token: f8dbacdf48f3c009a70bb7eb105ec84d
+  trial_number: +13259392865
 
 vnpay:
-  returnUrl: https://nhatro-spring-app-20231220005522.azuremicroservices.io/api/v1/payment/vnpay-return
+  returnUrl: https://sweetdream-gjdaath6dchyfwhp.eastus-01.azurewebsites.net/api/v1/payment/vnpay-return
   paymentUrl: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
   tmnCode": QYBSTFGY
   hashSecret: ZZFKYHJMITRTSDOUEIJUFQYRLLRMMSVN

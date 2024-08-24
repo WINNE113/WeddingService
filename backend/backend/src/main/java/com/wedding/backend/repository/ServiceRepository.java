@@ -19,6 +19,7 @@ import java.util.List;
 public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
     List<ServiceEntity> findAllByIsDeletedFalse(Pageable pageable);
 
+    List<ServiceEntity> getAllByStatusAndIsDeletedAndRotationIsNotNull(StatusCommon statusCommon, boolean isDeleted);
     List<ServiceEntity> findAllByServiceTypeAndIsDeletedFalse(ServiceTypeEntity serviceType, Pageable pageable);
 
     @Query(

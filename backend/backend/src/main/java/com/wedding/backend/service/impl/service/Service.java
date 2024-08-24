@@ -24,11 +24,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Console;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
@@ -418,5 +420,53 @@ public class Service implements IService {
         return result;
     }
 
+    @Override
+    public ResponseEntity<?> findServicesAroundLocation(double latitude, double longitude, double radiusInKm) {
+        ResponseEntity<?> response;
+        try {
+            List<ServiceDTO> resultToView = findServicesWithinRadius(latitude, longitude, radiusInKm);
+            System.out.println(resultToView.size());
+            response = new ResponseEntity<>(resultToView, HttpStatus.OK);
+        } catch (Exception ex) {
+            response = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_SYSTEM_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return response;
+    }
 
+    private List<ServiceDTO> findServicesWithinRadius(double latitude, double longitude, double radiusInKm) {
+        List<ServiceEntity> services = repository.getAllByStatusAndIsDeletedAndRotationIsNotNull(StatusCommon.APPROVED, false);
+
+        return services.stream()
+                .filter(service -> {
+                    String[] rotation = service.getRotation().split(",");
+                    double serviceLatitude = Double.parseDouble(rotation[0]);
+                    double serviceLongitude = Double.parseDouble(rotation[1]);
+                    double distance = calculateDistance(latitude, longitude, serviceLatitude, serviceLongitude);
+                    return distance <= radiusInKm;
+                })
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        final int EARTH_RADIUS = 6371; // Bán kính Trái Đất theo đơn vị km
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return EARTH_RADIUS * c; // Khoảng cách theo đơn vị km
+    }
+    private ServiceDTO convertToDTO(ServiceEntity service) {
+        ServiceDTO serviceDTO = new ServiceDTO();
+        serviceDTO.setId(service.getId());
+        serviceDTO.setTitle(service.getTitle());
+        serviceDTO.setAddress(service.getAddress());
+        serviceDTO.setCreatedDate(service.getCreatedDate());
+        serviceDTO.setDeleted(service.isDeleted());
+        serviceDTO.setStatus(service.getStatus().name());
+        serviceDTO.setImage(service.getImage());
+        return serviceDTO;
+    }
 }

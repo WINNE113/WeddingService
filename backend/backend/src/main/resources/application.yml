@@ -8,9 +8,9 @@ spring:
     name: backend
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: huuthang
-    url: jdbc:mysql://localhost:3306/wedding_db
-    username: root
+    password: Huuthang3001
+    url: jdbc:mysql://weddingdb.cdysm68wgj3j.us-east-1.rds.amazonaws.com/wedding_db
+    username: admin
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -25,8 +25,8 @@ spring:
 
   servlet:
     multipart:
-      max-file-size: 100MB
-      max-request-size: 100MB
+      max-file-size: 128MB
+      max-request-size: 128MB
       enabled: true
       file-size-threshold: 0
       location: /tmp
@@ -36,10 +36,8 @@ twilio:
   trial_number: +13259392865
 
 vnpay:
-  returnUrl: http://localhost:8080/api/v1/payment/vnpay-return
+  returnUrl: https://sweetdream-gjdaath6dchyfwhp.eastus-01.azurewebsites.net/api/v1/payment/vnpay-return
   paymentUrl: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
   tmnCode": QYBSTFGY
   hashSecret: ZZFKYHJMITRTSDOUEIJUFQYRLLRMMSVN
   version: 2.1.0
-
-

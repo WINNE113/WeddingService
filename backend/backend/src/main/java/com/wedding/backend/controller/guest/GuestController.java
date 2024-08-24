@@ -13,6 +13,7 @@ import com.wedding.backend.service.IService.service.IServicePackage;
 import com.wedding.backend.service.IService.service.IServiceType;
 import com.wedding.backend.service.IService.supplier.ISupplierService;
 import com.wedding.backend.util.extensions.ConvertStringToArrayExtension;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -78,6 +79,15 @@ public class GuestController {
             }
         }
         return ResponseEntity.ok(iDatabaseSearch.searchFilter(pageable, map));
+    }
+
+    @Operation(
+            description = "Latitude: Vĩ Độ, Longitude: Kinh Độ",
+            summary = "Endpoint For Get Post Around Location"
+    )
+    @GetMapping("/service/location")
+    public ResponseEntity<?> findServicesAroundLocation(@RequestParam(name = "latitude") double latitude, @RequestParam(name = "longitude") double longitude, @RequestParam(name = "radiusInKm") double radiusInKm) {
+        return ResponseEntity.ok(service.findServicesAroundLocation(latitude, longitude, radiusInKm));
     }
 
     @GetMapping("/albByName")
