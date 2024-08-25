@@ -169,7 +169,7 @@ const Pricing = () => {
       >
         <div className="section-content text-center">
           <p className="mb-4 text-lg leading-relaxed text-white">
-            Chào mừng bạn đến với sweetdream.com - nền tảng dịch vụ cưới hỏi hàng đầu!
+            Chào mừng bạn đến với SweetDream - nền tảng dịch vụ cưới hỏi hàng đầu!
             Chúng tôi cung cấp các gói dịch vụ VIP để giúp tin đăng của bạn nổi bật
             trên trang chủ, thu hút được nhiều khách hàng hơn.
           </p>

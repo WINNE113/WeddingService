@@ -35,6 +35,8 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
 
     List<ServiceEntity> findAllBySupplier_IdAndIsDeletedFalse(Pageable pageable, Long supplierId);
 
+    List<ServiceEntity> findAllBySupplier_Id(Long supplierId);
+
 
     @Query(
             value = "Select s.id, li.image_url_list as imagesURL, sa.name as nameAlb from services as s\n" +

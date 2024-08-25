@@ -4,6 +4,7 @@ const path = {
     LOGIN: "login",
     INVALID: "*",
     MEMBER: "member",
+    ABOUT_US: "gioi-thieu",
     TOP_PROVINCE: "tinh-thanh",
     WISHLIST: "danh-sach-yeu-thich",
     PERSONAL: "thong-tin-ca-nhan",

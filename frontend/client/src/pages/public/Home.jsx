@@ -10,10 +10,11 @@ import Card from "@/components/posts/Card";
 import { useDispatch, useSelector } from "react-redux"
 import { VideoPlayer } from "@/components";
 import { ImageSlider } from "@/components";
-import { ServiceTypeGrid, Pagination, LongCard, BoxFilter } from "@/components";
+import { ServiceTypeGrid, Pagination, PaginationBaseTotalData, LongCard, BoxFilter } from "@/components";
 import { useSearchParams } from "react-router-dom"
 import { NavLink } from "react-router-dom";
 import path from "@/ultils/path";
+import { toast } from "react-toastify"
 
 const Home = () => {
     const dispatch = useDispatch()
@@ -22,6 +23,7 @@ const Home = () => {
     const [serviceVIP3, setServiceVIP3] = useState([])
     const [serviceVIP1And2, setServiceVIP1And2] = useState([])
     const [countServiceVIP1And2, setCountServiceVIP1And2] = useState(0)
+    const [countServiceByLocation, setCountServiceByLocation] = useState(0)
     const [serviceSuggested, setServiceSuggested] = useState([])
     const { wishlist } = useSelector((s) => s.user)
     const [searchParams] = useSearchParams()
@@ -66,7 +68,11 @@ const Home = () => {
 
                 // Gửi tọa độ về server và nhận kết quả từ API
                 const response = await apiGetServiceByLocation({ latitude: latitude, longitude: longitude, radiusInKm: 10 });
-                if (response.statusCodeValue === 200) setServiceLocation(response.body);
+                if (response.statusCodeValue === 200) {
+                    const dataFromServier = response.body.slice(0, 5);
+                    setServiceLocation(response.body);
+                    setCountServiceByLocation(response.body.length);
+                }
 
             } catch (error) {
                 toast.error("Lỗi lấy tạo độ người dùng")
@@ -252,10 +258,12 @@ const Home = () => {
                 contentClassName="grid grid-cols-10 gap-4"
             >
                 <div className="col-span-7 flex flex-col gap-4">
-                    {serviceLocation?.map((el) => (
-                        <LongCard key={el.id} {...el} />
-                    ))}
+                  
+                    <div className="mt-6 col-span-4">
+                        <PaginationBaseTotalData data={serviceLocation} itemsPerPage={5} />
+                    </div>
                 </div>
+
                 <div className="col-span-3 flex flex-col gap-4">
                     <BoxFilter
                         className="flex justify-center items-center text-xl font-semibold"
@@ -271,7 +279,7 @@ const Home = () => {
                                 >
                                     <span>
                                         {el.name}{" "}
-                                        <span className="text-sm font-normal">{`(1254)`}</span>
+                                        <span className="text-sm font-normal">{`(1568)`}</span>
                                     </span>
                                 </NavLink>
                             ))}

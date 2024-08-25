@@ -9,16 +9,10 @@ import com.wedding.backend.dto.auth.*;
 import com.wedding.backend.dto.user.UpdateProfileRequest;
 import com.wedding.backend.dto.user.UserDTO;
 import com.wedding.backend.dto.user.UserStatus;
-import com.wedding.backend.entity.RoleEntity;
-import com.wedding.backend.entity.SupplierEntity;
-import com.wedding.backend.entity.SupplierFollowEntity;
-import com.wedding.backend.entity.UserEntity;
+import com.wedding.backend.entity.*;
 import com.wedding.backend.exception.ResourceNotFoundException;
 import com.wedding.backend.mapper.UserMapper;
-import com.wedding.backend.repository.RoleRepository;
-import com.wedding.backend.repository.SupplierFollowRepository;
-import com.wedding.backend.repository.SupplierRepository;
-import com.wedding.backend.repository.UserRepository;
+import com.wedding.backend.repository.*;
 import com.wedding.backend.service.IService.user.IUserService;
 import com.wedding.backend.service.impl.auth.JWTService;
 import com.wedding.backend.service.impl.twilio.TwilioOTPService;
@@ -56,6 +50,8 @@ public class UserService implements IUserService {
     private final TokenHandler tokenHandler;
     private final SupplierRepository supplierRepository;
     private final SupplierFollowRepository supplierFollowRepository;
+    private final ServiceRepository serviceRepository;
+
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
@@ -223,6 +219,18 @@ public class UserService implements IUserService {
         try {
             Optional<UserEntity> user = userRepository.findById(listId);
             if (user.isPresent()) {
+                Optional<SupplierEntity> supplierIsExit = supplierRepository.findByUser_Id(user.get().getId());
+                if (supplierIsExit.isPresent()) {
+                    supplierIsExit.get().setDeleted(true);
+                    supplierRepository.save(supplierIsExit.get());
+                    List<ServiceEntity> servicesFromDb = serviceRepository.findAllBySupplier_Id(supplierIsExit.get().getId());
+
+                    for (ServiceEntity item : servicesFromDb
+                    ) {
+                        item.setDeleted(true);
+                        serviceRepository.save(item);
+                    }
+                }
                 user.get().setDeleted(true);
                 userRepository.save(user.get());
             }

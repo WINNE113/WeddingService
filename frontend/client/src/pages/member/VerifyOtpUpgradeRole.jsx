@@ -80,7 +80,7 @@ const VerifyOtpUpgradeRole = ({ navigate, dispatch }) => {
           to="/"
           className="mx-auto w-main text-white font-bold flex items-center justify-between text-3xl"
         >
-          <span style={{ color: '#e4007f' }}>SweetDream.com</span>
+          <span style={{ color: '#e4007f' }}>SweetDream</span>
           {/* <span className="text-sm font-light">❓ Help</span> */}
         </Link>
       </div>

@@ -31,11 +31,6 @@ const Navigation = ({ navigate }) => {
       dropdownItems: [] // Khởi tạo dropdownItems là một mảng rỗng
     },
     {
-      path: "/danh-sach/?type=" + path.CANHO,
-      name: "KHUYỂN MÃI",
-      id: "nhacanhochothue",
-    },
-    {
       path: "/danh-sach/?type=" + path.TIMOGHEP,
       name: "KINH NGHIỆM & Ý TƯỞNG",
       id: "timoghep",
@@ -44,6 +39,11 @@ const Navigation = ({ navigate }) => {
       path: "/" + path.PRICING,
       name: "BẢNG GIÁ GÓI",
       id: "banggiadichvu",
+    },
+    {
+      path: "/" + path.ABOUT_US,
+      name: "Giới thiệu",
+      id: "gioithieu",
     },
   ])
 
@@ -74,7 +74,7 @@ const Navigation = ({ navigate }) => {
     }
 
     fetchData()
-  }, []) 
+  }, [])
 
   const handleMouseEnter = (id) => {
     clearTimeout(timeoutRef.current)

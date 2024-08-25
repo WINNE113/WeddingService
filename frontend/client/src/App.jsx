@@ -35,6 +35,7 @@ import ManagePayment from "./pages/admin/ManagePayment"
 import ManageReport from "./pages/admin/ManageReport"
 import ManageBooking from "./pages/supplier/ManageBooking"
 import ChangePassword from "./pages/member/ChangePassword"
+import AboutUs from "./pages/public/AboutUs"
 
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
           <Route path={path.DETAIL_POST__PID__TITLE} element={<DetailService />} />
           <Route path={path.INVALID} element={<Home />} />
           <Route path={path.PRICING} element={<Pricing />} />
+          <Route path={path.ABOUT_US} element={<AboutUs />} />
           <Route path={path.SUPPLIER_DETAIL__SID__NAME} element={<SupplierDetail />} />
         </Route>
         <Route path={path.LOGIN} element={<Login />} />

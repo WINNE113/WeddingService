@@ -25,7 +25,7 @@ const AdminSidebar = ({ dispatch }) => {
       <div className="py-12 pb-6 flex flex-col gap-1 justify-center items-center w-full">
         {/* <img src="/logo.png" alt="" className="w-3/5 object-contain" /> */}
         <span className="text-3xl text-pink-600 tracking-tight font-bold">
-          SweetDream.com
+          SweetDream
         </span>
         <small className="text-sm font-medium text-red-500 ">
           Admin workspace

@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="w-main mx-auto grid grid-cols-1 md:grid-cols-5 gap-4">
         <div className="col-span-1 flex justify-center items-center">
           <span className="text-3xl font-bold tracking-tight">
-            SweetDream.com
+            SweetDream
           </span>
         </div>
         <div className="col-span-1 py-6 flex flex-col gap-2">
@@ -28,11 +28,12 @@ const Footer = () => {
         </div>
         <div className="col-span-1 py-6 flex flex-col gap-2">
           <h1 className="uppercase font-bold pb-2">Hệ thống</h1>
-          {menu.map((el) => (
-            <Link key={el.path} to={el.path} className="hover:underline">
-              {el.subname}
-            </Link>
-          ))}
+          <Link to="/" className="hover:underline">
+            Bảo Mật
+          </Link>
+          <Link to="/" className="hover:underline">
+            Uy Tín
+          </Link>
         </div>
         <div className="col-span-1 py-6 flex flex-col gap-2">
           <h1 className="uppercase font-bold pb-2">Tính năng nổi bật</h1>
