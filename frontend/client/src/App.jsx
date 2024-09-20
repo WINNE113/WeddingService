@@ -7,7 +7,7 @@ import Home from "./pages/public/Home"
 import Loading from './components/common/Loading.jsx';
 import Modal from "./components/common/Modal"
 import path from "./ultils/path"
-import { getCurrent, getWishlist, getProvinces } from "./redux/action"
+import { getCurrent, getWishlist, getProvinces, getRequestForQuotaion } from "./redux/action"
 import Layout from "./pages/public/layout"
 import LayoutMember from "./pages/member/LayoutMember"
 import Wishlist from "./pages/member/Wishlist"
@@ -36,6 +36,7 @@ import ManageReport from "./pages/admin/ManageReport"
 import ManageBooking from "./pages/supplier/ManageBooking"
 import ChangePassword from "./pages/member/ChangePassword"
 import AboutUs from "./pages/public/AboutUs"
+import RequestForQuotation from "./pages/member/RequestForQuotation"
 
 
 function App() {
@@ -45,15 +46,24 @@ function App() {
 
   const { token } = useSelector((state) => state.user)
   const dispatch = useDispatch()
+
   useEffect(() => {
     dispatch(getProvinces())
   }, [])
+
+  // Xử lý logic lấy dữ liệu dựa vào token (nếu có token thì lấy thêm wishlist và requestForQuotation)
   useEffect(() => {
-    setTimeout(() => {
-      dispatch(getCurrent())
-      if (token) dispatch(getWishlist())
-    }, 800)
-  }, [token])
+    const fetchData = async () => {
+      dispatch(getCurrent());
+      if (token) {
+        dispatch(getWishlist());
+        dispatch(getRequestForQuotaion());
+      }
+    };
+    const timeoutId = setTimeout(fetchData, 800);
+
+    return () => clearTimeout(timeoutId);
+  }, [token, dispatch]);
 
   return (
     <>
@@ -79,6 +89,7 @@ function App() {
         <Route path={path.MEMBER} element={<LayoutMember />}>
           <Route path={path.WISHLIST} element={<Wishlist />} />
           <Route path={path.PERSONAL} element={<Personal />} />
+          <Route path={path.REQUEST_FOR_QUOTATION} element={<RequestForQuotation />} />
           <Route path={path.CHANGE_PASSWORD} element={<ChangePassword />} />
         </Route>
         {/* Supplier routes */}

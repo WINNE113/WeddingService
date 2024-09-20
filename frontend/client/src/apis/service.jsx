@@ -8,14 +8,35 @@ export const apiGetServiceType = () =>
 
 export const apiCreateNewBooking = (data) =>
     axios({
-        url: "/booking-service/add",
+        url: "/request-for-quotation/add",
         method: "post",
         data,
     })
 
+export const apiSendRequestForQuotations = (data) =>
+    axios({
+        url: "/request-for-quotation/send-request-for-quotation",
+        method: "POST",
+        data
+    })
+
+
+export const apiAddToRequestForQuotation = (params) =>
+    axios({
+        url: "/request-for-quotation/add-request-for-quotation-to-cart",
+        method: "post",
+        params,
+    })
+
+export const apiRemoveRequestForQuotation = (serviceId) =>
+    axios({
+        url: `/request-for-quotation/remove-by-customer/${serviceId}`,
+        method: "Delete",
+    })
+
 export const apiGetBookingServices = () =>
     axios({
-        url: "/booking-service/booking-service-by-supplier-id",
+        url: "/request-for-quotation/request-for-quotation-by-supplier-id",
         method: "GET"
     })
 
@@ -129,7 +150,7 @@ export const apiUpdateRejectedService = (params) =>
     })
 export const apiUpdateStatusBooking = (params) =>
     axios({
-        url: "/booking-service/change/status-booking",
+        url: "/request-for-quotation/change/status-request-for-quotation",
         method: "patch",
         params,
     })

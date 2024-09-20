@@ -8,6 +8,7 @@ import { menuColors } from "@/ultils/constant"
 import clsx from "clsx"
 import { modal, resetFilter } from "@/redux/appSlice"
 import { AiOutlineHeart } from "react-icons/ai"
+import { MdForwardToInbox } from "react-icons/md"
 import Button from "../common/Button"
 import Swal from "sweetalert2"
 import { formatMoney } from "@/ultils/fn"
@@ -47,8 +48,9 @@ const Navigation = ({ navigate }) => {
     },
   ])
 
-  const { current, wishlist } = useSelector((state) => state.user)
+  const { current, wishlist, requestForQuotation} = useSelector((state) => state.user)
   const dispatch = useDispatch()
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -153,6 +155,22 @@ const Navigation = ({ navigate }) => {
                 </>
               ) : (
                 <>
+                  {current?.roles?.some((el) => el.name === "ROLE_CUSTOMER") && (
+                    <Link
+                      to={`/${path.MEMBER}/${path.REQUEST_FOR_QUOTATION}`}
+                      className="flex items-center gap-2 text-pink-400 rounded-md px-6 py-2 text-sm font-medium"
+                    >
+                      <span className="relative">
+                        {requestForQuotation?.count > 0 && (
+                          <span className="absolute -top-2 -right-2 flex items-center justify-center w-3 h-3 text-[8px] text-pink-400 bg-red-500 border border-white rounded-full">
+                            {requestForQuotation.count}
+                          </span>
+                        )}
+                        <MdForwardToInbox size={22} />
+                      </span>
+                      Danh sách yêu cầu báo giá
+                    </Link>
+                  )}
                   {current?.roles?.some((el) => el.name === "ROLE_CUSTOMER") && (
                     <Link
                       to={`/${path.MEMBER}/${path.WISHLIST}`}

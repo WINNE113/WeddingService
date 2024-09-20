@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { getCurrent } from "./action"
 import { getWishlist } from "./action"
+import { getRequestForQuotaion } from "./action"
 
 export const userSlice = createSlice({
   name: "user",
@@ -11,6 +12,7 @@ export const userSlice = createSlice({
     selectedRole: "",
     selectedUserName: "",
     wishlist: [],
+    requestForQuotation: [],
   },
   reducers: {
     login: (state, action) => {
@@ -37,9 +39,13 @@ export const userSlice = createSlice({
       state.current = null
       state.token = null
       state.wishlist = []
+      state.requestForQuotation = []
     })
     builder.addCase(getWishlist.fulfilled, (state, action) => {
       state.wishlist = action.payload
+    })
+    builder.addCase(getRequestForQuotaion.fulfilled, (state, action) => {
+      state.requestForQuotation = action.payload
     })
   },
 })

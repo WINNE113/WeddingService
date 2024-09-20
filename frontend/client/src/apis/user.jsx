@@ -35,6 +35,12 @@ export const apiGetWishlist = (params) =>
         method: "get",
         params,
     })
+export const apiGetRequestForQuotation = (params) =>
+    axios({
+        url: "/request-for-quotation/request-for-quotation-by-customer",
+        method: "GET",
+        params,
+    })
 export const apiRemoveWishlist = (id) =>
     axios({
         url: "/wishlist/delete/wishListItem/" + id,

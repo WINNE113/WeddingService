@@ -288,15 +288,7 @@ const Home = () => {
                 </div>
             </Section>
 
-            <Section
-                className="w-full h-screenflex items-center justify-center bg-[#f9f5f3] mt-20 mb-16" // Full height and center content
-                contentClassName="flex justify-center"
-            >
-                <VideoPlayer
-                    videoSrc="https://www.youtube.com/embed/3UdRzxr8hhM?rel=0&autoplay=1"
-                    title="Happy Ending"
-                />
-            </Section>
+           
         </section>
     )
 }

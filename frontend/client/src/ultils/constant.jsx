@@ -14,6 +14,7 @@ import {
   AiOutlineDashboard,
   AiOutlineHeart,
   AiOutlineUser,
+  
 } from "react-icons/ai"
 import path from "./path"
 import { FcUpRight } from "react-icons/fc"
@@ -21,6 +22,7 @@ import {
   MdOutlineAttachMoney,
   MdHistory,
   MdReportGmailerrorred,
+  MdForwardToInbox
 } from "react-icons/md"
 import {
   RiFileEditLine,
@@ -172,7 +174,13 @@ export const memberSidebar = [
     icon: <AiOutlineHeart size={20} />,
     type: "SINGLE",
   },
-
+  {
+    id: 3,
+    name: "Danh sánh yêu cầu báo giá",
+    path: `/${path.MEMBER}/${path.REQUEST_FOR_QUOTATION}`,
+    icon: <MdForwardToInbox size={20} />,
+    type: "SINGLE",
+  },
   {
     id: 2,
     name: "Tới Homepage",

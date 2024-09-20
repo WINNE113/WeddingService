@@ -5,6 +5,7 @@ import Button from '@/components/common/Button'
 import InputForm from '@/components/inputs/InputForm'
 import InputRadio from '@/components/inputs/InputRadio';
 import OtpVerify from '@/components/auth/OtpVerify';
+import { FaEye, FaEyeSlash, FaSpinner, FaGoogle } from "react-icons/fa";
 
 import { useForm } from "react-hook-form"
 import Swal from "sweetalert2"
@@ -20,6 +21,8 @@ const Login = ({ navigate, dispatch, location }) => {
   const [variant, setVariant] = useState(() => location.state || "LOGIN")
   const [isLoading, setIsLoading] = useState(false)
   const [searchParams] = useSearchParams()
+  const [showPassword, setShowPassword] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -30,6 +33,8 @@ const Login = ({ navigate, dispatch, location }) => {
   useEffect(() => {
     reset()
   }, [variant])
+
+
   const role = watch("role")
   const userName = watch("userName")
   useEffect(() => {
@@ -82,6 +87,12 @@ const Login = ({ navigate, dispatch, location }) => {
     else setVariant("LOGIN")
   }, [variant])
 
+  const handleGoogleLogin = () => {
+    // Implement Google login logic here
+    alert("Google login functionality to be implemented");
+  };
+
+
   return (
     <div className="w-full flex flex-col items-center gap-8">
       <div className="bg-emerald-700 h-[80px] flex items-center w-full" style={{ backgroundColor: 'rgba(254, 241, 241, .65)' }}>
@@ -120,22 +131,35 @@ const Login = ({ navigate, dispatch, location }) => {
               placeholder="Nhập số điện thoại của bạn"
               fullWidth
             />
-            <InputForm
-              label="Mật khẩu"
-              register={register}
-              errors={errors}
-              id="password"
-              validate={{
-                required: "Trường này không được bỏ trống.",
-                minLength: {
-                  value: 6,
-                  message: "Mật khẩu bắt buộc tối thiểu 6 ký tự.",
-                },
-              }}
-              type="password"
-              fullWidth
-              placeholder="Mật khẩu tối thiểu 6 ký tự"
-            />
+            <div className="relative">
+              <InputForm
+                label="Mật khẩu"
+                register={register}
+                errors={errors}
+                id="password"
+                validate={{
+                  required: "Trường này không được bỏ trống.",
+                  minLength: {
+                    value: 6,
+                    message: "Mật khẩu bắt buộc tối thiểu 6 ký tự.",
+                  },
+                }}
+                type={showPassword ? "text" : "password"}
+                fullWidth
+                placeholder="Mật khẩu tối thiểu 6 ký tự"
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 mt-8 right-0 pr-3 flex items-center"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <FaEyeSlash className="h-5 w-5 text-gray-400" />
+                ) : (
+                  <FaEye className="h-5 w-5 text-gray-400" />
+                )}
+              </button>
+            </div>
             {variant === "REGISTER" && (
               <Fragment>
                 <InputForm
@@ -161,10 +185,30 @@ const Login = ({ navigate, dispatch, location }) => {
                 </div>
               </Fragment>
             )}
-
             <Button disabled={isLoading} type="submit" fullWidth className="mt-3">
               {variant === "LOGIN" ? "Đăng nhập" : "Đăng ký tài khoản"}
             </Button>
+            {variant === "LOGIN" && (
+              <div className="">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-300"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                  </div>
+                </div>
+                <div className="mt-6">
+                  <button
+                    onClick={handleGoogleLogin}
+                    className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out"
+                  >
+                    <FaGoogle className="h-5 w-5 mr-2" />
+                    Login with Google
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="flex gap-2">
               <span style={{ color: '#93536a' }}>
                 {variant === "LOGIN"
@@ -178,7 +222,9 @@ const Login = ({ navigate, dispatch, location }) => {
                 {variant === "LOGIN" ? "Tạo tài khoản" : "Đi tới đăng nhập"}
               </span>
             </div>
+
           </form>
+
         </div>
       </div>
     </div>

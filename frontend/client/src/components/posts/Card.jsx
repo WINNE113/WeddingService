@@ -1,10 +1,11 @@
 import { apiAddWishlist, apiRemoveWishlist } from "@/apis/user"
-import { getWishlist } from "@/redux/action"
+import { apiAddToRequestForQuotation } from "@/apis/service"
+import { getRequestForQuotaion, getWishlist } from "@/redux/action"
 import { formatMoney, formatVietnameseToString } from "@/ultils/fn"
 import path from "@/ultils/path"
 import moment from "moment"
 import React, { useEffect } from "react"
-import { FaHeart, FaRegHeart } from "react-icons/fa"
+import { FaHeart, FaRegHeart, FaShoppingCart } from "react-icons/fa"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useParams } from "react-router-dom"
 import { toast } from "react-toastify"
@@ -27,7 +28,7 @@ const Card = ({
   averageRating,
 }) => {
   const dispatch = useDispatch()
-  const { current, wishlist } = useSelector((s) => s.user)
+  const { current, wishlist, requestForQuotation } = useSelector((s) => s.user)
   const handleAddWishlist = async () => {
     if (!current) return toast.warn("Bạn phải đăng nhập trước.")
     const response = await apiAddWishlist({ postId: id, wishlistName: "service" })
@@ -44,6 +45,16 @@ const Card = ({
       dispatch(getWishlist())
     } else toast.error(response.message)
   }
+
+  const handleAddToRequestForQuotation = async () => {
+    if (!current) return toast.warn("Bạn phải đăng nhập trước.")
+    const response = await apiAddToRequestForQuotation({ serviceId: id })
+    if (response?.success) {
+      toast.success(response?.message)
+      dispatch(getRequestForQuotaion())
+    } else toast.error(response?.message)
+  }
+
   return (
     <div className="w-full col-span-1 flex flex-col rounded-md border transition-transform duration-300 hover:scale-105 hover:shadow-xl hover:shadow-gray-500">
       <div className="w-full h-[156px] relative">
@@ -77,11 +88,19 @@ const Card = ({
           {title}
         </Link>
         <span className="text-sm text-gray-500">{address}</span>
-        <span className="flex items-center">
-          {renderStarFromNumber(averageRating)?.map((item, index) => (
-            <span key={index}>{item}</span>
-          ))}
-        </span>
+        <div className="flex justify-between items-center mt-2">
+          <span className="flex items-center">
+            {renderStarFromNumber(averageRating)?.map((item, index) => (
+              <span key={index}>{item}</span>
+            ))}
+          </span>
+          <span
+            onClick={handleAddToRequestForQuotation}
+            className="text-white bg-pink-500 hover:bg-pink-600 p-2 rounded-full cursor-pointer"
+          >
+            <MdForwardToInbox size={22} />
+          </span>
+        </div>
         <div className="mt-3 flex justify-between items-center">
           <Button
             onClick={() =>
