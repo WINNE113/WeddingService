@@ -10,5 +10,6 @@ public enum StatusCommon {
     APPROVED,
     REJECTED,
     PROCESS,
-    SUCCESS
+    SUCCESS,
+    PENDING
 }

@@ -57,7 +57,9 @@ public class SecurityConfiguration {
                                 "/api/v1/guest/**",
                                 "/api/v1/supplier/getAll",
                                 "/api/v1/supplier/get-all-by-service-package",
-                                "/api/v1/service/suggest-by-follow-or-not"
+                                "/api/v1/service/suggest-by-follow-or-not",
+                                "/api/v1/supplier/transaction/is-expired",
+                                "/api/v1/elasticsearch-services/**"
                         )
                         .permitAll()
                         .anyRequest()

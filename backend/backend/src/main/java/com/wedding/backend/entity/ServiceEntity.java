@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -76,7 +75,7 @@ public class ServiceEntity extends BaseEntityWithIDIncrement {
 
     @OneToMany(mappedBy = "serverBooking")
     @JsonBackReference
-    private List<BookingEntity> bookings;
+    private List<RequestForQuotationEntity> bookings;
 
     @OneToMany(mappedBy = "serviceRating")
     @JsonBackReference

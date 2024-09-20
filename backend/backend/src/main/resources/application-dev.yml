@@ -30,6 +30,9 @@ spring:
             enabled: true
             file-size-threshold: 0
             location: /tmp
+    elasticsearch:
+        uris: http://localhost:9200
+
 twilio:
     account_sid: AC0b34ce3d996ee5c31d9addf80af6b110
     auth_token: f8dbacdf48f3c009a70bb7eb105ec84d
@@ -38,6 +41,6 @@ twilio:
 vnpay:
     returnUrl: https://sweetdream-gjdaath6dchyfwhp.eastus-01.azurewebsites.net/api/v1/payment/vnpay-return
     paymentUrl: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
-    tmnCode": QYBSTFGY
+    tmnCode: QYBSTFGY
     hashSecret: ZZFKYHJMITRTSDOUEIJUFQYRLLRMMSVN
     version: 2.1.0

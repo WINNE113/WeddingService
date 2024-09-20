@@ -1,4 +1,4 @@
-package com.wedding.backend.dto.bookingService;
+package com.wedding.backend.dto.requestForQuotationService;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -17,6 +17,7 @@ import com.wedding.backend.service.IService.service.ITransactionService;
 import com.wedding.backend.service.IService.twilio.ITwilioService;
 import com.wedding.backend.util.helper.HashHelper;
 import com.wedding.backend.util.message.MessageUtil;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -258,28 +259,26 @@ public class TransactionServiceImpl implements ITransactionService {
     }
 
     @Override
-    public ResponseEntity<?> checkTransactionServicePackageIsExpired(Principal connectedUser) {
+    public ResponseEntity<?> checkTransactionServicePackageIsExpired() {
         try {
-            UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-            if (user == null) {
-                return new ResponseEntity<>(MessageUtil.MSG_USER_BY_TOKEN_NOT_FOUND, HttpStatus.NOT_FOUND);
+            List<SupplierEntity> suppliers = supplierRepository.findAllByIsDeletedFalse();
+
+            for (SupplierEntity supplier : suppliers) {
+                try {
+                    TransactionEntity transactionEntity = transactionRepository
+                            .findByUserTransaction_IdAndExpiredFalse(supplier.getId())
+                            .orElse(null);
+
+                    if (transactionEntity != null && transactionEntity.getExpirationDate().before(new Date())) {
+                        transactionEntity.setExpired(true);
+                        transactionRepository.save(transactionEntity);
+                    }
+                } catch (Exception e) {
+                    // Log lỗi nhưng không ngắt quá trình kiểm tra các nhà cung cấp khác
+                    LoggerFactory.getLogger(this.getClass()).error("Error processing supplier with ID: " + supplier.getId(), e);
+                }
             }
-
-            SupplierEntity supplier = supplierRepository.findByUser_Id(user.getId())
-                    .orElseThrow(() -> new RuntimeException(MessageUtil.SUPPLIER_NOT_FOUND));
-
-            TransactionEntity transactionEntity = transactionRepository.findByUserTransaction_IdAndExpiredFalse(supplier.getId())
-                    .orElseThrow(() -> new RuntimeException(MessageUtil.TRANSACTION_PACKAGE_NOT_FOUND));
-
-            if (transactionEntity.getExpirationDate().before(new Date())) {
-                transactionEntity.setExpired(true);
-                transactionRepository.save(transactionEntity);
-            }
-
             return new ResponseEntity<>(MessageUtil.MSG_OK, HttpStatus.OK);
-
-        } catch (RuntimeException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

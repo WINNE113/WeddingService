@@ -23,6 +23,8 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> 
 
     List<SupplierEntity> findAllByIsDeletedFalse(Pageable pageable);
 
+    List<SupplierEntity> findAllByIsDeletedFalse();
+
     @Query("SELECT s from SupplierEntity as s join TransactionEntity as t on s.id = t.userTransaction.id where s.isDeleted = false order by t.purchaseDate desc")
     List<SupplierEntity> findAllByTransactionEntitiesAndIsDeletedFalse(Pageable pageable);
 

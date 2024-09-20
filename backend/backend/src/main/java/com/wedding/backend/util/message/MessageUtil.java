@@ -7,6 +7,8 @@ public class MessageUtil {
     public static final String MSG_OTP_CODE_INCORRECT = "Rất tiếc! Mã OTP của bạn không chính xác.";
     public static final String MSG_OTP_CODE_CORRECT = "Mã OTP của bạn chính xác.";
     public static final String MSG_ADD_SUCCESS = "Thêm mới thành công !";
+    public static final String MSG_ADD_TO_REQUEST_FOR_QUOTATION_SUCCESS = "Đã thêm vào danh sách yêu cầu báo giá.";
+    public static final String MSG_SERVICE_ALREADY_IN_REQUEST_FOR_QUOTATION = "Dịch vụ này đã tồn tại trong danh sách yêu cầu báo giá hoặc đang được nhà cung cấp xử lý.";
     public static final String MSG_UPDATE_SUCCESS = "Cập nhật thành công !";
     public static final String MSG_DELETE_SUCCESS = "Xóa thành công !";
     public static final String MSG_SYSTEM_ERROR = "Lỗi hệ thống vui lòng thử lại sau !";

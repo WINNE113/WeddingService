@@ -13,8 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "bookings")
-public class BookingEntity extends BaseEntityWithIDIncrement {
+@Table(name = "request_for_quotation")
+public class RequestForQuotationEntity extends BaseEntityWithIDIncrement {
 
     @Column(name = "name")
     private String name;

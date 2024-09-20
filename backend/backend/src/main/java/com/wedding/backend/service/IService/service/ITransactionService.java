@@ -14,5 +14,5 @@ public interface ITransactionService {
 
     ResponseEntity<?> getAllTransactionService(Pageable pageable);
 
-    ResponseEntity<?> checkTransactionServicePackageIsExpired(Principal connectedUser);
+    ResponseEntity<?> checkTransactionServicePackageIsExpired();
 }

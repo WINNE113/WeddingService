@@ -107,7 +107,6 @@ public class GuestController {
 
     }
 
-    @CrossOrigin("http://localhost:5173")
     @GetMapping("/service/services-by-package-vip")
     public ResponseEntity<?> getServicesByPackageVIP(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                                      @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
@@ -116,8 +115,6 @@ public class GuestController {
         return ResponseEntity.ok(service.getServiceByPackageVIP(pageable, packageId));
     }
 
-
-    @CrossOrigin("http://localhost:5173")
     @GetMapping("/service/services-by-package-VIP1-VIP2")
     public ResponseEntity<?> getServicesByPackageVIP1AndVIP2(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                                              @RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
