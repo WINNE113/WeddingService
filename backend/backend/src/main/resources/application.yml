@@ -11,6 +11,9 @@ spring:
     password: Huuthang3001
     url: jdbc:mysql://weddingdb.cdysm68wgj3j.us-east-1.rds.amazonaws.com/wedding_db
     username: admin
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -33,6 +36,12 @@ spring:
   elasticsearch:
     rest:
       uris: http://localhost:9200
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: false
+
   data:
     elasticsearch:
       repositories:
@@ -50,3 +59,11 @@ vnpay:
   tmnCode: QYBSTFGY
   hashSecret: ZZFKYHJMITRTSDOUEIJUFQYRLLRMMSVN
   version: 2.1.0
+
+momo:
+  partnerCode: MOMOBKUN20180529
+  returnUrl: http://localhost:8080/api/payment/momo-return
+  paymentUrl: https://test-payment.momo.vn/v2/gateway/api/create
+  ipnUrl: http://localhost:8080/payment/api/momo-ipn
+  accessKey: klm05TvNBzhg7h7j
+  secretKey: at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa

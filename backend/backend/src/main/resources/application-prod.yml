@@ -31,7 +31,19 @@ spring:
       file-size-threshold: 0
       location: /tmp
   elasticsearch:
-    uris: http://localhost:9200
+    rest:
+      uris: http://localhost:9200
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: false
+
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+
 
 twilio:
   account_sid: AC0b34ce3d996ee5c31d9addf80af6b110

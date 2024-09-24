@@ -1,7 +1,7 @@
 package com.wedding.backend.controller.service;
 
 import com.wedding.backend.entity.ElasticSearchService;
-import com.wedding.backend.repository.ElasticSearchQuery;
+import com.wedding.backend.service.impl.service.ElasticSearchQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +17,12 @@ import java.util.List;
 public class ElasticsearchServiceController {
     private final ElasticSearchQuery elasticSearchQuery;
 
+
+    @GetMapping(value = "/fuzzy-search")
+    public ResponseEntity<?> fuzzySearch(@RequestParam(name = "approximateServiceTitle") String approximateServiceTitle) throws IOException {
+        return ResponseEntity.ok(elasticSearchQuery.fuzzySearch(approximateServiceTitle));
+    }
+
     @PostMapping("/createOrUpdateDocument")
     public ResponseEntity<Object> createOrUpdateDocument(@RequestBody ElasticSearchService elasticSearchService) throws IOException {
         String response = elasticSearchQuery.createOrUpdateDocument(elasticSearchService);
@@ -25,13 +31,13 @@ public class ElasticsearchServiceController {
 
     @GetMapping("/getDocument")
     public ResponseEntity<Object> getDocumentById(@RequestParam String elasticSearchServiceId) throws IOException {
-        ElasticSearchService elasticSearchService =  elasticSearchQuery.getDocumentById(elasticSearchServiceId);
+        ElasticSearchService elasticSearchService = elasticSearchQuery.getDocumentById(elasticSearchServiceId);
         return new ResponseEntity<>(elasticSearchService, HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteDocument")
     public ResponseEntity<Object> deleteDocumentById(@RequestParam String elasticSearchServiceId) throws IOException {
-        String response =  elasticSearchQuery.deleteDocumentById(elasticSearchServiceId);
+        String response = elasticSearchQuery.deleteDocumentById(elasticSearchServiceId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -39,5 +45,10 @@ public class ElasticsearchServiceController {
     public ResponseEntity<Object> searchAllDocument() throws IOException {
         List<ElasticSearchService> elasticSearchServices = elasticSearchQuery.searchAllDocuments();
         return new ResponseEntity<>(elasticSearchServices, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/delete-index")
+    public void deleteIndex(@RequestParam(name = "indexName") String indexName) {
+        elasticSearchQuery.deleteIndex(indexName);
     }
 }

@@ -3,8 +3,10 @@ package com.wedding.backend.service.impl.payment;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.base.BaseResultWithDataAndCount;
+import com.wedding.backend.config.MomoConfig;
 import com.wedding.backend.config.VnpayConfig;
 import com.wedding.backend.dto.payment.*;
+import com.wedding.backend.dto.request.MomoOneTimePaymentRequest;
 import com.wedding.backend.dto.request.VnpayPayRequest;
 import com.wedding.backend.dto.response.VnpayPayIpnResponse;
 import com.wedding.backend.dto.response.VnpayPayResponse;
@@ -53,6 +55,9 @@ public class PaymentService implements IPaymentService {
 
     @Autowired
     private VnpayConfig vnpayConfig;
+
+    @Autowired
+    private MomoConfig momoConfig;
 
     @Autowired
     private IUserIpAddress ipAddress;
@@ -127,10 +132,32 @@ public class PaymentService implements IPaymentService {
                             paymentResult.getId());
                     paymentUrl = vnpayPayRequest.getLink(vnpayConfig.getPaymentUrl(), vnpayConfig.getHashSecret());
                     break;
+                case "MOMO":
+                    MomoOneTimePaymentRequest momoOneTimePayRequest = new MomoOneTimePaymentRequest(
+                            momoConfig.getPartnerCode(),
+                            paymentResult.getId(),
+                            request.getRequiredAmount(),
+                            paymentResult.getId(),
+                            request.getPaymentContent(),
+                            momoConfig.getReturnUrl(),
+                            momoConfig.getIpnUrl(),
+                            "captureWallet",
+                            ""
+                    );
+
+                    momoOneTimePayRequest.makeSignature(momoConfig.getAccessKey(), momoConfig.getSecretKey());
+                    // Call the getLink method and handle the result
+                    BaseResult resultMap = momoOneTimePayRequest.getLink(momoConfig.getPaymentUrl());
+                    if (resultMap.isSuccess()) {
+                        paymentUrl = resultMap.getMessage();
+                    } else {
+                        resutl.setMessage(resultMap.getMessage());
+                    }
                 default:
                     break;
             }
 
+            //TODO: Need check if success or not
             PaymentLinkDto paymentLinkDto = PaymentLinkDto.builder().paymentId(payment.getId()).paymentUrl(paymentUrl).build();
             resutl.Set(true, MessageUtil.MSG_OK, paymentLinkDto);
 
@@ -288,7 +315,7 @@ public class PaymentService implements IPaymentService {
                         BigDecimal newBalance = user.get().getBalance().add(payment.get().getPaidAmount());
                         user.get().setBalance(newBalance);
                         userRepository.save(user.get());
-                        responseEntity = new ResponseEntity<>(new BaseResult(true ,MessageUtil.MSG_PROCESS_TRANSACTION_PAYMENT_SUCCESS), HttpStatus.OK);
+                        responseEntity = new ResponseEntity<>(new BaseResult(true, MessageUtil.MSG_PROCESS_TRANSACTION_PAYMENT_SUCCESS), HttpStatus.OK);
                     }
                 } else {
                     responseEntity = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_PAYMENT_NOT_FOUND), HttpStatus.NOT_FOUND);
@@ -323,7 +350,7 @@ public class PaymentService implements IPaymentService {
 
                 responseEntity = new ResponseEntity<>(resultData, HttpStatus.OK);
             } else {
-                responseEntity = new ResponseEntity<>(new BaseResult(false ,MessageUtil.MSG_USER_BY_TOKEN_NOT_FOUND), HttpStatus.NOT_FOUND);
+                responseEntity = new ResponseEntity<>(new BaseResult(false, MessageUtil.MSG_USER_BY_TOKEN_NOT_FOUND), HttpStatus.NOT_FOUND);
             }
         } catch (Exception ex) {
             responseEntity = new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

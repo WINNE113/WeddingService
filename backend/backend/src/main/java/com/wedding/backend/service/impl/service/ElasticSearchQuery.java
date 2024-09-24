@@ -1,24 +1,50 @@
-package com.wedding.backend.repository;
+package com.wedding.backend.service.impl.service;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.core.search.Hit;
+import co.elastic.clients.elasticsearch.indices.DeleteIndexRequest;
+import co.elastic.clients.elasticsearch.indices.DeleteIndexResponse;
+import com.wedding.backend.base.BaseResultWithDataAndCount;
 import com.wedding.backend.entity.ElasticSearchService;
+import com.wedding.backend.util.elasticsearch.ElasticSearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
-@Repository
+@Service
 public class ElasticSearchQuery {
 
     @Autowired
     private ElasticsearchClient elasticsearchClient;
 
     private final String indexName = "services";
+
+    public BaseResultWithDataAndCount<List<ElasticSearchService>> fuzzySearch(String approximateServiceTitle) throws IOException {
+        BaseResultWithDataAndCount<List<ElasticSearchService>> result = new BaseResultWithDataAndCount<>();
+        List<ElasticSearchService> services = new ArrayList<>();
+        try {
+            Supplier<Query> supplier = ElasticSearchUtil.createSupplierQuery(approximateServiceTitle);
+            SearchResponse<ElasticSearchService> response = elasticsearchClient
+                    .search(s -> s.index(indexName).query(supplier.get()), ElasticSearchService.class);
+
+            List<Hit<ElasticSearchService>> hitList = response.hits().hits();
+            for (Hit<ElasticSearchService> hit : hitList
+            ) {
+                services.add(hit.source());
+            }
+            result.set(services, (long) services.size());
+        } catch (Exception ex) {
+            throw new IOException(ex.getMessage());
+        }
+        return result;
+    }
 
     public String createOrUpdateDocument(ElasticSearchService elasticSearchService) throws IOException {
         IndexResponse response = elasticsearchClient.index(i -> i
@@ -62,6 +88,19 @@ public class ElasticSearchQuery {
         }
         System.out.println("Elasticsearch service not found");
         return new StringBuilder("Elasticsearch service with id " + deleteResponse.id() + " does not exist.").toString();
+    }
+
+    public void deleteIndex(String indexName) {
+        try {
+            DeleteIndexRequest deleteIndexRequest = DeleteIndexRequest.of(d -> d
+                    .index(indexName) // Tên index bạn muốn xóa
+            );
+
+            DeleteIndexResponse response = elasticsearchClient.indices().delete(deleteIndexRequest);
+            System.out.println("Index deleted: " + response.acknowledged());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public List<ElasticSearchService> searchAllDocuments() throws IOException {

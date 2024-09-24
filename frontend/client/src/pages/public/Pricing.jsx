@@ -12,6 +12,8 @@ import { getCurrent } from "@/redux/action"
 import Swal from "sweetalert2"
 import { NavLink, useNavigate } from "react-router-dom"
 import path from "@/ultils/path"
+import { CiStickyNote } from "react-icons/ci";
+
 
 const PricingItem = ({
   name,
@@ -147,6 +149,26 @@ const Pricing = () => {
   useEffect(() => {
     fetchPricing()
   }, [])
+
+  const benefits = [
+    {
+      name: 'Nổi bật',
+      description: 'Dịch vụ của bạn sẽ được xuất hiện ở trang chủ của chúng tôi'
+    },
+    {
+      name: 'Hiệu quả chi phí',
+      description: 'Các gói dịch vụ được hỗ trợ đặc biệt về chi phí khi mua'
+    },
+    {
+      name: 'Nhiều tính năng',
+      description: 'Cung cấp nhiều tính năng nổi bật để dịch vụ của bạn dễ hàng tiếp canh người dùng'
+
+    },
+    {
+      name: 'Hỗ trợ đáng tin cậy',
+      description: 'Hỗ trợ chuyên gia khi bạn cần'
+    },
+  ]
   return (
     <div className="mx-auto w-main py-8">
       <header className="page-header category clearfix">
@@ -160,35 +182,28 @@ const Pricing = () => {
           Nâng Tầm Tin Đăng Của Bạn với Các Gói VIP
         </h1>
       </header>
-      <section
-        className="section bg-cover bg-center p-8 rounded-lg transition-transform duration-500 hover:scale-105"
-        style={{
-          backgroundImage: 'url("https://matchthemes.com/demohtml/tilia/images/pages/img-about1.jpg")',
-          backgroundColor: 'rgba(233, 30, 99, 0.9)', // Overlay pink color
-        }}
-      >
-        <div className="section-content text-center">
-          <p className="mb-4 text-lg leading-relaxed text-white">
-            Chào mừng bạn đến với SweetDream - nền tảng dịch vụ cưới hỏi hàng đầu!
-            Chúng tôi cung cấp các gói dịch vụ VIP để giúp tin đăng của bạn nổi bật
-            trên trang chủ, thu hút được nhiều khách hàng hơn.
+      <section>
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-semibold text-pink-700 mb-4">Nhận mức giá hấp dẫn tại đây</h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Chọn gói dịch vụ hoàn hảo cho nhu cầu của bạn. Cho dù bạn mới bắt đầu hay đang điều hành một doanh nghiệp lớn, chúng tôi đều có gói dịch vụ phù hợp với bạn.
           </p>
-          <p className="font-semibold text-lg text-white">ƯU ĐIỂM GÓI VIP:</p>
-          <div className="benefit-item text-pink-200 flex items-center space-x-2">
-            <FaCheck className="text-2xl" />
-            <strong>Tăng Hiển Thị:</strong> Đảm bảo tin đăng của bạn luôn xuất hiện trên trang chủ.
-          </div>
-          <div className="benefit-item text-pink-200 flex items-center space-x-2 mt-2">
-            <FaCheck className="text-2xl" />
-            <strong>Tiếp Cận Nhiều Khách Hàng Hơn:</strong> Gói VIP giúp bạn tiếp cận đúng đối tượng khách hàng.
-          </div>
-          <div className="benefit-item text-pink-200 flex items-center space-x-2 mt-2">
-            <FaCheck className="text-2xl" />
-            <strong>Tùy Chọn Linh Hoạt:</strong> Chọn gói VIP phù hợp với nhu cầu và ngân sách của bạn.
-          </div>
-          <div className="benefit-item text-pink-200 flex items-center space-x-2 mt-2">
-            <FaCheck className="text-2xl" />
-            <strong>Hỗ Trợ Tận Tình:</strong> Đội ngũ hỗ trợ luôn sẵn sàng giúp đỡ bạn bất cứ lúc nào.
+        </div>
+        <div className="bg-white rounded-lg shadow-lg p-8 mb-12">
+          <h3 className="text-2xl font-bold mb-6">Tại sao chọn gói dịch vụ của chúng tôi??</h3>
+          <span className="mb-8">
+            Các gói dịch vụ được chúng tôi nghiên cứu cẩn thận nhằm mang lại cho bạn giá trị tốt nhất cho dịch vụ của bạn. Sau đây là những gì bạn có thể mong đợi:
+          </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-4">
+            {benefits.map((benefit) => (
+              <div key={benefit.name} className="flex items-start">
+                <CiStickyNote className="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" aria-hidden="true" />
+                <div>
+                  <h4 className="font-semibold mb-1">{benefit.name}</h4>
+                  <p className="text-gray-600">{benefit.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

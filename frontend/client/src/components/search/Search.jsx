@@ -11,7 +11,10 @@ import { BiReset, BiDollar } from "react-icons/bi"
 import SearchRange from "./SearchRange"
 import SearchAddress from "./SearchAddress"
 import SearchNameSupplier from "./SearchNameSupplier"
+import SearchNameService from "./SearchNameService"
 import { InputForm } from ".."
+import { MdLocalLaundryService } from "react-icons/md";
+
 
 
 const Search = ({ dispatch, navigate, location }) => {
@@ -19,6 +22,7 @@ const Search = ({ dispatch, navigate, location }) => {
 
   const { setValue, watch, register, formState: { errors } } = useForm()
   const nameSupplier = watch("nameSupplier")
+  const title = watch("title")
   const address = watch("address")
   useEffect(() => {
     if (location.pathname === "/") reset()
@@ -26,11 +30,13 @@ const Search = ({ dispatch, navigate, location }) => {
   const reset = () => {
     setValue("nameSupplier", "")
     setValue("address", "")
+    setValue("title", "")
   }
 
   const handleSearchPost = () => {
     const queries = {}
     if (nameSupplier) queries.name = nameSupplier
+    if (title) queries.title = title
     if (address) queries.address = address
 
     navigate({
@@ -79,6 +85,26 @@ const Search = ({ dispatch, navigate, location }) => {
           >
             <span className="line-clamp-1">
               {nameSupplier || "📛 Tên nhà cung cấp"}
+            </span>
+          </div>
+
+          <div
+            className="col-span-1 p-2 rounded-[0.25rem] flex items-center cursor-pointer text-gray-500 bg-white"
+            onClick={() =>
+              dispatch(
+                modal({
+                  isShowModal: true,
+                  modalContent: (
+                    <SearchNameService
+                      getTitle={(val) => setValue("title", val)}
+                    />
+                  ),
+                })
+              )
+            }
+          >
+            <span className="line-clamp-1">
+              {title || "🏤 Tên dịch vụ"}
             </span>
           </div>
 

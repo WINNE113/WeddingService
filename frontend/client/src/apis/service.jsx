@@ -20,6 +20,12 @@ export const apiSendRequestForQuotations = (data) =>
         data
     })
 
+export const apiGetServiceByFuzzySearch = (params) => 
+    axios({
+        url: "/elasticsearch-services/fuzzy-search",
+        method: "GET",
+        params
+    })
 
 export const apiAddToRequestForQuotation = (params) =>
     axios({

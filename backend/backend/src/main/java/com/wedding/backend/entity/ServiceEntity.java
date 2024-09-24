@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -46,6 +47,15 @@ public class ServiceEntity extends BaseEntityWithIDIncrement {
     @Column(name = "is_selected")
     private boolean isSelected; // Trường này để đánh dấu dịch vụ có được chọn hay không
 
+    @Column(name = "is_publish_to_elasticsearch")
+    private boolean isPublishToElasticsearch;
+
+    @Column(name = "min_price")
+    private BigDecimal minPrice;
+
+    @Column(name = "max_price")
+    private BigDecimal maxPrice;
+
     @Enumerated(EnumType.STRING)
     private StatusCommon status;
 
@@ -63,11 +73,6 @@ public class ServiceEntity extends BaseEntityWithIDIncrement {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @OneToOne(mappedBy = "serviceServiceAlbum")
     private ServiceAlbumEntity serviceAlbum;
-
-    @JsonManagedReference
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @OneToOne(mappedBy = "serviceServicePromotion")
-    private ServicePromotionEntity servicePromotion;
 
     @OneToMany(mappedBy = "servicesReport")
     @JsonBackReference

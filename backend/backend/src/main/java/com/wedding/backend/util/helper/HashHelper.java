@@ -46,4 +46,33 @@ public class HashHelper {
         }
     }
 
+    public static String hmacSHA256(String inputData, String key) {
+        try {
+            // Convert the key and input data to bytes
+            byte[] keyByte = key.getBytes(StandardCharsets.UTF_8);
+            byte[] messageBytes = inputData.getBytes(StandardCharsets.UTF_8);
+
+            // Create an HMAC-SHA256 instance
+            Mac hmacSHA256 = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKey = new SecretKeySpec(keyByte, "HmacSHA256");
+
+            // Initialize the Mac instance with the key
+            hmacSHA256.init(secretKey);
+
+            // Compute the HMAC hash
+            byte[] hashmessage = hmacSHA256.doFinal(messageBytes);
+
+            // Convert the byte array to a hex string
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashmessage) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Error while calculating HMAC-SHA256", e);
+        }
+    }
 }

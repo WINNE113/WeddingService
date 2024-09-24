@@ -1,8 +1,6 @@
 package com.wedding.backend.entity;
 
-import com.wedding.backend.common.StatusCommon;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,9 +27,6 @@ public class ElasticSearchService {
     @Field(type = FieldType.Text)
     private String information;
 
-    @Field(type = FieldType.Double, name = "price")
-    private double price;
-
     @Field(type = FieldType.Text)
     private String image;
 
@@ -53,7 +48,6 @@ public class ElasticSearchService {
     @Field(type = FieldType.Boolean)
     private boolean isSelected;
 
-    @Enumerated(EnumType.STRING)
-    @Field(type = FieldType.Keyword)
-    private StatusCommon status;
+    @Field(type = FieldType.Boolean)
+    private boolean isPublishToElasticsearch;
 }
