@@ -151,6 +151,42 @@ const Home = () => {
         }
     };
 
+
+    const shuffleArray = (array) => {
+        let currentIndex = array.length, randomIndex;
+
+        // While there remain elements to shuffle.
+        while (currentIndex !== 0) {
+
+            // Pick a remaining element.
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+
+        return array;
+    };
+
+    // Hàm trộn và cập nhật mảng serviceVIP3
+    const shuffleServices = () => {
+        setServiceVIP3(prevServices => shuffleArray([...prevServices])); // Trộn lại mảng
+    };
+
+    useEffect(() => {
+        // Trộn mảng lần đầu tiên khi component được mount
+        shuffleServices();
+
+        // Thiết lập interval để trộn mảng mỗi 30 giây
+        const intervalId = setInterval(() => {
+            shuffleServices();
+        }, 30000); // 30 giây
+
+        // Cleanup khi component unmount để tránh memory leak
+        return () => clearInterval(intervalId);
+    }, []);
+
     useEffect(() => {
         const { page, ...searchParamsObject } = Object.fromEntries([
             ...searchParams,
@@ -258,7 +294,7 @@ const Home = () => {
                 contentClassName="grid grid-cols-10 gap-4"
             >
                 <div className="col-span-7 flex flex-col gap-4">
-                  
+
                     <div className="mt-6 col-span-4">
                         <PaginationBaseTotalData data={serviceLocation} itemsPerPage={5} />
                     </div>
@@ -288,7 +324,7 @@ const Home = () => {
                 </div>
             </Section>
 
-           
+
         </section>
     )
 }

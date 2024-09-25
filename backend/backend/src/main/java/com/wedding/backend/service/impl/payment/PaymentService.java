@@ -7,6 +7,7 @@ import com.wedding.backend.config.MomoConfig;
 import com.wedding.backend.config.VnpayConfig;
 import com.wedding.backend.dto.payment.*;
 import com.wedding.backend.dto.request.MomoOneTimePaymentRequest;
+import com.wedding.backend.dto.request.MomoOneTimePaymentResultRequest;
 import com.wedding.backend.dto.request.VnpayPayRequest;
 import com.wedding.backend.dto.response.VnpayPayIpnResponse;
 import com.wedding.backend.dto.response.VnpayPayResponse;
@@ -221,6 +222,129 @@ public class PaymentService implements IPaymentService {
         }
 
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> processMomoPaymentReturn(MomoOneTimePaymentResultRequest resultRequest) {
+        String returnUrl = "";
+        var result = new BaseResultWithData<PaymentResultData>();
+        try {
+//            url return of merchant
+            var resultData = new PaymentReturnDto();
+
+            //TODO: check data response
+            var isValidSignature = resultRequest.isValidSignature(momoConfig.getAccessKey(), momoConfig.getSecretKey());
+            if (isValidSignature) {
+                Optional<PaymentEntity> payment = paymentRepository.findById(resultRequest.getOrderId());
+
+                if (payment.isPresent()) {
+                    Optional<MerchantEntity> merchant = merchantRepository.findById(payment.get().getMerchant().getId());
+                    if (merchant.isPresent()) {
+                        returnUrl = merchant.get().getMerchantReturnUrl();
+                    }
+                    if (Objects.equals(resultRequest.getResultCode(), 0)) {
+                        resultData.setPaymentStatus("00");
+                        resultData.setPaymentId(payment.get().getId());
+
+                        //TODO: MAKE SIGNATURE
+                        resultData.setSignature(HashHelper.generateEntityId());
+                    } else {
+                        resultData.setPaymentStatus("10");
+                        resultData.setPaymentMessage("Payment process failed");
+                    }
+
+                    result.setSuccess(true);
+                    result.setMessage("OK");
+
+                    PaymentResultData paymentResultData = PaymentResultData.builder().returnDto(resultData).returnUrl(returnUrl).build();
+                    result.setData(paymentResultData);
+                } else {
+                    resultData.setPaymentStatus("11");
+                    resultData.setPaymentMessage("Can't find payment at payment service");
+                }
+
+            } else {
+                resultData.setPaymentStatus("99");  // signature is not true
+                resultData.setPaymentMessage("Invalid Signature in response");
+            }
+        } catch (Exception ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @Override
+    public BaseResult momoReturnIpn(MomoOneTimePaymentResultRequest response) {
+        BaseResult baseResult = new BaseResult();
+        String message = "";
+        String status = "";
+        try {
+
+            //TODO: check data response
+            var isValidSignature = response.isValidSignature(momoConfig.getAccessKey(), momoConfig.getSecretKey());
+            if (isValidSignature) {
+                // Get payment by id
+                Optional<PaymentEntity> payment = paymentRepository.findById(response.getOrderId());
+                if (payment.isPresent()) {
+                    // check neu so tien vnpay tra ve == so tien yeu cau thanh toan
+                    if (payment.get().getRequiredAmount().compareTo(BigDecimal.valueOf(response.getAmount())) == 0) {
+                        // check if giao dich chua hoan tat
+                        if (!Objects.equals(payment.get().getPaymentStatus(), "0")) {
+                            // kiem tra vpm_response code tra ve giao dich thanh cong hay khong
+                            if (Objects.equals(response.getResultCode(), 0)) {
+                                status = "0";
+                                message = "Transaction Success";
+                            } else {
+                                status = "-1";
+                                message = "Transaction error";
+                            }
+                            //TODO: insert payment transaction table
+                            PaymentTransactionEntity paymentTransactionRequestDb = new PaymentTransactionEntity();
+                            paymentTransactionRequestDb.setId(HashHelper.generateEntityId());
+                            paymentTransactionRequestDb.setTranMessage(message);
+                            String payLoad = ConvertObjectToJsonExtension.convertToJson(response);
+                            paymentTransactionRequestDb.setTranPayload(payLoad);
+                            paymentTransactionRequestDb.setTranStatus(status);
+                            paymentTransactionRequestDb.setTranAmount(BigDecimal.valueOf(response.getAmount()));
+                            paymentTransactionRequestDb.setTranDate(new Date());
+                            paymentTransactionRequestDb.setCreatedBy(payment.get().getUserPayment().getId());
+                            paymentTransactionRequestDb.setCreatedDate(new Date());
+                            paymentTransactionRequestDb.setPaymentTransaction(payment.get());
+
+                            PaymentTransactionEntity paymentTransactionRes = paymentTransactionRepository.save(paymentTransactionRequestDb);
+
+                            //TODO: Update payment table
+                            payment.get().setPaidAmount(BigDecimal.valueOf(response.getAmount()));
+                            payment.get().setPaymentLastMessage(message);
+                            payment.get().setPaymentStatus(status);
+                            baseResult.setSuccess(true);
+                            baseResult.setMessage("Giao dịch thành công");
+                            paymentRepository.save(payment.get());
+                        } else {
+                            baseResult.setSuccess(false);
+                            baseResult.setMessage("Payment already confirmed");
+                        }
+                    } else {
+                        baseResult.setSuccess(false);
+                        baseResult.setMessage("Invalid amount");
+                    }
+                } else {
+                    baseResult.setSuccess(false);
+                    baseResult.setMessage("Payment not found");
+                }
+
+
+            } else {
+                baseResult.setSuccess(false);
+                baseResult.setMessage("Invalid signature");
+            }
+        } catch (Exception ex) {
+            baseResult.setSuccess(false);
+            baseResult.setMessage(ex.getMessage());
+        }
+
+        return baseResult;
     }
 
     /***

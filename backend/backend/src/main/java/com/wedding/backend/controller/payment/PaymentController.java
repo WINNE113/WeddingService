@@ -7,6 +7,7 @@ import com.wedding.backend.dto.payment.PaymentDto;
 import com.wedding.backend.dto.payment.PaymentResultData;
 import com.wedding.backend.dto.payment.PaymentReturnDto;
 import com.wedding.backend.dto.payment.ViewPaymentReturnDto;
+import com.wedding.backend.dto.request.MomoOneTimePaymentResultRequest;
 import com.wedding.backend.dto.response.VnpayPayIpnResponse;
 import com.wedding.backend.dto.response.VnpayPayResponse;
 import com.wedding.backend.service.IService.payment.IPaymentService;
@@ -60,16 +61,40 @@ public class PaymentController {
         }
     }
 
+
+    @GetMapping(value = "/momo-return")
+    public void momoReturn(@ModelAttribute MomoOneTimePaymentResultRequest response, HttpServletResponse httpServletResponse) throws IOException {
+        //TODO: Đầu sử lý IPN
+        BaseResult resultIpn = paymentService.momoReturnIpn(response);
+        if (resultIpn.isSuccess()) {
+            //TODO: Đầu return view
+            ResponseEntity<?> responseEntity = paymentService.processMomoPaymentReturn(response);
+            String returnUrl = "";
+            PaymentReturnDto model = null;
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
+                BaseResultWithData<PaymentResultData> convertResponse = (BaseResultWithData<PaymentResultData>) responseEntity.getBody();
+                returnUrl = convertResponse.getData().getReturnUrl();
+                model = convertResponse.getData().getReturnDto();
+
+                if (returnUrl.endsWith("/")) {
+                    returnUrl = returnUrl.substring(0, returnUrl.length() - 1);
+                }
+                String queryString = ObjectExtension.toQueryString(model);
+                httpServletResponse.sendRedirect(returnUrl + "?" + queryString);
+            }
+        }
+    }
+
     @GetMapping(value = "/vpn-ipn")
     public BaseResultWithData<VnpayPayIpnResponse> vnpReturnIpn(@ModelAttribute VnpayPayResponse response) {
         return paymentService.vnpayReturnIpn(response);
     }
 
-    @GetMapping(value = "/vnpay-return-view")
+    @GetMapping(value = "/payment-return-view")
     public void vnpayReturnView(@ModelAttribute ViewPaymentReturnDto response, HttpServletResponse httpServletResponse) throws IOException {
         ResponseEntity<?> responseEntity = paymentService.vnpayReturnView(response);
         BaseResult baseResult = (BaseResult) responseEntity.getBody();
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("https://sweetdreamservice.netlify.app/payment/status")
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:5173/payment/status")
                 .queryParam("message", baseResult.getMessage())
                 .queryParam("success", baseResult.isSuccess());
         httpServletResponse.sendRedirect(builder.toUriString());

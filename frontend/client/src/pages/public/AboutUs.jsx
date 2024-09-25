@@ -1,61 +1,68 @@
-import React from "react";
+import React from 'react'
+import { FaArrowRight, FaPencilAlt, FaTrashAlt, FaChartBar } from 'react-icons/fa'
 
-const AboutUs = () => {
+export default function AboutPage() {
   return (
-    <div className="bg-gray-100">
-      {/* Background */}
-      <div 
-        id="home-background" 
-        className="relative bg-cover bg-center h-80" 
-        style={{ backgroundImage: "url('https://tranhoangkhang1212.github.io/travelix/assets/images/Turkey-Turkish-Cappadocia-hot-air-balloons-1149868-wallhere.com.jpg')" }}
-      >
-        <div className="absolute inset-0 bg-black opacity-40"></div>
-        <div className="relative z-10 flex items-center justify-center h-full text-center text-pink-500">
-          <h1 className="text-4xl font-extrabold mb-4">Giới thiệu về chúng tôi</h1>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
+      <main className="container mx-auto px-4 py-16 sm:px-6 lg:px-8">
+        <section className="mb-16 text-center">
+          <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-pink-400 sm:text-5xl">Về dịch vụ cưới của chúng tôi</h1>
+          <p className="mx-auto max-w-2xl text-xl text-pink-300">
+            Chúng tôi cung cấp một nền tảng hoàn hảo để bạn đăng dịch vụ cưới của mình. Với các tính năng quản lý đăng bài hiệu quả, bạn có thể dễ dàng theo dõi và cập nhật thông tin của mình.          </p>
+        </section>
 
-      {/* Introduction */}
-      <div className="flex flex-col md:flex-row p-8 max-w-6xl mx-auto">
-        <div className="flex-1 mb-8 md:mb-0 md:pr-4">
-          <img 
-            src="https://7799wedding.vn/data/media/2458/images/tiec-cuoi-ngoai-troi%20(8).jpg" 
-            alt="Resort" 
-            className="w-full h-auto object-cover rounded-lg shadow-lg"
-          />
-        </div>
-        <div className="flex-1 flex flex-col justify-center md:pl-4">
-          <h2 className="text-3xl font-semibold mb-4">Dịch vụ của chúng tôi</h2>
-          <p className="text-gray-700 mb-4">
-            Chúng tôi cung cấp một nền tảng hoàn hảo để bạn có thể đăng tin về các dịch vụ tiệc cưới của mình. Với các tính năng quản lý tin đăng hiệu quả, bạn có thể dễ dàng theo dõi và cập nhật thông tin của mình.
-          </p>
-          <p className="text-gray-700">
-            Chúng tôi cam kết cung cấp dịch vụ tốt nhất và tạo điều kiện thuận lợi cho việc tìm kiếm và lựa chọn dịch vụ tiệc cưới của bạn. Hãy cùng khám phá và trải nghiệm dịch vụ của chúng tôi ngay hôm nay.
-          </p>
-        </div>
-      </div>
+        <section className="mb-16">
+          <h2 className="mb-6 text-3xl font-bold text-gray-900">Our Commitment</h2>
+          <p>Chúng tôi cam kết cung cấp dịch vụ tốt nhất và tạo điều kiện thuận lợi cho việc tìm kiếm và lựa chọn dịch vụ cưới của bạn. Hãy cùng khám phá và trải nghiệm dịch vụ của chúng tôi ngay hôm nay.</p>
+          <a href="#services" className="inline-flex items-center text-pink-600 hover:text-pink-700">
+            Khám phá dịch vụ của chúng tôi
+            <FaArrowRight className="ml-2 h-5 w-5" />
+          </a>
+        </section>
+        <section id="services" className="mb-16">
+          <h2 className="mb-8 text-3xl font-bold text-gray-900">Dịch vụ của chúng tôi</h2>
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <ServiceCard
+              title="Quản lý dịch vụ bài viết"
+              description="Thêm, chỉnh sửa và xóa bài đăng một cách linh hoạt để dịch vụ của bạn luôn được cập nhật."
+              icon={<FaPencilAlt className="h-8 w-8 text-pink-500" />}
+            />
+            <ServiceCard
+              title="Cập nhật dễ dàng"
+              description="Giao diện thân thiện với người dùng để cập nhật dịch vụ nhanh chóng và dễ dàng."
+              icon={<FaTrashAlt className="h-8 w-8 text-pink-500" />}
+            />
+            <ServiceCard
+              title="Theo dõi hiệu suất"
+              description="Theo dõi hiệu quả bài đăng của bạn để cải thiện dịch vụ của bạn."
+              icon={<FaChartBar className="h-8 w-8 text-pink-500" />}
+            />
+          </div>
+        </section>
 
-      <div className="flex flex-col md:flex-row p-8 bg-gray-200 max-w-6xl mx-auto rounded-lg shadow-md">
-        <div className="flex-1 mb-8 md:mb-0 md:pr-4">
-          <img 
-            src="https://weddingplanner.vn/dichvu/wp-content/uploads/2014/08/VNWP-Tim-Hieu-Nghe-Wedding-Planner-O-Viet-Nam-01.jpg" 
-            alt="Service" 
-            className="w-full h-auto object-cover rounded-lg shadow-lg"
-          />
-        </div>
-        <div className="flex-1 flex flex-col justify-center md:pl-4">
-          <h2 className="text-3xl font-semibold mb-4">Dịch vụ quản lý tin đăng</h2>
-          <p className="text-gray-700 mb-4">
-            Hãy sử dụng các công cụ của chúng tôi để quản lý tin đăng của bạn một cách dễ dàng và hiệu quả. Bạn có thể thêm, chỉnh sửa và xóa tin đăng một cách linh hoạt, đồng thời theo dõi hiệu quả của các tin đăng để cải thiện dịch vụ của mình.
+        <section className="rounded-lg bg-pink-100 p-8">
+          <h2 className="mb-4 text-2xl font-bold text-gray-900">Sẵn sàng để bắt đầu chưa?</h2>
+          <p className="mb-6 text-lg text-gray-600">
+            Hãy tham gia nền tảng của chúng tôi ngay hôm nay và bắt đầu giới thiệu dịch vụ cưới của bạn tới nhiều đối tượng hơn.
           </p>
-          <p className="text-gray-700">
-            Chúng tôi cung cấp một giao diện thân thiện và dễ sử dụng để bạn có thể dễ dàng cập nhật và quản lý dịch vụ của mình. Chúng tôi luôn sẵn sàng hỗ trợ bạn trong quá trình sử dụng dịch vụ của chúng tôi.
-          </p>
-        </div>
-      </div>
-
+          <a
+            href="/login"
+            className="inline-block rounded-md bg-pink-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-pink-700"
+          >
+            Đăng kí ngay
+          </a>
+        </section>
+      </main>
     </div>
-  );
-};
+  )
+}
 
-export default AboutUs;
+function ServiceCard({ title, description, icon }) {
+  return (
+    <div className="rounded-lg bg-white p-6 shadow-md">
+      <div className="mb-4">{icon}</div>
+      <h3 className="mb-2 text-xl font-semibold text-gray-900">{title}</h3>
+      <p className="text-gray-600">{description}</p>
+    </div>
+  )
+}

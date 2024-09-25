@@ -130,7 +130,7 @@ const Navigation = ({ navigate }) => {
   }
 
   return (
-    <div className="flex bg-white py-6 justify-center border-b-2 border-pink-200">
+    <div className="flex bg-gradient-to-b from-pink-100 to-white py-6 justify-center border-b-2 shadow-md border-pink-200">
       <div className="w-main flex flex-col gap-4">
         <div className="flex justify-between items-center">
           <Link className="text-3xl text-pink-300 font-bold" to={"/"}>

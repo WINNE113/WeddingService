@@ -54,7 +54,7 @@ twilio:
   trial_number: +13259392865
 
 vnpay:
-  returnUrl: https://sweetdream-gjdaath6dchyfwhp.eastus-01.azurewebsites.net/api/v1/payment/vnpay-return
+  returnUrl: http://localhost:8080/api/v1/payment/vnpay-return
   paymentUrl: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
   tmnCode: QYBSTFGY
   hashSecret: ZZFKYHJMITRTSDOUEIJUFQYRLLRMMSVN
@@ -62,8 +62,8 @@ vnpay:
 
 momo:
   partnerCode: MOMOBKUN20180529
-  returnUrl: http://localhost:8080/api/payment/momo-return
+  returnUrl: http://localhost:8080/api/v1/payment/momo-return
   paymentUrl: https://test-payment.momo.vn/v2/gateway/api/create
-  ipnUrl: http://localhost:8080/payment/api/momo-ipn
+  ipnUrl: http://localhost:8080/api/v1/payment/momo-ipn
   accessKey: klm05TvNBzhg7h7j
   secretKey: at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa

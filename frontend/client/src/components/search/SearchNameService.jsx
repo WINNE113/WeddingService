@@ -16,12 +16,12 @@ const SearchNameService = ({ getTitle, dispatch }) => {
 
     const keyword = watch("keyword")
 
-    const debounceValue = useDebounce(keyword, 500)
+    const debounceValue = useDebounce(keyword, 100)
 
     const fetchServices = async (params) => {
         try {
             const response = await apiGetServiceByFuzzySearch({ approximateServiceTitle: params });
-            if (response) setTitleService(response.data);
+            if (response) setTitleService(response?.data);
             else setTitleService([]);
         } catch (error) {
             console.error("Error fetching services:", error);
@@ -41,7 +41,7 @@ const SearchNameService = ({ getTitle, dispatch }) => {
             className="w-full max-w-[650px] bg-white rounded-md p-4"
         >
             <h1 className="text-lg font-bold tracking-tight pb-4 border-b">Tìm kiếm nhanh theo tên dịch vụ</h1>
-            <div className="my-6 flex flex-col gap-4">
+            <div className="mt-6 flex flex-col gap-4">
                 <input
                     {...register("keyword")}
                     type="text"
@@ -50,9 +50,9 @@ const SearchNameService = ({ getTitle, dispatch }) => {
                     className="border rounded p-2 w-full"
                     placeholder="Nhập tên dịch vụ"
                 />
-                <div className="mt-2">
+                <div className="">
                     <div className="mt-3 bg-white">
-                        {titleService.map((option) => (
+                        {titleService?.slice(0,7).map((option) => (
                             <div className="border shadow-md mt-2 mb-2 p-2">
                                 <Link
                                     to={`/${path.DETAIL_POST}/${option.serviceId}/${formatVietnameseToString(option.title)}`}

@@ -39,9 +39,11 @@ const Deposit = () => {
     handleSubmit,
   } = useForm()
   const handleDeposit = async (data) => {
+    data.paymentContent = "Nạp Tiền Vào Tài Khoản"
     if (method === "VNPAY") {
-      data.paymentContent = "Nạp Tiền Vào Tài Khoản"
       data.paymentDestinationId = "VNPAY"
+    } else if (method === "MOMO") {
+      data.paymentDestinationId = "MOMO"
     }
     const response = await apiPayment(data)
     if (response.success) {
@@ -72,7 +74,7 @@ const Deposit = () => {
                 setMethod={setMethod}
               />
               <Card
-                text="Momo"
+                text="MOMO"
                 id="MOMO"
                 logo={
                   <img
@@ -81,11 +83,12 @@ const Deposit = () => {
                     className="w-full object-contain"
                   />
                 }
+                setTitle={setTitle}
                 setMethod={setMethod}
               />
             </div>
           )}
-          {title?.includes("VNPAY") && (
+          {(title?.includes("VNPAY") || title?.includes("MOMO")) && (
             <div className="col-span-7 flex flex-col gap-4 mt-6">
               <h2>Chọn số tiền cần nạp:</h2>
               <div className="flex items-center gap-4">

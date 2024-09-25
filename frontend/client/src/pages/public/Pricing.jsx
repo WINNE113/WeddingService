@@ -170,21 +170,18 @@ const Pricing = () => {
     },
   ]
   return (
-    <div className="mx-auto w-main py-8">
+    <div className="mx-auto w-main py-8 ">
       <header className="page-header category clearfix">
         <h1
-          className="page-h1 text-2xl font-bold text-center mt-12 mb-8 transition-transform duration-500 transform hover:scale-105"
-          style={{
-            fontSize: "2em",
-            color: "#e91e63", // Bright pink for headings
-          }}
+          className="page-h1 text-4xl font-bold text-center text-pink-400 mt-12 mb-8 transition-transform duration-500 transform hover:scale-105 "
+         
         >
           Nâng Tầm Tin Đăng Của Bạn với Các Gói VIP
         </h1>
       </header>
       <section>
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-semibold text-pink-700 mb-4">Nhận mức giá hấp dẫn tại đây</h2>
+        <div className="text-center mb-12 bg-gradient-to-b from-pink-50 to-white">
+          <h2 className="text-4xl font-bold text-pink-400 mb-4">Nhận mức giá hấp dẫn tại đây</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Chọn gói dịch vụ hoàn hảo cho nhu cầu của bạn. Cho dù bạn mới bắt đầu hay đang điều hành một doanh nghiệp lớn, chúng tôi đều có gói dịch vụ phù hợp với bạn.
           </p>
@@ -208,14 +205,13 @@ const Pricing = () => {
         </div>
       </section>
       <h1
-        className="page-h1 text-2xl font-bold"
+        className="page-h1 text-2xl font-bold text-pink-400"
         style={{
           float: "none",
           marginTop: "50px",
           marginBottom: "30px",
           textAlign: "center",
           fontSize: "2em",
-          color: "#e91e63", // Same pink color for consistency
         }}
       >
         Bảng Giá Dịch Vụ
