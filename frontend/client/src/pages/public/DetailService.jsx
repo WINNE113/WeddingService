@@ -8,6 +8,7 @@ import { createSearchParams, useParams } from "react-router-dom"
 import Swal from "sweetalert2"
 import { FaPhoneSquareAlt } from "react-icons/fa";
 import { FiHome } from "react-icons/fi";
+import { MdOutlinePriceChange } from "react-icons/md";
 
 
 // import { apiGetDetailPost, apiGetPosts, apiGetRatings } from "@/apis/post"
@@ -197,7 +198,7 @@ const DetailPost = ({ navigate, location, dispatch }) => {
               <Button
                 onClick={() => navigate(SUPPLIER_DETAIL_PATH)}
                 className="mt-2 bg-blue-500 text-white px-3 py-1 rounded"
-              ><FiHome/>
+              ><FiHome />
                 Xem Trang
               </Button>
             </div>
@@ -419,6 +420,17 @@ const DetailPost = ({ navigate, location, dispatch }) => {
               </span>
             )}
           </div>
+          {post?.minPrice && post?.maxPrice ? (
+            <div className="flex text-pink-800 text-lg justify-start items-center">
+              <MdOutlinePriceChange size={20} />
+              <span className="ml-2">{formatMoney(post?.minPrice)} - {formatMoney(post?.maxPrice)} VND</span>
+            </div>
+          ) : (
+            <div className="flex text-pink-500 text-lg justify-start items-center">
+              <MdOutlinePriceChange size={20} />
+              <span className="ml-2">Liên hệ để biết giá</span>
+            </div>
+          )}
           <span>
             Chuyên mục:{" "}
             <span className="font-semibold cursor-pointer">

@@ -12,9 +12,9 @@ import { toast } from "react-toastify"
 import { Button } from ".."
 import { modal } from "@/redux/appSlice"
 import { Booking } from ".."
-import { MdForwardToInbox } from "react-icons/md"
+import { MdDataExploration, MdForwardToInbox } from "react-icons/md"
 import { renderStarFromNumber } from "@/ultils/fn"
-
+import { MdOutlinePriceChange } from "react-icons/md";
 
 
 const Card = ({
@@ -26,7 +26,11 @@ const Card = ({
   isLike,
   wishListItemId,
   averageRating,
+  minPrice,
+  maxPrice
 }) => {
+
+  console.log("Min: " + minPrice);
   const dispatch = useDispatch()
   const { current, wishlist, requestForQuotation } = useSelector((s) => s.user)
   const handleAddWishlist = async () => {
@@ -101,6 +105,17 @@ const Card = ({
             <MdForwardToInbox size={22} />
           </span>
         </div>
+        {minPrice !== 0 && maxPrice !== 0 ? (
+          <div className="flex text-pink-800 text-lg justify-start items-center">
+            <MdOutlinePriceChange size={20} />
+            <span className="ml-2">{formatMoney(minPrice)} - {formatMoney(maxPrice)} VND</span>
+          </div>
+        ) : (
+        <div className="flex text-pink-500 text-lg justify-start items-center">
+          <MdOutlinePriceChange size={20} />
+          <span className="ml-2">Liên hệ để biết giá</span>
+        </div>
+        )}
         <div className="mt-3 flex justify-between items-center">
           <Button
             onClick={() =>

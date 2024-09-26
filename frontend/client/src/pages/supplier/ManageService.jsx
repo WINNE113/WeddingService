@@ -167,6 +167,12 @@ const ManageService = ({ dispatch, navigate }) => {
                 </th>
                 <th className="p-2 border font-medium text-center">Tiêu đề</th>
                 <th className="p-2 border font-medium text-center">Địa chỉ</th>
+
+                <th className="p-2 border font-medium text-center">Giá thấp nhât</th>
+
+                <th className="p-2 border font-medium text-center">Giá cao nhất</th>
+
+
                 <th className="p-2 border font-medium text-center">
                   Ngày tạo mới
                 </th>
@@ -210,6 +216,12 @@ const ManageService = ({ dispatch, navigate }) => {
                   </td>
                   <td className="p-2 text-center">
                     {el.address}
+                  </td>
+                  <td className="p-2 text-center">
+                    {formatMoney(+el.minPrice)}
+                  </td>
+                  <td className="p-2 text-center">
+                    {formatMoney(el.maxPrice)}
                   </td>
                   <td className="p-2 text-center">
                     {moment(el.createdDate).format("DD/MM/YYYY")}

@@ -75,7 +75,7 @@ const Home = () => {
                 }
 
             } catch (error) {
-                toast.error("Lỗi lấy tạo độ người dùng")
+                console.log("Lỗi lấy tạo độ người dùng")
             }
         } else {
             toast.error("Geolocation không hỗ trợ browser.")
@@ -270,6 +270,8 @@ const Home = () => {
                             title={el.title}
                             address={el.address}
                             createdDate={el.createdDate}
+                            minPrice={el.minPrice}
+                            maxPrice={el.maxPrice}
                             key={el.id}
                         />
                     ))}

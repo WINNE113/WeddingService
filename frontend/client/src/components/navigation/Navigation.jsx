@@ -142,13 +142,13 @@ const Navigation = ({ navigate }) => {
                 <>
                   <button
                     onClick={() => navigate(`/${path.LOGIN}`, { state: "LOGIN" })}
-                    className="bg-gray-100 text-pink-300 rounded-md px-6 py-2 text-sm font-medium"
+                    className="bg-gray-100 text-pink-300 border border-pink-300 rounded-md px-6 py-2 text-sm font-medium"
                   >
                     Đăng nhập
                   </button>
                   <button
                     onClick={() => navigate(`/${path.LOGIN}`, { state: "REGISTER" })}
-                    className="bg-gray-100 text-pink-300 rounded-md px-6 py-2 text-sm font-medium"
+                    className="bg-gray-100 text-pink-300 border border-pink-300 rounded-md px-6 py-2 text-sm font-medium"
                   >
                     Đăng ký
                   </button>

@@ -193,6 +193,8 @@ const CreateService = ({ navigate }) => {
             information,
             linkFacebook,
             linkWebsite,
+            minPrice,
+            maxPrice,
             avtImgBase64,
             ...dto
         } = getValues()
@@ -203,6 +205,8 @@ const CreateService = ({ navigate }) => {
             linkWebsite,
             linkFacebook,
             rotation,
+            minPrice,
+            maxPrice,
             serviceTypeId: serviceTypeId?.id,
             ...dto,
         }
@@ -368,6 +372,30 @@ const CreateService = ({ navigate }) => {
                             inputClassName="border-gray-300"
                             wrapClassanme="col-span-1"
                             textColor="text-black"
+                        />
+                    </div>
+                    <div className="mt-6 grid grid-cols-3 gap-4">
+                        <InputForm
+                            label="Giá Thấp Nhất"
+                            register={register}
+                            errors={errors}
+                            id="minPrice"
+                            fullWidth
+                            inputClassName="border-gray-300"
+                            wrapClassanme="col-span-1"
+                            textColor="text-black"
+                            type="number"
+                        />
+                        <InputForm
+                            label="Giá Cao Nhất"
+                            register={register}
+                            errors={errors}
+                            id="maxPrice"
+                            fullWidth
+                            inputClassName="border-gray-300"
+                            wrapClassanme="col-span-1"
+                            textColor="text-black"
+                            type="number"
                         />
                     </div>
                     <div className="mt-6 flex flex-col gap-2">

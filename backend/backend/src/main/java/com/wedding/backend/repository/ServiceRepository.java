@@ -23,9 +23,9 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
     List<ServiceEntity> findAllByServiceTypeAndIsDeletedFalse(ServiceTypeEntity serviceType, Pageable pageable);
 
     @Query(
-            value = "SELECT sv.id as serviceId, sv.title, sv.address as addressService, sv.image, sv.information, sv.link_facebook as linkFacebook, sv.link_website as linkWebsite, sv.rotation, s.phone_number_supplier as phoneNumberSupplier,\n" +
+            value = "SELECT sv.id as serviceId, sv.min_price as minPrice, sv.max_price as maxPrice, sv.title, sv.address as addressService, sv.image, sv.information, sv.link_facebook as linkFacebook, sv.link_website as linkWebsite, sv.rotation, s.phone_number_supplier as phoneNumberSupplier,\n" +
                     "s.id as supplierId, s.name as supplierName, s.address_supplier as addressSupplier, s.logo, st.name as serviceTypeName\n" +
-                    "FROM wedding_db.services as sv\n" +
+                    "FROM services as sv\n" +
                     "inner join supplier as s on sv.supplier_id = s.id\n" +
                     "inner join service_types st on sv.service_type_id = st.id\n" +
                     "where sv.id=:serviceId", nativeQuery = true
@@ -55,6 +55,8 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
                     "        s.created_date as  createdDate, \n" +
                     "        t.purchase_date as purchaseDate,\n" +
                     "        s.supplier_id as supplierId,\n" +
+                    "        s.max_price AS maxPrice,\n" +
+                    "        s.min_price AS minPrice,\n" +
                     "        ROW_NUMBER() OVER (PARTITION BY s.supplier_id ORDER BY s.created_date DESC) AS rn\n" +
                     "    FROM services AS s\n" +
                     "    INNER JOIN supplier AS sup ON s.supplier_id = sup.id\n" +
@@ -81,6 +83,8 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
                     "        t.purchase_date AS purchaseDate,\n" +
                     "        s.supplier_id AS supplierId,\n" +
                     "        t.package_id AS packageId,\n" +
+                    "        s.max_price AS maxPrice,\n" +
+                    "        s.min_price AS minPrice,\n" +
                     "        ROW_NUMBER() OVER (PARTITION BY s.supplier_id ORDER BY s.created_date DESC) AS rn\n" +
                     "    FROM services AS s\n" +
                     "    INNER JOIN supplier AS sup ON s.supplier_id = sup.id\n" +
@@ -113,6 +117,8 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
                     "        s.image,\n" +
                     "        s.address,\n" +
                     "        s.created_date,\n" +
+                    "        s.min_price,\n" +
+                    "        s.max_price,\n" +
                     "        sup.id as supplierId,\n" +
                     "        AVG(r.star_point) as averageRating\n" +
                     "    FROM \n" +
@@ -128,7 +134,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
                     "        AND s.status = 'APPROVED'\n" +
                     "        AND s.is_deleted = FALSE\n" +
                     "    GROUP BY \n" +
-                    "        s.id, s.title, s.image, s.address, s.created_date, sup.id\n" +
+                    "        s.id, s.title, s.image, s.address, s.created_date, sup.id, s.min_price, s.max_price\n" +
                     "),\n" +
                     "RankedFollowedServices AS (\n" +
                     "    SELECT \n" +
@@ -139,6 +145,8 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
                     "        created_date,\n" +
                     "        supplierId,\n" +
                     "        averageRating,\n" +
+                    "        min_price,\n" +
+                    "        max_price,\n" +
                     "        ROW_NUMBER() OVER (PARTITION BY supplierId ORDER BY created_date DESC) AS rn\n" +
                     "    FROM \n" +
                     "        ServicesWithAverageRating\n" +
@@ -149,7 +157,9 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
                     "    image, \n" +
                     "    address, \n" +
                     "    created_date  as createdDate,\n" +
-                    "    averageRating\n" +
+                    "    averageRating,\n" +
+                    "    min_price as minPrice,\n" +
+                    "    max_price as maxPrice\n" +
                     "FROM \n" +
                     "    RankedFollowedServices\n" +
                     "WHERE \n" +
@@ -161,7 +171,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
 
 
     @Query(
-            value = "Select p.id, p.title, p.address, p.created_date as createdDate, p.image, AVG(r.star_point) as averageRating\n" +
+            value = "Select p.id, p.title, p.address, p.created_date as createdDate, p.min_price as minPrice, p.max_price as maxPrice, p.image, AVG(r.star_point) as averageRating\n" +
                     "from services p\n" +
                     "left join ratings r on p.id = r.service_id\n" +
                     "where p.status like 'Approved' and p.is_deleted = false\n" +

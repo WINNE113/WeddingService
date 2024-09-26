@@ -160,6 +160,8 @@ public class Service implements IService {
             service.setAddress(serviceDTO.getAddress());
             service.setLinkWebsite(serviceDTO.getLinkWebsite());
             service.setLinkFacebook(serviceDTO.getLinkFacebook());
+            service.setMinPrice(serviceDTO.getMinPrice());
+            service.setMaxPrice(serviceDTO.getMaxPrice());
             if (serviceDTO.getRotation() != null) {
                 service.setRotation(serviceDTO.getRotation());
             }
@@ -467,6 +469,8 @@ public class Service implements IService {
         serviceDTO.setDeleted(service.isDeleted());
         serviceDTO.setStatus(service.getStatus().name());
         serviceDTO.setImage(service.getImage());
+        serviceDTO.setMinPrice(service.getMinPrice());
+        serviceDTO.setMaxPrice(service.getMaxPrice());
         return serviceDTO;
     }
 }

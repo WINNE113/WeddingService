@@ -1,5 +1,7 @@
 package com.wedding.backend.dto.service;
 
+import java.math.BigDecimal;
+
 public interface ServiceDetail {
     Long getServiceId();
 
@@ -28,4 +30,7 @@ public interface ServiceDetail {
     String getLogo();
 
     String getServiceTypeName();
+
+    BigDecimal getMinPrice();
+    BigDecimal getMaxPrice();
 }

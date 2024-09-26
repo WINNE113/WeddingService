@@ -1,5 +1,6 @@
 package com.wedding.backend.dto.service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public interface ServiceBySuggest {
@@ -14,5 +15,8 @@ public interface ServiceBySuggest {
     String getImage();
 
     Double getAverageRating();
+
+    BigDecimal getMinPrice();
+    BigDecimal getMaxPrice();
 
 }

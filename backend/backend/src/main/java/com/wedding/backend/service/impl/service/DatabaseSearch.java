@@ -43,7 +43,7 @@ public class DatabaseSearch implements IDatabaseSearch {
         totalResultQuery.append("SELECT count(*) as total FROM ").append(tableName)
                 .append(" inner join supplier as sup on services.supplier_id = sup.id")
                 .append(" where services.is_deleted = false ");
-        filterQuery.append("Select s.id, s.title, s.image, s.address, s.is_deleted, s.status, s.service_type_id, s.created_date, s.is_selected, sup.name, sup.id")
+        filterQuery.append("Select s.id, s.title, s.image, s.address, s.is_deleted, s.status, s.service_type_id, s.created_date, s.is_selected,s.min_price, s.max_price, sup.name, sup.id")
                 .append(" from services s")
                 .append(" inner join supplier as sup on s.supplier_id = sup.id")
                 .append(" where s.is_deleted = false");
@@ -80,7 +80,7 @@ public class DatabaseSearch implements IDatabaseSearch {
         }
 
         // Use Group By on filter query
-        filterQuery.append(" group by s.id, s.title, s.image, s.address, s.is_deleted, s.status, s.service_type_id, s.created_date, s.is_selected, sup.name, sup.id");
+        filterQuery.append(" group by s.id, s.title, s.image, s.address, s.is_deleted, s.status, s.service_type_id, s.created_date, s.is_selected, s.min_price, s.max_price, sup.name, sup.id");
 
         //Order by Created data DESC
 
@@ -150,6 +150,8 @@ public class DatabaseSearch implements IDatabaseSearch {
                 postDtoWithFilter.setStatus(rs.getString("status"));
                 postDtoWithFilter.setImage(rs.getString("image"));
                 postDtoWithFilter.setSelected(rs.getBoolean("is_selected"));
+                postDtoWithFilter.setMinPrice(rs.getBigDecimal("min_price"));
+                postDtoWithFilter.setMaxPrice(rs.getBigDecimal("max_price"));
                 Optional<ServiceTypeEntity> serviceType = repository.findById(rs.getLong("service_type_id"));
                 serviceType.ifPresent(postDtoWithFilter::setServiceType);
                 serviceDTO.add(postDtoWithFilter);

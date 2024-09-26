@@ -1,5 +1,6 @@
 package com.wedding.backend.dto.service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public interface ServiceByPackageDTO {
@@ -16,6 +17,10 @@ public interface ServiceByPackageDTO {
     Date getPurchaseDate();
 
     Long getSupplierId();
+
+    BigDecimal getMaxPrice();
+
+    BigDecimal getMinPrice();
 
     Integer getRn();
 }

@@ -8,7 +8,9 @@ import { twMerge } from "tailwind-merge"
 import { Button } from ".."
 import { Booking } from ".."
 import { useDispatch } from "react-redux"
-import { MdForwardToInbox  } from "react-icons/md"
+import { MdForwardToInbox } from "react-icons/md"
+import { MdOutlinePriceChange } from "react-icons/md";
+
 
 import { modal } from "@/redux/appSlice"
 
@@ -17,13 +19,14 @@ const LongCard = ({
   image,
   title,
   address,
-  price,
+  minPrice,
+  maxPrice,
   createdDate,
   hideImage,
   containerClassName,
   id,
 }) => {
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
   return (
     <div
@@ -55,6 +58,17 @@ const LongCard = ({
           {title}
         </Link>
         <span className="text-sm text-gray-500">{address}</span>
+        {minPrice !== 0 && maxPrice !== 0 ? (
+          <div className="flex text-pink-800 text-lg justify-start items-center">
+            <MdOutlinePriceChange size={20} />
+            <span className="ml-2">{formatMoney(minPrice)} - {formatMoney(maxPrice)} VND</span>
+          </div>
+        ) : (
+        <div className="flex text-pink-500 text-lg justify-start items-center">
+          <MdOutlinePriceChange size={20} />
+          <span className="ml-2">Liên hệ để biết giá</span>
+        </div>
+        )}
         <div className="mt-3 flex justify-between items-center">
           <Button
             onClick={() =>

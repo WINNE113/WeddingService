@@ -10,7 +10,6 @@ import java.util.function.Supplier;
 public class ElasticSearchUtil {
     public static Supplier<Query> createSupplierQuery(String approximateServiceTitle) {
         Supplier<Query> supplier = () -> Query.of(q -> q.match(createMatchQuery(approximateServiceTitle)));
-        System.out.println("Query match search: " + createMatchQuery(approximateServiceTitle));
         return supplier;
     }
 

@@ -10,4 +10,6 @@ public interface ServiceByWishList {
      Date getCreatedDate();
      String getImage();
      Long getWishListItemId();
+     BigDecimal getMinPrice();
+     BigDecimal getMaxPrice();
 }
