@@ -23,7 +23,7 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> 
 
     Optional<SupplierEntity> findByUser(UserEntity email);
 
-    List<SupplierEntity> findAllByIsDeletedFalse(Pageable pageable);
+    List<SupplierEntity> findAllByIsDeletedFalseOrderByCreatedDateDesc(Pageable pageable);
 
     Long countAllByIsDeletedFalse();
 

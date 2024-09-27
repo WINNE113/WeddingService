@@ -41,6 +41,7 @@ public class Service implements IService {
     private final SupplierRepository supplierRepository;
     private final FileHandler fileHandler;
     private final ServiceAlbumRepository serviceAlbumRepository;
+    private final ElasticSearchQuery elasticSearchQuery;
 
     @Override
     public BaseResultWithDataAndCount<List<ServiceDTO>> getAllByFalseDeletedAndAcceptStatus(Pageable pageable) {
@@ -222,6 +223,7 @@ public class Service implements IService {
             if (dataFromDb.isPresent()) {
                 dataFromDb.get().setDeleted(true);
                 repository.save(dataFromDb.get());
+                elasticSearchQuery.deleteDocumentById(String.valueOf(dataFromDb.get().getId()));
                 return new BaseResult(true, MessageUtil.MSG_DELETE_SUCCESS);
             }
             return new BaseResult(false, "Delete is failed!");

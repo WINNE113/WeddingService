@@ -172,7 +172,7 @@ public class SupplierService implements ISupplierService {
     public BaseResultWithDataAndCount<List<SupplierDTO>> getSuppliersByFalseDeleted(Pageable pageable) {
         BaseResultWithDataAndCount<List<SupplierDTO>> result = new BaseResultWithDataAndCount<>();
         try {
-            List<SupplierDTO> resultFromDB = repository.findAllByIsDeletedFalse(pageable)
+            List<SupplierDTO> resultFromDB = repository.findAllByIsDeletedFalseOrderByCreatedDateDesc(pageable)
                     .stream()
                     .map(supplierMapper::entityToDto)
                     .toList();
@@ -281,7 +281,7 @@ public class SupplierService implements ISupplierService {
         BaseResultWithDataAndCount<List<SupplierDTO>> result = new BaseResultWithDataAndCount<>();
         try {
             // Fetch all non-deleted suppliers and map them to DTOs
-            List<SupplierDTO> supplierDTOS = repository.findAllByIsDeletedFalse(pageable)
+            List<SupplierDTO> supplierDTOS = repository.findAllByIsDeletedFalseOrderByCreatedDateDesc(pageable)
                     .stream()
                     .map(supplierMapper::entityToDto)
                     .toList();
