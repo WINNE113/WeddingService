@@ -424,7 +424,7 @@ public class PaymentService implements IPaymentService {
      * if response return vnp_status == '00' -> thành công - > up balance account
      **/
     @Override
-    public ResponseEntity<?> vnpayReturnView(ViewPaymentReturnDto response) {
+    public ResponseEntity<?> paymentReturnView(ViewPaymentReturnDto response) {
         ResponseEntity<?> responseEntity = null;
         try {
             if (Objects.equals(response.getPaymentStatus(), "00")) {

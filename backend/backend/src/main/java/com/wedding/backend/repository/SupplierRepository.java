@@ -1,5 +1,7 @@
 package com.wedding.backend.repository;
 
+import com.wedding.backend.common.StatusCommon;
+import com.wedding.backend.dto.supplier.LicencesSupplier;
 import com.wedding.backend.dto.supplier.ServiceLimitResponse;
 import com.wedding.backend.entity.SupplierEntity;
 import com.wedding.backend.entity.UserEntity;
@@ -19,16 +21,28 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> 
 
     Optional<SupplierEntity> findByEmailSupplier(String email);
 
-    List<SupplierEntity> findAllByUser(UserEntity email);
+    Optional<SupplierEntity> findByUser(UserEntity email);
 
     List<SupplierEntity> findAllByIsDeletedFalse(Pageable pageable);
 
+    Long countAllByIsDeletedFalse();
+
+    Long countAllByIsDeletedFalseAndStatusSupplier(StatusCommon statusCommon);
+
     List<SupplierEntity> findAllByIsDeletedFalse();
+
+
+    List<SupplierEntity> findAllByIsDeletedFalseAndStatusSupplier(StatusCommon statusCommon);
+
+
 
     @Query("SELECT s from SupplierEntity as s join TransactionEntity as t on s.id = t.userTransaction.id where s.isDeleted = false order by t.purchaseDate desc")
     List<SupplierEntity> findAllByTransactionEntitiesAndIsDeletedFalse(Pageable pageable);
 
+    Optional<SupplierEntity> findByStatusSupplierAndUser_Id(StatusCommon statusCommon, String userId);
+
     Optional<SupplierEntity> findByUser_Id(String userId);
+
 
     @Query(value = "Select supplier.id as supplierId , service_limit as serviceLimit from supplier \n" +
             "inner join transaction on supplier.id = transaction.supplier_id\n" +
@@ -36,4 +50,9 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> 
             "where supplier.id =:supplierId and transaction.expired = false", nativeQuery = true)
     ServiceLimitResponse getServiceLimitOfPackageVIP(@Param("supplierId") Long supplierId);
 
+    @Query(
+            value = "Select s.id, img.url_images_license as imagesLicence from supplier_entity_url_images_license as img \n" +
+                    "inner join supplier as s on img.supplier_entity_id = s.id \n" +
+                    "where s.id=:sid", nativeQuery = true)
+    List<LicencesSupplier> licencesSupplier(@Param("sid") Long supplierId);
 }

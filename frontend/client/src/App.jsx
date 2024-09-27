@@ -37,6 +37,7 @@ import ManageBooking from "./pages/supplier/ManageBooking"
 import ChangePassword from "./pages/member/ChangePassword"
 import AboutUs from "./pages/public/AboutUs"
 import RequestForQuotation from "./pages/member/RequestForQuotation"
+import ManageSuppliers from "./pages/admin/ManageSuppliers"
 
 
 function App() {
@@ -113,6 +114,7 @@ function App() {
           <Route path={path.CREATE_PRICING} element={<CreatePricing />} />
           <Route path={path.MANAGER_PAYMENT} element={<ManagePayment />} />
           <Route path={path.MANAGE_REPORT} element={<ManageReport />} />
+          <Route path={path.MANAGE_SUPPLIER} element={<ManageSuppliers />} />
         </Route>
 
         <Route path={path.PAYMENT_RESULT} element={<PaymentResult />} />

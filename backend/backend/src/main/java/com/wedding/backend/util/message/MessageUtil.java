@@ -43,6 +43,8 @@ public class MessageUtil {
     public static final String ADD_REPORT_SUCCESS = "Cam on thong tin bao cao dich vu cua ban";
     public static final String MSG_SUCCESS = "Thành công";
     public static final String UPDATE_STATUS_SERVICE_SUCCESS = "Cập nhật trạng thái dịch vụ thành công.";
+    public static final String UPDATE_STATUS_SUPPLIER_SUCCESS = "Cập nhật trạng thái nhà cung cấp thành công.";
+
     public static final String MSG_ID_FORMAT_INVALID = "Mã sai định dạng !";
     public static final String USER_NOT_FOLLOWING_SUPPLIER = "Người dùng chưa theo dõi nhà cung cấp này!";
     public static final String UNFOLLOWING_SUCCESS = "Bạn đã hủy theo dõi";

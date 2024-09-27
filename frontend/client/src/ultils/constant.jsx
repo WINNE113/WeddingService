@@ -22,6 +22,7 @@ import {
   MdOutlineAttachMoney,
   MdHistory,
   MdReportGmailerrorred,
+  MdOutlinePayments,
   MdForwardToInbox
 } from "react-icons/md"
 import {
@@ -29,6 +30,7 @@ import {
   RiShareForwardFill,
   RiPriceTag2Line,
 } from "react-icons/ri"
+import { FaHouseUser } from "react-icons/fa";
 
 export const menuColors = [
   {
@@ -131,6 +133,13 @@ export const adminSidebar = [
     type: "SINGLE",
   },
   {
+    id: 47,
+    name: "Quản lý nhà cung cấp",
+    path: `/${path.ADMIN}/${path.MANAGE_SUPPLIER}`,
+    icon: <FaHouseUser size={20} />,
+    type: "SINGLE",
+  },
+  {
     id: 573238,
     name: "Quản lý giá gói dịch vụ",
     path: `/${path.ADMIN}/${path.MANAGE_PRICING}`,
@@ -141,7 +150,7 @@ export const adminSidebar = [
     id: 576538,
     name: "Quản lý thanh toán",
     path: `/${path.ADMIN}/${path.MANAGER_PAYMENT}`,
-    icon: <RiPriceTag2Line size={20} />,
+    icon: <MdOutlinePayments  size={20} />,
     type: "SINGLE",
   },
   {

@@ -25,12 +25,14 @@ const path = {
     MANAGE_BOOKING: "danh-sach-yeu-cau-bao-gia-nha-cung-cap",
     CHANGE_PASSWORD: "doi-mat-khau",
     REQUEST_FOR_QUOTATION: "danh-sach-yeu-cau-bao-gia",
+    
 
     ADMIN: "admin",
     DASHBOARD: "dashboard",
     MANAGE_SERVICES_ALL: "quan-ly-tat-ca-tin-dang",
     MANAGE_USER: "quan-ly-thanh-vien",
     MANAGE_PRICING: "quan-ly-bang-gia-dich-vu",
+    MANAGE_SUPPLIER: "quan-ly-nha-cung-cap",
     CREATE_PRICING: "tao-moi-bang-gia-dich-vu",
     MANAGER_PAYMENT: "payment",
     MANAGE_REPORT: "bao-cao-vi-pham",

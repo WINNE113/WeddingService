@@ -8,6 +8,7 @@ import com.wedding.backend.service.IService.report.IReportService;
 import com.wedding.backend.service.IService.service.IService;
 import com.wedding.backend.service.IService.service.IServicePackage;
 import com.wedding.backend.service.IService.service.ITransactionService;
+import com.wedding.backend.service.IService.supplier.ISupplierService;
 import com.wedding.backend.service.IService.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +37,8 @@ public class AdminController {
 
     private final IPaymentService paymentService;
 
+    private final ISupplierService supplier;
+
 
     //TODO: Dashboard
     @GetMapping(value = "transaction/status")
@@ -49,7 +52,7 @@ public class AdminController {
     }
 
     @GetMapping(value = "user/status")
-    public ResponseEntity<?> getUserAccountStatus(){
+    public ResponseEntity<?> getUserAccountStatus() {
         return userService.getUserAccountStatus();
     }
 
@@ -149,4 +152,32 @@ public class AdminController {
     public ResponseEntity<?> deleteReportByIds(@RequestParam(name = "ids") Long ids) {
         return reportService.deleteReportByIds(ids);
     }
+
+    //TODO: MANAGE SUPPLIER
+
+    @GetMapping("/supplier/getAllByStatus")
+    public ResponseEntity<?> allSuppliersByStatus(
+            @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+            @RequestParam(name = "status") String status) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(supplier.getAllSupplierByStatus(status));
+    }
+
+
+    @GetMapping("/suppliers/all")
+    public ResponseEntity<?> allSuppliersByAdmin(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+                                                 @RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(supplier.getAllSuppliersByAdmin(pageable));
+    }
+
+    @PatchMapping("/supplier/update-status")
+    public ResponseEntity<?> updateStatusSupplier(@RequestParam(name = "sid") Long supplierId,
+                                                  @RequestParam(name = "status") String statusName) {
+        return ResponseEntity.ok(supplier.updateStatusSupplier(supplierId, statusName));
+    }
+
+
 }

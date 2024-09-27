@@ -8,9 +8,9 @@ spring:
     name: backend
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: Huuthang3001
-    url: jdbc:mysql://weddingdb.cdysm68wgj3j.us-east-1.rds.amazonaws.com/wedding_db
-    username: admin
+    password: huuthang
+    url: jdbc:mysql://localhost/wedding_service_db
+    username: root
     hikari:
       maximum-pool-size: 10
       minimum-idle: 5

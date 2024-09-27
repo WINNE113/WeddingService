@@ -138,6 +138,7 @@ public class AuthenticationService implements IAuthenticationService {
                         request.setUserName(item.getUserName());
                         request.setPhoneNumber(item.getPhoneNumber());
                         request.setPassword(item.getPassword());
+                        //SHOULD BE ROLE SUPPLIER OR DIFF
                         request.setRole(item.getRole());
                         boolean checkRegister = this.baseRegister(request);
                         if (!checkRegister) {
@@ -176,7 +177,8 @@ public class AuthenticationService implements IAuthenticationService {
                 user.setTwoFactorEnable(false);
             } else if (request.getRole().equals(ModelCommon.MANAGE)) {
                 RoleEntity responseFromDB = roleRepository.findByName(ModelCommon.CUSTOMER);
-                user.setRoles(Set.of(role, responseFromDB));
+                //TODO: SHOULD BE LIKE THAT: user.setRoles(Set.of(role, responseFromDB));
+                user.setRoles(Set.of(responseFromDB));
                 user.setPhoneNumberConfirmed(true);
                 user.setTwoFactorEnable(true);
             }

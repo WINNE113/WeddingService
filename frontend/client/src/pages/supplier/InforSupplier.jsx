@@ -16,10 +16,10 @@ import {
     apiGetDistricts,
     apiGetWards,
 } from "@/apis/app";
+import { getBase64 } from "@/ultils/fn"
 import { apiAddInforSupplier, apiSupplierGetByUser } from "@/apis/supplier";
 import { toast } from "react-toastify";
-import { data } from "autoprefixer";
-import { json } from "react-router-dom";
+import { ImBin } from "react-icons/im"
 
 const InforSupplier = ({ navigate }) => {
     const {
@@ -38,26 +38,57 @@ const InforSupplier = ({ navigate }) => {
     const [zoom, setZoom] = useState(10);
     const [isLoading, setIsLoading] = useState(false);
     const [avtImgFile, setAvtImgFile] = useState(null);
+    const [imagesBase64, setImagesBase64] = useState([])
+    const [imageHover, setImageHover] = useState()
 
 
+    const images = watch("images")
     const province = watch("province");
     const district = watch("district");
     const ward = watch("ward");
     const street = watch("street");
     const address = watch("address");
 
+    const convertFileToBase64 = async (file) => {
+        const base64 = await getBase64(file)
+        if (base64) setImagesBase64((prev) => [...prev, base64])
+    }
+
+    useEffect(() => {
+        setImagesBase64([])
+        if (images && images instanceof FileList)
+            for (let file of images) convertFileToBase64(file)
+    }, [images])
+
+
+    const removeFileFromFileList = (index, filesId) => {
+        const dt = new DataTransfer()
+        const input = document.getElementById(filesId)
+        const { files } = input
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i]
+            if (index !== i) dt.items.add(file) // here you exclude the file. thus removing it.
+        }
+        setValue("images", dt.files)
+        // input.files = dt.files
+    }
+
     useEffect(() => {
         const fetchSupplierData = async () => {
             try {
                 const response = await apiSupplierGetByUser();
-                if (response.data && response.data.length > 0) {
-                    setSupplierData(response.data[0]);
-                    setValue("name", response.data[0].name);
-                    setValue("phoneNumberSupplier", response.data[0].phoneNumberSupplier);
-                    setValue("emailSupplier", response.data[0].emailSupplier);
-                    setValue("addressSupplier", response.data[0].addressSupplier);
-                    if (response.data[0].logo) {
-                        setAvtImgFile(response.data[0].logo);
+                if (response?.data) {
+                    setSupplierData(response?.data);
+                    setValue("name", response.data.name);
+                    setValue("phoneNumberSupplier", response.data.phoneNumberSupplier);
+                    setValue("emailSupplier", response.data.emailSupplier);
+                    setValue("addressSupplier", response.data.addressSupplier);
+                    if (response.data.logo) {
+                        setAvtImgFile(response.data.logo);
+                    }
+                    if (response.data.imagesLicence) {
+                        setImagesBase64(response.data.imagesLicence)
                     }
                 }
             } catch (error) {
@@ -77,7 +108,7 @@ const InforSupplier = ({ navigate }) => {
         }
     };
 
-   
+
 
     // Lấy tọa độ từ địa chỉ
     const fetLngLat = async (payload) => {
@@ -169,28 +200,6 @@ const InforSupplier = ({ navigate }) => {
             });
     }, [province, district, ward, debounceValue, setValue]);
 
-    // Xử lý gửi form
-    // const handleSubmitCreate = async (data) => {
-    //     const { name, phoneNumberSupplier, emailSupplier, addressSupplier } = data;
-    //     const payload = { name, phoneNumberSupplier, emailSupplier, addressSupplier };
-    //     const formData = new FormData()
-    //     formData.append("request", JSON.stringify(payload))
-    //     if (avtImgBase64 && avtImgBase64 instanceof FileList && avtImgBase64.length > 0) {
-    //         formData.append("supplierImage", avtImgBase64[0])
-    //     }
-    //     setIsLoading(true);
-    //     const response = await apiAddInforSupplier(formData);
-    //     setIsLoading(false);
-    //     if (response.success == true) {
-    //         toast.success("Tạo thông tin nhà cung cấp thành công");
-    //         // navigate("/" + path.SUPPLIER + "/" + path.INFORMATION_SUPPLIER);
-    //     } else {
-    //         toast.error(response.message);
-    //     }
-    // };
-    // const handleSubmitUpdate = async (data) => {
-
-    // }
     const handleSubmit = async (data) => {
         const { name, phoneNumberSupplier, emailSupplier, addressSupplier } = data;
         const payload = { name, phoneNumberSupplier, emailSupplier, addressSupplier };
@@ -202,9 +211,14 @@ const InforSupplier = ({ navigate }) => {
         const formData = new FormData();
         formData.append("request", JSON.stringify(payload));
 
+        if (images && images instanceof FileList) {
+            for (let image of images) formData.append("image", image)
+        }
+
         if (avtImgFile) {
             formData.append("supplierImage", avtImgFile);
         }
+
 
 
         setIsLoading(true);
@@ -229,13 +243,16 @@ const InforSupplier = ({ navigate }) => {
 
     return (
         <section className="pb-[200px]">
-            <Title title="Thông tin nhà cung cấp">
+            <Title title={
+                <>
+                    Thông tin nhà cung cấp <span className="text-red-600">{supplierData?.statusSupplier}</span>
+                </>
+            }>
                 {
                     supplierData ? (
                         <Button onClick={validate(handleSubmit)} disabled={isLoading}>
                             Cập nhật
                         </Button>
-
                     ) : (
                         <Button onClick={validate(handleSubmit)} disabled={isLoading}>
                             Thêm mới
@@ -243,6 +260,7 @@ const InforSupplier = ({ navigate }) => {
                     )
                 }
             </Title>
+
             <form className="p-4 grid grid-cols-12 gap-6">
                 <div className="col-span-8">
                     <div className="mt-4">
@@ -348,6 +366,43 @@ const InforSupplier = ({ navigate }) => {
                             readOnly={true}
                             validate={{ required: "Không được bỏ trống" }}
                         />
+                    </div>
+                    <div className="mt-6 flex flex-col gap-2">
+                        <label className="font-medium" htmlFor="images">
+                            Hình ảnh giấy phép kinh doanh (Nếu có)
+                        </label>
+
+                        <input
+                            multiple
+                            {...register("images")}
+                            type="file"
+                            id="images"
+                        />
+                        {errors?.images && (
+                            <small className="text-xs text-red-500">
+                                {errors.images?.message}
+                            </small>
+                        )}
+                        <div className="grid grid-cols-4 gap-4">
+                            {imagesBase64?.map((el, idx) => (
+                                <div
+                                    onMouseEnter={() => setImageHover(el)}
+                                    onMouseLeave={() => setImageHover()}
+                                    className="col-span-1 w-full relative"
+                                    key={idx}
+                                >
+                                    <img src={el} alt="" className="w-full object-contain" />
+                                    {imageHover === el && (
+                                        <div
+                                            onClick={() => removeFileFromFileList(idx, "images")}
+                                            className="absolute inset-0 text-white cursor-pointer flex items-center justify-center bg-overlay-70"
+                                        >
+                                            <ImBin />
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
                     </div>
                     <div className="mt-6 flex flex-col gap-2">
                         <label className="font-medium" htmlFor="avtImgBase64">

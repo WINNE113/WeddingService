@@ -17,6 +17,26 @@ export const apiSuppliers = () =>
         url: "/supplier/getAll",
         method: "GET"
     })
+export const apiSuppliersByAdmin = (params) =>
+    axios({
+        url: "admin/suppliers/all",
+        method: "GET",
+        params
+    })
+
+export const apiSuppliersByStatus = (params) =>
+    axios({
+        url: "admin/supplier/getAllByStatus",
+        method: "GET",
+        params
+    })
+
+export const apiUpdateStatusSuppliersByAdmin = (params) =>
+    axios({
+        url: "admin/supplier/update-status",
+        method: "PATCH",
+        params
+    })
 export const apiSuppliersByServicePackage = (params) =>
     axios({
         url: "/supplier/get-all-by-service-package",

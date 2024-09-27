@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,4 +22,8 @@ public class SupplierDTO {
     private String emailSupplier;
     private String addressSupplier;
     private Integer followerCount;
+    private String statusSupplier;
+    private Date createdDate;
+    private Date modifiedDate;
+    private List<String> imagesLicence;
 }

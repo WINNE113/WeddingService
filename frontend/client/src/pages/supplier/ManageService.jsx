@@ -18,7 +18,6 @@ import path from "@/ultils/path"
 import { stars, statuses } from "@/ultils/constant"
 import { apiCheckSupplierExited } from "@/apis/supplier"
 
-
 const ManageService = ({ dispatch, navigate }) => {
   const { setValue, watch, register, errors } = useForm()
   const { current } = useSelector((s) => s.user)
@@ -91,6 +90,7 @@ const ManageService = ({ dispatch, navigate }) => {
       if (response.success) {
         navigate(`/${path.SUPPLIER}/${path.CREATE_SERVICE}`);
       } else {
+        toast.warn(response?.message)
         navigate(`/${path.SUPPLIER}/${path.INFORMATION_SUPPLIER}`);
       }
     } catch (error) {

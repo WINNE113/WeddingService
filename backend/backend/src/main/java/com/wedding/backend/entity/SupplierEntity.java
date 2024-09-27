@@ -1,6 +1,8 @@
 package com.wedding.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.wedding.backend.common.StatusCommon;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,6 +34,14 @@ public class SupplierEntity extends BaseEntityWithIDIncrement {
 
     @Column(name = "is_deleted")
     private boolean isDeleted;
+
+    @Column(name = "url_images_license")
+    @ElementCollection
+    @OrderColumn
+    private List<String> urlImagesLicense;
+
+    @Enumerated(EnumType.STRING)
+    private StatusCommon statusSupplier;
 
     @Column(name = "follower_count")
     private Integer followerCount;

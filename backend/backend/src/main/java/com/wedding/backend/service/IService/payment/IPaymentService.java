@@ -4,7 +4,6 @@ import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.dto.payment.PaymentDto;
 import com.wedding.backend.dto.payment.ViewPaymentReturnDto;
-import com.wedding.backend.dto.request.MomoOneTimePaymentRequest;
 import com.wedding.backend.dto.request.MomoOneTimePaymentResultRequest;
 import com.wedding.backend.dto.response.VnpayPayIpnResponse;
 import com.wedding.backend.dto.response.VnpayPayResponse;
@@ -24,7 +23,7 @@ public interface IPaymentService {
 
     BaseResultWithData<VnpayPayIpnResponse> vnpayReturnIpn(VnpayPayResponse response);
 
-    ResponseEntity<?> vnpayReturnView(ViewPaymentReturnDto response);
+    ResponseEntity<?> paymentReturnView(ViewPaymentReturnDto response);
 
     ResponseEntity<?> paymentHistory(Principal connectedUser, Pageable pageable);
 

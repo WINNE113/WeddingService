@@ -7,12 +7,14 @@ import { Link } from "react-router-dom"
 import { twMerge } from "tailwind-merge"
 import { Button } from ".."
 import { Booking } from ".."
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { MdForwardToInbox } from "react-icons/md"
 import { MdOutlinePriceChange } from "react-icons/md";
-
-
+import { apiAddToRequestForQuotation } from "@/apis/service"
+import { toast } from "react-toastify"
 import { modal } from "@/redux/appSlice"
+import { getRequestForQuotaion, getWishlist } from "@/redux/action"
+import { FaPlus } from "react-icons/fa";
 
 
 const LongCard = ({
@@ -27,6 +29,16 @@ const LongCard = ({
   id,
 }) => {
   const dispatch = useDispatch()
+  const { current, wishlist, requestForQuotation } = useSelector((s) => s.user)
+
+  const handleAddToRequestForQuotation = async () => {
+    if (!current) return toast.warn("Bạn phải đăng nhập trước.")
+    const response = await apiAddToRequestForQuotation({ serviceId: id })
+    if (response?.success) {
+      toast.success(response?.message)
+      dispatch(getRequestForQuotaion())
+    } else toast.error(response?.message)
+  }
 
   return (
     <div
@@ -47,10 +59,18 @@ const LongCard = ({
           hideImage ? "col-span-10" : "col-span-8"
         )}
       >
-        <span className="text-sm text-gray-500">
+        <div className="flex justify-between items-center">
+          <span className="text-sm text-gray-500 font-semibold">
 
-          {address?.split(",")[address?.split(",")?.length - 1]}
-        </span>
+            {address?.split(",")[address?.split(",")?.length - 1]}
+          </span>
+          <span
+            onClick={handleAddToRequestForQuotation}
+            className="text-white bg-pink-500 hover:bg-pink-600 p-2 rounded-md cursor-pointer"
+          >
+            <FaPlus size={14} />
+          </span>
+        </div>
         <Link
           className="text-fuchsia-950 cursor-pointer hover:underline font-semibold line-clamp-2"
           to={`/${path.DETAIL_POST}/${id}/${formatVietnameseToString(title)}`}
@@ -64,10 +84,10 @@ const LongCard = ({
             <span className="ml-2">{formatMoney(minPrice)} - {formatMoney(maxPrice)} VND</span>
           </div>
         ) : (
-        <div className="flex text-pink-500 text-lg justify-start items-center">
-          <MdOutlinePriceChange size={20} />
-          <span className="ml-2">Liên hệ để biết giá</span>
-        </div>
+          <div className="flex text-pink-500 text-lg justify-start items-center">
+            <MdOutlinePriceChange size={20} />
+            <span className="ml-2">Liên hệ để biết giá</span>
+          </div>
         )}
         <div className="mt-3 flex justify-between items-center">
           <Button

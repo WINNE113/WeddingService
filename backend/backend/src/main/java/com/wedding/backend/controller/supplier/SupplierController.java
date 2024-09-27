@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/supplier")
@@ -53,21 +54,23 @@ public class SupplierController {
     @PostMapping(value = "/update-supplier", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> updateSupplier(@RequestPart(name = "supplierRequest") String supplierRequest,
                                             @RequestPart(required = false, name = "supplierImage") @Valid MultipartFile supplierImage,
+                                            @RequestPart(required = false, name = "image") @Valid List<MultipartFile> imageLicence,
                                             Principal connectedUser) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         UpdateSupplierRequest supplier = objectMapper.readValue(supplierRequest, UpdateSupplierRequest.class);
 
-        return ResponseEntity.ok(service.updateSupplier(supplier, supplierImage, connectedUser));
+        return ResponseEntity.ok(service.updateSupplier(supplier, supplierImage, imageLicence , connectedUser));
     }
 
     @PostMapping(value = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> addSupplier(@RequestPart(name = "request") String request,
                                          @RequestPart(required = false, name = "supplierImage") @Valid MultipartFile supplierImage,
+                                         @RequestPart(required = false, name = "image") @Valid List<MultipartFile> imageLicence,
                                          Principal connectedUser) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         SupplierDTO supplierDTO = objectMapper.readValue(request, SupplierDTO.class);
-        return ResponseEntity.ok(service.addSupplier(supplierDTO, supplierImage, connectedUser));
+        return ResponseEntity.ok(service.addSupplier(supplierDTO, imageLicence, supplierImage, connectedUser));
     }
 
     @GetMapping(value = "/supplier-is-exit-by-userId")

@@ -7,7 +7,7 @@ import { Navigate, Outlet } from "react-router-dom"
 
 const LayoutSupplier = () => {
   const { current } = useSelector((state) => state.user)
-   if (!current?.roles?.some((el) => el.name === "ROLE_SUPPLIER")) {
+   if (!current?.phoneNumberConfirmed) {
     return <Navigate to={`/${path.LOGIN}`} replace={true} />
   }
   return (

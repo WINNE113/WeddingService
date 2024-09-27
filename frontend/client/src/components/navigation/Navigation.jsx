@@ -51,6 +51,7 @@ const Navigation = ({ navigate }) => {
   const { current, wishlist, requestForQuotation} = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
+  console.log("Current: " + JSON.stringify(current))
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,7 +112,7 @@ const Navigation = ({ navigate }) => {
   }, [])
 
   const handleClickCreatePost = (pathname) => {
-    if (current?.roles?.some((el) => el.name === "ROLE_SUPPLIER")) {
+    if (current?.phoneNumberConfirmed) {
       navigate(pathname)
     } else {
       Swal.fire({

@@ -1,6 +1,5 @@
 package com.wedding.backend.controller.payment;
 
-import com.wedding.backend.base.BaseResponse;
 import com.wedding.backend.base.BaseResult;
 import com.wedding.backend.base.BaseResultWithData;
 import com.wedding.backend.dto.payment.PaymentDto;
@@ -92,7 +91,7 @@ public class PaymentController {
 
     @GetMapping(value = "/payment-return-view")
     public void vnpayReturnView(@ModelAttribute ViewPaymentReturnDto response, HttpServletResponse httpServletResponse) throws IOException {
-        ResponseEntity<?> responseEntity = paymentService.vnpayReturnView(response);
+        ResponseEntity<?> responseEntity = paymentService.paymentReturnView(response);
         BaseResult baseResult = (BaseResult) responseEntity.getBody();
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:5173/payment/status")
                 .queryParam("message", baseResult.getMessage())

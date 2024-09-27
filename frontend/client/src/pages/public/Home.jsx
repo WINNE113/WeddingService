@@ -181,7 +181,7 @@ const Home = () => {
         // Thiết lập interval để trộn mảng mỗi 30 giây
         const intervalId = setInterval(() => {
             shuffleServices();
-        }, 30000); // 30 giây
+        }, 20000); // 20 giây
 
         // Cleanup khi component unmount để tránh memory leak
         return () => clearInterval(intervalId);

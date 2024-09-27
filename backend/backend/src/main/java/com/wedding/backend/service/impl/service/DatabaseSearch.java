@@ -24,9 +24,9 @@ public class DatabaseSearch implements IDatabaseSearch {
 
     @Override
     public BaseResultWithDataAndCount<List<ServiceDTO>> searchFilter(Pageable pageable, LinkedHashMap<String, Object> map) throws SQLException {
-        String url = "jdbc:mysql://weddingdb.cdysm68wgj3j.us-east-1.rds.amazonaws.com/wedding_db";
-        String username = "admin";
-        String password = "Huuthang3001";
+        String url = "jdbc:mysql://localhost/wedding_service_db";
+        String username = "root";
+        String password = "huuthang";
         String tableName = "services";
         String tableJoin = "supplier";
 
